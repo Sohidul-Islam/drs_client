@@ -5,7 +5,7 @@ import Dashboard from "../Pages/Dashboard/Dashboard/Dashboard";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Home Page</div>,
+    element: <div className="text-center">Home Page</div>,
   },
   {
     path: "/registration",
