@@ -5,6 +5,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'bgExploreImage': "url('/src/assets/bg-explore.png')",
+        'bgRegisterImage': "url('/src/assets/bg-register.png')",
+      },
       fontFamily: {
         sora: ['Sora', 'sans-serif'],
       },

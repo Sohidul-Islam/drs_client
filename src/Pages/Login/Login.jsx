@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import bg from "../../assets/bg-login.png";
 import pharmaLogin from "../../assets/pharma-login.png";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaHandPointDown, FaPhone } from "react-icons/fa6";
@@ -10,14 +9,8 @@ const Login = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 container mx-auto">
-      {/* login photo section  */}
-      <section
-        className="lg:col-span-7"
-        style={{
-          backgroundImage: `url(${bg})`,
-          backgroundSize: "cover",
-        }}
-      >
+      {/* Explore photo section  */}
+      <section className="lg:col-span-7 bg-bgExploreImage bg-cover">
         <div className="flex items-center justify-center h-full bg-[#1F23A8]/50 py-10 lg:py-0">
           <div className="text-white px-5 md:px-28 font-sora">
             <h1 className="text-3xl mb-8">Pharma DRA Solutions</h1>
@@ -47,7 +40,7 @@ const Login = () => {
           <p className="font-semibold mb-3">Welcome Back!</p>
           <p className="text-[13px]">
             Don't have an account?{" "}
-            <Link className="underline font-semibold">
+            <Link to="/register" className="underline font-semibold">
               Create a new account now
             </Link>
             . It's FREE! for one month, Takes let a minutes.
@@ -64,7 +57,7 @@ const Login = () => {
                 Email or username
               </label>
               <input
-                type="text"
+                type="email"
                 className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
               />
             </div>
@@ -98,6 +91,8 @@ const Login = () => {
             </div>
           </form>
           {/* end form  */}
+
+          {/* Contact Info  */}
           <div className="mt-14">
             <p className="flex gap-2 items-center mb-5">
               <FaHandPointDown fill="#006E9E" />
