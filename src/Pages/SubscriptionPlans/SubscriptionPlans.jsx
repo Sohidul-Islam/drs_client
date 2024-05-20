@@ -2,7 +2,7 @@ import React from "react";
 import pharmaLogin from "../../assets/pharma-login.png";
 import PlanCard from "../../Components/PlanCard/PlanCard";
 
-const ServicePlan = () => {
+const SubscriptionPlans = () => {
   return (
     <div className="px-5 md:px-10 py-5 md:py-10 font-sora">
       <div className="flex items-center gap-3">
@@ -29,4 +29,4 @@ const ServicePlan = () => {
   );
 };
 
-export default ServicePlan;
+export default SubscriptionPlans;

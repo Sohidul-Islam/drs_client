@@ -3,7 +3,7 @@ import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
 import Dashboard from "../Pages/Dashboard/Dashboard/Dashboard";
 import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
-import ServicePlan from "../Pages/ServicePlan/ServicePlan";
+import SubscriptionPlans from "../Pages/SubscriptionPlans/SubscriptionPlans";
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/service-plan",
-    element: <ServicePlan />,
+    element: <SubscriptionPlans />,
   },
   {
     path: "/dashboard",
