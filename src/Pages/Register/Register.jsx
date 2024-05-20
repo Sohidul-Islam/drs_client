@@ -3,15 +3,18 @@ import { Link } from "react-router-dom";
 import pharmaLogin from "../../assets/pharma-login.png";
 import { FaEye, FaEyeSlash, FaHandPointDown, FaPhone } from "react-icons/fa6";
 import { MdAlternateEmail } from "react-icons/md";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [phone, setPhone] = useState("");
   return (
     <div className="bg-bgRegisterImage bg-cover">
       <div className="flex items-center justify-center h-full bg-[#1F23A8]/50 py-14">
         <div className="px-5 md:px-10 py-10 bg-white font-sora rounded-lg">
           <div className="flex items-center gap-3 mb-10">
-            <img className="w-10 h-8" src={pharmaLogin} alt="" />
+            <img className="w-10 h-8" src={pharmaLogin} alt="Phara login" />
             <h2 className="text-2xl font-semibold">
               <span className="text-[#006E9E]">Pharma</span> DRA Solution
             </h2>
@@ -93,11 +96,20 @@ const Register = () => {
                 />
               </div>
               {/* Mobile  */}
-              <div>
+              {/* <div>
                 <label className="block text-[#989898] text-xs">Mobile</label>
                 <input
                   type="number"
                   className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                />
+              </div> */}
+              <div>
+                <label className="block text-[#989898] text-xs">Mobile</label>
+                <PhoneInput
+                  country={"us"}
+                  value={phone}
+                  onChange={setPhone}
+                  inputClass="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
                 />
               </div>
             </div>
