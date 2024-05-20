@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/service-plan",
+    path: "/subscription-plan",
     element: <SubscriptionPlans />,
   },
   {
