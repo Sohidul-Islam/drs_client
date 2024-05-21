@@ -15,9 +15,9 @@ const Register = () => {
         <div className="px-5 md:px-10 py-10 max-w-[536px] bg-white font-sora rounded-lg">
           <div className="flex items-center gap-3 mb-10">
             <img className="w-10 h-8" src={pharmaLogin} alt="Phara login" />
-            <h2 className="text-2xl font-semibold">
+            <Link to="/" className="text-2xl font-semibold">
               <span className="text-[#006E9E]">Pharma</span> DRA Solution
-            </h2>
+            </Link>
           </div>
           <p className="font-semibold mb-3">Create New Account!</p>
           <p className="text-[13px]">
@@ -181,23 +181,7 @@ const Register = () => {
 
           {/* Contact Info  */}
           <div className="mt-8 md:mt-14 flex justify-center">
-            <HelpCard />
-            {/* <p className="flex gap-2 items-center mb-5">
-              <FaHandPointDown fill="#006E9E" />
-              <span className="text-[#006E9E]">
-                For any query contact with us.
-              </span>
-            </p>
-            <div className="md:flex gap-14">
-              <p className="flex gap-2 items-center">
-                <MdAlternateEmail />
-                <span className="text-sm">pharnadrasolutions@gmail.com</span>
-              </p>
-              <p className="flex gap-2 items-center">
-                <FaPhone />
-                <span className="text-sm">+880-1994779217</span>
-              </p> */}
-            {/* </div> */}
+            <HelpCard display="flex"/>
           </div>
         </div>
       </div>
