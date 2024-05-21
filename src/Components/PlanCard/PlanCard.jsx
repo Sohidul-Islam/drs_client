@@ -14,7 +14,7 @@ const PlanCard = ({planeType, price, month}) => {
         </p>
       </div>
       <div className="text-2xl font-semibold my-4">
-        {price} BDT <span className="text-sm font-normal">/{month} month</span>
+        {price} BDT <span className="text-xs font-normal">/{month} month</span>
       </div>
       <ul className="space-y-2 text-xs">
         <li className="flex items-center gap-2">

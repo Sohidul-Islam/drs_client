@@ -1,15 +1,16 @@
 import React from "react";
 import pharmaLogin from "../../assets/pharma-login.png";
 import PlanCard from "../../Components/PlanCard/PlanCard";
+import { Link } from "react-router-dom";
 
 const SubscriptionPlans = () => {
   return (
     <div className="px-5 md:px-10 py-5 md:py-10 font-sora">
       <div className="flex items-center gap-3">
         <img className="w-10 md:h-8" src={pharmaLogin} alt="Phara login" />
-        <h1 className="text-2xl font-semibold">
+        <Link to="/" className="text-2xl font-semibold">
           <span className="text-[#006E9E]">Pharma</span> DRA Solution
-        </h1>
+        </Link>
       </div>
       <div className="mt-6 md:text-center max-w-[600px] mx-auto ">
         <h2 className="text-xl md:text-3xl font-semibold">Choose your right plan!</h2>

@@ -13,9 +13,9 @@ const Login = () => {
         <div className="px-5 md:px-10 py-10 max-w-[536px] bg-white font-sora rounded-lg">
           <div className="flex items-center gap-3 mb-10">
             <img className="w-10 h-8" src={pharmaLogin} alt="" />
-            <h2 className="text-2xl font-semibold">
+            <Link to="/" className="text-2xl font-semibold">
               <span className="text-[#006E9E]">Pharma</span> DRA Solution
-            </h2>
+            </Link>
           </div>
           <div>
             <p className="font-semibold mb-3">Welcome Back!</p>
@@ -75,7 +75,7 @@ const Login = () => {
 
           {/* contact info  */}
           <div className="mt-8 md:mt-14 flex justify-center">
-            <HelpCard />
+            <HelpCard display="flex"/>
           </div>
         </div>
       </div>

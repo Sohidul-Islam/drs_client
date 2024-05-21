@@ -9,8 +9,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[#006E9E] text-white p-4 font-sora">
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="bg-[#006E9E] text-white  font-sora">
+      <div className="container mx-auto px-12 py-4 flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <div className="text-red-500">
             <svg
