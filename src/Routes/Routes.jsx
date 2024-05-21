@@ -4,11 +4,12 @@ import Dashboard from "../Pages/Dashboard/Dashboard/Dashboard";
 import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
 import SubscriptionPlans from "../Pages/SubscriptionPlans/SubscriptionPlans";
+import Home from "../Pages/Home/Home/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div className="text-center">Home Page</div>,
+    element: <Home/>
   },
   {
     path: "/register",
