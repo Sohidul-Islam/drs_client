@@ -15,11 +15,11 @@ const HelpCard = ({display}) => {
         সাহায্যের জন্য যোগাযোগ
       </h4>
 
-      <div className={`max-w-[430px] mt-5 ${display} justify-center items-center gap-x-3 space-y-3 md:space-y-0`}>
+      <div className={`w-full md:max-w-[430px] mt-5 ${display} justify-center items-center gap-x-3 space-y-3 md:space-y-0`}>
         {/* email  */}
         <div className="flex gap-1 items-center text-[#880015] px-3 py-4 border border-[#880015] rounded-md bg-[#FFE7EB]">
           <IoMailUnreadOutline />
-          <a href="mailto:pharnadrasolutions@gmail.com" className="text-xs">
+          <a href="mailto:pharnadrasolutions@gmail.com" className="text-xs ">
             pharnadrasolutions@gmail.com
           </a>
         </div>

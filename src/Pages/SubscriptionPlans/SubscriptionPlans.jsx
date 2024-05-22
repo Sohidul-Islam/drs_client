@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 
 const SubscriptionPlans = () => {
   return (
-    <div className="px-5 md:px-10 py-5 md:py-10 font-sora">
+    <div className="container mx-auto px-5 md:px-10 py-5 md:py-10 font-sora bg-gradient-sky-90">
       <div className="flex items-center gap-3">
         <img className="w-10 md:h-8" src={pharmaLogin} alt="Phara login" />
-        <Link to="/" className="text-2xl font-semibold">
+        <Link to="/" className="text-xl md:text-2xl font-semibold">
           <span className="text-[#006E9E]">Pharma</span> DRA Solution
         </Link>
       </div>
@@ -23,7 +23,7 @@ const SubscriptionPlans = () => {
       <div className="mt-5 md:mt-10 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 ">
         <PlanCard planeType="Free Trial" price="0.00"/>
         <PlanCard planeType="Stellar" price="500.00" month="3"/>
-        <PlanCard planeType="Stellar Business" price="1000.00" month="6"/>
+        <PlanCard planeType="Stellar Business" price="1000.00" month="6" backgroundColor="bg-gradient-sky-90"/>
         <PlanCard planeType="Premium" price="1500.00" month="12"/>
       </div>
     </div>

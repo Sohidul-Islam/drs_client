@@ -8,6 +8,7 @@ module.exports = {
       backgroundImage: {
         'bgExploreImage': "url('/src/assets/bg-explore.png')",
         'bgRegisterImage': "url('/src/assets/bg-register.png')",
+        'gradient-sky-90': 'var(--gradient-sky-50)',
       },
       fontFamily: {
         sora: ['Sora', 'sans-serif'],

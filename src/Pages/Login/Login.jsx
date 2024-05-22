@@ -9,11 +9,11 @@ const Login = () => {
 
   return (
     <div className="bg-bgExploreImage bg-cover">
-      <div className="flex items-center justify-center h-full bg-[#1F23A8]/50 py-14">
-        <div className="px-5 md:px-10 py-10 max-w-[536px] bg-white font-sora rounded-lg">
-          <div className="flex items-center gap-3 mb-10">
+      <div className="px-5 py-5 md:py-14 flex items-center justify-center h-full bg-[#1F23A8]/50 ">
+        <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white font-sora rounded-lg">
+          <div className="flex items-center gap-3 mb-5 md:mb-10">
             <img className="w-10 h-8" src={pharmaLogin} alt="" />
-            <Link to="/" className="text-2xl font-semibold">
+            <Link to="/" className="text-xl md:text-2xl font-semibold">
               <span className="text-[#006E9E]">Pharma</span> DRA Solution
             </Link>
           </div>
@@ -75,7 +75,7 @@ const Login = () => {
 
           {/* contact info  */}
           <div className="mt-8 md:mt-14 flex justify-center">
-            <HelpCard display="flex"/>
+            <HelpCard display="md:flex"/>
           </div>
         </div>
       </div>
