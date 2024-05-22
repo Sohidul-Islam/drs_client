@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-[#006E9E] text-white  font-sora">
-      <div className="container mx-auto px-12 py-4 flex items-center justify-between">
+      <div className="container mx-auto px-5 md:px-12 py-3 md:py-4 flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <div className="text-red-500">
             <svg
@@ -29,7 +29,7 @@ const Navbar = () => {
           </div>
           <Link to="/" className="text-base font-semibold">Pharma DRA Solution</Link>
         </div>
-        <div className="md:block">
+        <div className="hidden md:block">
           <div className="flex items-center gap-x-4">
             <Link
               to="/subscription-plan"
@@ -70,17 +70,17 @@ const Navbar = () => {
       <div
         className={`md:hidden ${
           isMobileMenuOpen ? "block" : "hidden"
-        } flex flex-col space-y-4 mt-4`}
+        } flex flex-col space-y-3 py-4 px-5`}
       >
-        <a href="#subscriptions" className="text-white hover:text-gray-300">
+        <Link to="/subscription-plan" className="text-white hover:text-gray-300">
           Subscriptions
-        </a>
-        <button className="border border-white px-4 py-2 rounded hover:bg-white hover:text-blue-800">
+        </Link>
+        <Link to="/login" className="border border-white px-4 py-2 rounded hover:bg-white hover:text-blue-800 w-full text-center">
           Sign in
-        </button>
-        <button className="bg-red-700 px-4 py-2 rounded text-white hover:bg-red-800">
+        </Link>
+        <Link to="/register" className="bg-red-700 px-4 py-2 rounded text-white hover:bg-red-800 w-full text-center">
           Register
-        </button>
+        </Link>
       </div>
     </nav>
   );

@@ -5,8 +5,8 @@ import pharmaLogin from "../../assets/pharma-login.png";
 const HomeDetails = () => {
   return (
     <div>
-      <h1 className="text-3xl font-semibold">Pharmacy Management Software</h1>
-      <p className="text-xs mt-2 leading-5 w-2/3">
+      <h1 className="text-lg md:text-3xl font-semibold">Pharmacy Management Software</h1>
+      <p className="text-xs mt-2 leading-5 w-full md:w-2/3">
         বাংলাদেশের খুঁচরা ঔষধ বিপনীগুলোর কাজ সহজসাধ্য করতে ঔষধ প্রশাসন
         অধিদপ্তরের সার্বিক তত্ত্বাবধানে ম্যানেজমেন্ট সায়েন্সেস ফর হেলথ - এর
         বেটার হেলথ ইন বাংলাদেশ (বিএইচবি) প্রকল্প তাদের জন্য একটি ফার্মেসি
@@ -14,7 +14,7 @@ const HomeDetails = () => {
         ব্যবহার করতে পারবে
       </p>
 
-      <div className="grid grid-cols-7 gap-x-12 mt-7">
+      <div className="grid grid-cols-1 md:grid-cols-7 md:gap-2 lg:gap-x-12 gap-y-5 md:gap-y-0 mt-5 md:mt-7">
         <div className="col-span-5 p-4 border border-[#880015] rounded-md">
           <h2 className="text-base font-semibold">
             ফার্মেসি ম্যানেজমেন্ট সফটওয়্যার এর পরিচিতি
