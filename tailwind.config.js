@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'bgExploreImage': "url('/src/assets/bg-explore.png')",
-        'bgRegisterImage': "url('/src/assets/bg-register.png')",
+        'bgLogin': "url('/src/assets/bg-login.png')",
+        'bgRegister': "url('/src/assets/bg-register.png')",
         'gradient-sky-35': 'var(--gradient-sky-35)',
       },
       fontFamily: {

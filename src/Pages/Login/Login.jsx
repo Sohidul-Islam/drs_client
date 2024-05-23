@@ -8,7 +8,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="bg-bgExploreImage bg-cover">
+    <div className="bg-bgLogin bg-cover bg-no-repeat">
       <div className="px-5 py-5 md:py-14 flex items-center justify-center h-full bg-[#1F23A8]/50 ">
         <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white font-sora rounded-lg">
           <div className="flex items-center gap-3 mb-5 md:mb-10">
