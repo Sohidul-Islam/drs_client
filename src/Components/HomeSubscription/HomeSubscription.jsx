@@ -12,11 +12,15 @@ const HomeSubscription = () => {
         ম্যানেজমন্টে সফটওয়্যার তৈরি করেছে। সফটওয়্যারটি বিপনীগুলো বিনামূল্যেই
         ব্যবহার করতে পারবে
       </p>
-      <div className="mt-5 md:mt-10 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div className="mt-5 md:mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <PlanCard planeType="Free Trial" price="0.00" />
-        <PlanCard planeType="Stellar" price="500.00" month="3" />
-        <PlanCard planeType="Stellar Business" price="1000.00" month="6" backgroundColor="bg-gradient-sky-90"/>
-        <PlanCard planeType="Premium" price="1500.00" month="12" />
+        <PlanCard
+          planeType="Stellar"
+          price="300.00"
+          month="6"
+          backgroundColor="bg-gradient-sky-90"
+        />
+        <PlanCard planeType="Stellar Business" price="1200.00" month="12" />
       </div>
     </div>
   );

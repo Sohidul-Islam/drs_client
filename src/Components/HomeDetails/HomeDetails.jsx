@@ -1,12 +1,14 @@
 import React from "react";
 import HelpCard from "../HelpCard/HelpCard";
-import pharmaLogin from "../../assets/pharma-login.png";
+import logo from "../../assets/logo.png";
 
 const HomeDetails = () => {
   return (
     <div>
-      <h1 className="text-lg md:text-3xl font-semibold">Pharmacy Management Software</h1>
-      <p className="text-xs mt-2 leading-5 w-full md:w-2/3">
+      <h1 className="text-lg md:text-3xl font-semibold">
+        Pharmacy Management Software
+      </h1>
+      <p className="text-xs mt-2 leading-5 w-full md:w-3/4">
         বাংলাদেশের খুঁচরা ঔষধ বিপনীগুলোর কাজ সহজসাধ্য করতে ঔষধ প্রশাসন
         অধিদপ্তরের সার্বিক তত্ত্বাবধানে ম্যানেজমেন্ট সায়েন্সেস ফর হেলথ - এর
         বেটার হেলথ ইন বাংলাদেশ (বিএইচবি) প্রকল্প তাদের জন্য একটি ফার্মেসি
@@ -14,8 +16,8 @@ const HomeDetails = () => {
         ব্যবহার করতে পারবে
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-7 md:gap-2 lg:gap-x-12 gap-y-5 md:gap-y-0 mt-5 md:mt-7">
-        <div className="col-span-5 p-4 border border-[#880015] rounded-md">
+      <div className="mt-5 md:mt-7 grid grid-cols-1 md:grid-cols-7 lg:grid-cols-4 gap-5 md:gap-10">
+        <div className="md:col-span-5 lg:col-span-3 p-4 border border-[#880015] rounded-md">
           <h2 className="text-base font-semibold">
             ফার্মেসি ম্যানেজমেন্ট সফটওয়্যার এর পরিচিতি
           </h2>
@@ -45,11 +47,11 @@ const HomeDetails = () => {
           </p>
         </div>
         {/* contact info  */}
-        <div className="col-span-2 border border-[#880015] rounded-md p-4">
+        <div className="col-span-1 md:col-span-2 lg:col-span-1 border border-[#880015] rounded-md p-4">
           <HelpCard display="block !space-y-4" />
-          <div className="flex items-center justify-center gap-3 mt-9">
-            <img className="w-10 h-8" src={pharmaLogin} alt="" />
-            <p className="text-lg font-semibold">
+          <div className="flex items-center justify-center gap-2 mt-9">
+            <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
+            <p className="text-base font-semibold">
               <span className="text-[#006E9E]">Pharma</span> DRA Solution
             </p>
           </div>
