@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --gradient-sky-50: linear-gradient(50deg, white , #F0FBFF);
+  --gradient-sky-35: linear-gradient(35deg, white , #F0FBFF);
 }
 
 body {

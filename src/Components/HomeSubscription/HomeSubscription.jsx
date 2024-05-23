@@ -18,7 +18,7 @@ const HomeSubscription = () => {
           planeType="Stellar"
           price="300.00"
           month="6"
-          backgroundColor="bg-gradient-sky-90"
+          backgroundColor="bg-gradient-sky-35"
         />
         <PlanCard planeType="Stellar Business" price="1200.00" month="12" />
       </div>
