@@ -55,7 +55,7 @@ const Login = () => {
                 type="email"
                 className={`w-full border-b-2 ${
                   errors.email ? "border-red-500 mb-1" : "border-[#989898] mb-8"
-                } outline-none block mb-5 p-1`}
+                } outline-none block p-1`}
               />
               {errors.email && (
                 <p role="alert" className="text-red-500 text-xs mb-3">
