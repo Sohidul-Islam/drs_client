@@ -74,7 +74,7 @@ const Login = () => {
               <div className="flex relative">
                 <input
                   {...register("password", {
-                    required: "Password is required",
+                    required: "password is required",
                   })}
                   aria-invalid={errors.password ? "true" : "false"}
                   type={showPassword ? "text" : "password"}
