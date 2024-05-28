@@ -18,15 +18,11 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // console.log(data, "login data");
     try {
       const response = await axios.post("/login", {
         email: data.email,
         password: data.password,
       });
-
-      // console.log(response, "login response");
-      
       if (response.data.status) {
         localStorage.setItem("accessToken", response.data.accessToken);
         navigate("/dashboard");
@@ -82,7 +78,7 @@ const Login = () => {
                 } outline-none block p-1`}
               />
               {errors.email && (
-                <p role="alert" className="text-red-500 text-xs mb-3">
+                <p className="text-red-500 text-xs mb-3">
                   {errors.email.message}
                 </p>
               )}
