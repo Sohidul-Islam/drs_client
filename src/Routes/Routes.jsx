@@ -5,11 +5,12 @@ import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
 import SubscriptionPlans from "../Pages/SubscriptionPlans/SubscriptionPlans";
 import Home from "../Pages/Home/Home/Home";
+import ProtectedRoute from "../Components/ProtectedRoute/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>
+    element: <Home />,
   },
   {
     path: "/register",
@@ -25,7 +26,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
