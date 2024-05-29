@@ -1,11 +1,40 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import HelpCard from "../../Components/HelpCard/HelpCard";
+import { useForm } from "react-hook-form";
+import axios from "../../config/axiosConfig";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("/login", {
+        email: data.email,
+        password: data.password,
+      });
+      if (response.data.status) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+        navigate("/dashboard");
+      } else {
+        setError(response.data.message);
+        console.error(response.data.message);
+      }
+    } catch (error) {
+      setError(error.message);
+      console.error("Login error:", error.message);
+    }
+  };
 
   return (
     <div className="bg-bgLogin bg-cover bg-no-repeat">
@@ -27,8 +56,9 @@ const Login = () => {
               . It's FREE! for one month, Takes let a minutes.
             </p>
           </div>
+
           {/* start form  */}
-          <form className="mt-11">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-11">
             {/* Email  */}
             <div>
               <label
@@ -38,9 +68,20 @@ const Login = () => {
                 Email or username
               </label>
               <input
+                {...register("email", {
+                  required: "email is required",
+                })}
+                aria-invalid={errors.email ? "true" : "false"}
                 type="email"
-                className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                className={`w-full border-b-2 ${
+                  errors.email ? "border-red-500 mb-1" : "border-[#989898] mb-8"
+                } outline-none block p-1`}
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs mb-3">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             {/* password  */}
             <div>
@@ -52,17 +93,32 @@ const Login = () => {
               </label>
               <div className="flex relative">
                 <input
+                  {...register("password", {
+                    required: "password is required",
+                  })}
+                  aria-invalid={errors.password ? "true" : "false"}
                   type={showPassword ? "text" : "password"}
-                  className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                  className={`w-full border-b-2 ${
+                    errors.password
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-8"
+                  } outline-none block p-1`}
                 />
                 <button
-                  type="button"
+                  type="submit"
                   onClick={() => setShowPassword(!showPassword)}
                   className="text-gray-500 mt-2 absolute right-3"
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+              {errors.password && (
+                <p role="alert" className="text-red-500 text-xs mb-3">
+                  {errors.password.message}
+                </p>
+              )}
+              {/* authentication error  */}
+              {error && <p className="text-red-500 text-xs mb-3">{error}</p>}
               <button className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4">
                 LOG IN
               </button>
@@ -75,7 +131,7 @@ const Login = () => {
 
           {/* contact info  */}
           <div className="mt-8 md:mt-14 flex justify-center">
-            <HelpCard display="md:flex"/>
+            <HelpCard display="md:flex" />
           </div>
         </div>
       </div>
