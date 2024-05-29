@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Routes/Routes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 
@@ -12,6 +14,14 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        newestOnTop={false}
+        rtl={false}
+        pauseOnHover={false}
+        theme="light"
+      />
       <RouterProvider router={router}>
         <App />
       </RouterProvider>

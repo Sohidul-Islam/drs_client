@@ -3,6 +3,7 @@ import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import HelpCard from "../../Components/HelpCard/HelpCard";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../features/auth/authSlice";
@@ -28,10 +29,30 @@ const Login = () => {
       ).unwrap();
       if (res?.status) {
         navigate("/");
+        toast.success("login successful", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
       }
       // console.log(res, 'res')
     } catch (error) {
-      console.log("login error: ", error);
+      toast.error("Something went wrong!!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      // console.log("login error: ", error);
     }
   };
 
