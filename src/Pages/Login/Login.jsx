@@ -4,12 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import HelpCard from "../../Components/HelpCard/HelpCard";
 import { useForm } from "react-hook-form";
-import axios from "../../config/axiosConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../features/auth/authSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
+
+  // console.log(error, 'error')
 
   const {
     register,
@@ -19,20 +23,15 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("/login", {
-        email: data.email,
-        password: data.password,
-      });
-      if (response.data.status) {
-        localStorage.setItem("accessToken", response.data.accessToken);
-        navigate("/dashboard");
-      } else {
-        setError(response.data.message);
-        console.error(response.data.message);
+      const res = await dispatch(
+        login({ email: data.email, password: data.password })
+      ).unwrap();
+      if (res?.status) {
+        navigate("/");
       }
+      // console.log(res, 'res')
     } catch (error) {
-      setError(error.message);
-      console.error("Login error:", error.message);
+      console.log("login error: ", error);
     }
   };
 
@@ -118,9 +117,15 @@ const Login = () => {
                 </p>
               )}
               {/* authentication error  */}
+              {/* this message will show on toaster , for temporary i have put here  */}
               {error && <p className="text-red-500 text-xs mb-3">{error}</p>}
-              <button className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4">
-                LOG IN
+
+              <button
+                disabled={loading}
+                type="submit"
+                className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4"
+              >
+                {loading ? "Logging in..." : "LOG IN"}
               </button>
               <span className="text-sm">
                 Forgot password? <Link className="underline">Click here</Link>

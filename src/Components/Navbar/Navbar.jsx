@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  console.log(user, "user");
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -27,18 +30,29 @@ const Navbar = () => {
             >
               Subscriptions
             </Link>
-            <Link
-              to="/login"
-              className="text-sm border border-white px-4 py-2 rounded hover:bg-white hover:text-[#006E9E]"
-            >
-              Sign in
-            </Link>
-            <Link
-              to="/register"
-              className="text-sm bg-red-700 px-4 py-2 rounded text-white hover:bg-red-800"
-            >
-              Register
-            </Link>
+            {user?.status ? (
+              <Link
+                to="/dashboard"
+                className="text-white hover:text-gray-300 text-sm font-semibold"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <div className="flex gap-x-4">
+                <Link
+                  to="/login"
+                  className="text-sm border border-white px-4 py-2 rounded hover:bg-white hover:text-[#006E9E]"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-sm bg-red-700 px-4 py-2 rounded text-white hover:bg-red-800"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 

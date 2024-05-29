@@ -1,6 +1,6 @@
 import axios from "axios";
-const instance = axios.create({
+const axiosInstance = axios.create({
     baseURL: "https://dra-server.onrender.com/api",
 });
 
-export default instance;
+export default axiosInstance;

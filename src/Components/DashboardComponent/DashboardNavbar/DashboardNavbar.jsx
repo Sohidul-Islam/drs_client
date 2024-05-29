@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import logo from "../../../assets/logo.png";
 import user from "../../../assets/user.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../features/auth/authSlice";
 
 const DashboardNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { data } = useSelector((state) => state?.auth?.user);
+  console.log(data, "current user");
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <div className="flex justify-between px-5 py-2 border-b border-[#E9E9E9]">
       <div className="flex gap-x-2 items-center">
@@ -19,14 +30,31 @@ const DashboardNavbar = () => {
         <div className="relative">
           <button onClick={() => setIsOpen(!isOpen)}>
             <p className="text-sm font-semibold w-24 truncate">
-              Sabaria Mozumder
+              {data?.shop_owner_name || "User Name"}
+            </p>
+            <p className="text-xs text-[#6B6B6B]">
+              {data?.shop_name || "Shope Name"}
             </p>
           </button>
-          <p className="text-xs text-[#6B6B6B]">MAA Pharmacy</p>
 
-          <div className={`${isOpen ? "opacity-100" : "opacity-0"} w-[274px] h-[61px] flex justify-between p-3 shadow-xl absolute top-14 -right-5  transition-all duration-300`}>
-            <Link to="/dashboard/profile" onClick={() => setIsOpen(false)} className="px-4 py-2 border border-[#C4C4C4] text-sm">Profile</Link>
-            <p className="px-4 py-2 border border-[#C4C4C4] text-sm">Logout</p>
+          <div
+            className={`${
+              isOpen ? "opacity-100" : "opacity-0"
+            } w-[274px] h-[61px] flex justify-between p-3 shadow-xl absolute top-14 -right-5  transition-all duration-300`}
+          >
+            <Link
+              to="/dashboard/profile"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 border border-[#C4C4C4] text-sm"
+            >
+              Profile
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-[#C4C4C4] text-sm"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>

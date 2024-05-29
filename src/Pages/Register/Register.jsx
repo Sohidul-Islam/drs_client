@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import HelpCard from "../../Components/HelpCard/HelpCard";
-import axios from "../../config/axiosConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { registers } from "../../features/auth/authSlice";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { loading, error } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -21,11 +25,10 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("/register", data);
-      console.log(response, 'response from register')
+      await dispatch(registers(data)).unwrap();
+      navigate("/dashboard");
     } catch (error) {
-      // setError(error.message);
-      console.error("Registration error:", error.message);
+      console.error("Failed to register: ", error.message);
     }
   };
 
@@ -63,7 +66,9 @@ const Register = () => {
                     required: "Full name is required",
                   })}
                   className={`w-full border-b-2 ${
-                    errors.shop_owner_name ? "border-red-500 mb-1" : "border-[#989898] mb-5"
+                    errors.shop_owner_name
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 />
                 {errors.shop_owner_name && (
@@ -83,7 +88,9 @@ const Register = () => {
                     required: "Shop name is required",
                   })}
                   className={`w-full border-b-2 ${
-                    errors.shop_name ? "border-red-500 mb-1" : "border-[#989898] mb-5"
+                    errors.shop_name
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 />
                 {errors.shop_name && (
@@ -104,7 +111,9 @@ const Register = () => {
                     required: "Division is required",
                   })}
                   className={`w-full border-b-2 ${
-                    errors.division ? "border-red-500 mb-1" : "border-[#989898] mb-5"
+                    errors.division
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
                   <option value="">------</option>
@@ -124,7 +133,9 @@ const Register = () => {
                     required: "District is required",
                   })}
                   className={`w-full border-b-2 ${
-                    errors.district ? "border-red-500 mb-1" : "border-[#989898] mb-5"
+                    errors.district
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
                   <option value="">...</option>
@@ -147,7 +158,9 @@ const Register = () => {
                     required: "Upazila/Thana is required",
                   })}
                   className={`w-full border-b-2 ${
-                    errors.upazila ? "border-red-500 mb-1" : "border-[#989898] mb-5"
+                    errors.upazila
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
                   <option value="">...</option>
@@ -171,7 +184,9 @@ const Register = () => {
                   type="email"
                   {...register("email", { required: "Email is required" })}
                   className={`w-full border-b-2 ${
-                    errors.email ? "border-red-500 mb-1" : "border-[#989898] mb-5"
+                    errors.email
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 />
                 {errors.email && (
@@ -206,7 +221,9 @@ const Register = () => {
                   )}
                 />
                 {errors.phone_number && (
-                  <p className="text-red-500 text-xs">{errors.phone_number.message}</p>
+                  <p className="text-red-500 text-xs">
+                    {errors.phone_number.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -228,8 +245,10 @@ const Register = () => {
                       required: "Password is required",
                     })}
                     className={`w-full border-b-2 ${
-                    errors.password ? "border-red-500 mb-1" : "border-[#989898] mb-5"
-                  } outline-none block p-1`}
+                      errors.password
+                        ? "border-red-500 mb-1"
+                        : "border-[#989898] mb-5"
+                    } outline-none block p-1`}
                   />
                   <button
                     type="button"
@@ -260,8 +279,10 @@ const Register = () => {
                       required: "Please confirm your password",
                     })}
                     className={`w-full border-b-2 ${
-                    errors.confirm_password ? "border-red-500 mb-1" : "border-[#989898] mb-5"
-                  } outline-none block p-1`}
+                      errors.confirm_password
+                        ? "border-red-500 mb-1"
+                        : "border-[#989898] mb-5"
+                    } outline-none block p-1`}
                   />
                   <button
                     type="button"
@@ -283,8 +304,9 @@ const Register = () => {
             <button
               className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4"
               type="submit"
+              disabled={loading}
             >
-              REGISTER
+              {loading ? "Progress..." : "REGISTER"}
             </button>
 
             {/* Forgot password  */}
