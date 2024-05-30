@@ -8,23 +8,26 @@ import { router } from "./Routes/Routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
-import { store } from "./app/store";
+import { store, persistor } from "./app/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        newestOnTop={false}
-        rtl={false}
-        pauseOnHover={false}
-        theme="light"
-      />
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          newestOnTop={false}
+          rtl={false}
+          pauseOnHover={false}
+          theme="light"
+        />
+        <RouterProvider router={router}>
+          <App />
+        </RouterProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
