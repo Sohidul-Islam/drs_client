@@ -39,6 +39,7 @@ const Login = () => {
           progress: undefined,
           theme: "light",
         });
+        window.scrollTo(0, 0);
       }
       // console.log(res, 'res')
     } catch (error) {

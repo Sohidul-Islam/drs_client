@@ -6,12 +6,16 @@ import DashboardSidebar from "../../Components/DashboardComponent/DashboardSideb
 const DashboardLayout = () => {
   return (
     <div>
-      <DashboardNavbar />
+      <div className="">
+        <DashboardNavbar />
+      </div>
       <div className="grid grid-cols-6">
-        <div className="col-span-1 border-r border-[#E9E9E9] min-h-screen">
+        <div className="col-span-1 border-r border-[#E9E9E9] min-h-screen py-4">
           <DashboardSidebar />
         </div>
-        <Outlet />
+        <div className="p-4">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

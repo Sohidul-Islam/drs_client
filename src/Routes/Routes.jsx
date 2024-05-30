@@ -37,12 +37,32 @@ export const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "shop",
-        element: <div>Dashboard Shop Page</div>,
+        path: "sales",
+        element: <div>sales Shop Page</div>,
+      },
+      {
+        path: "products",
+        element: <div>products Page</div>,
+      },
+      {
+        path: "product-categories",
+        element: <div>product-categories Page</div>,
+      },
+      {
+        path: "customers",
+        element: <div>customers Page</div>,
+      },
+      {
+        path: "manufacturer",
+        element: <div>manufacturer Page</div>,
+      },
+      {
+        path: "supplier",
+        element: <div>supplier Page</div>,
       },
       {
         path: "profile",
-        element: <div>Profile Page</div>,
+        element: <div>profile Page</div>,
       },
     ],
   },
