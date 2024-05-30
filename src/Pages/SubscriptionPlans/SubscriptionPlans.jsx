@@ -9,7 +9,7 @@ const SubscriptionPlans = () => {
       <Link to="/" className="flex items-center gap-3">
         <img className="w-10 md:h-8" src={logo} alt="DRA Solution logo" />
         <div className="text-xl md:text-2xl font-semibold">
-          <span className="text-[#006E9E]">Pharma</span> DRA Solution
+          <span className="text-[#006E9E]">DRA</span> Solution
         </div>
       </Link>
       <div className="mt-6 md:text-center max-w-[600px] mx-auto ">

@@ -24,7 +24,7 @@ const HomeDetails = () => {
           <div className="flex items-center justify-center gap-2 mt-9">
             <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
             <p className="text-base font-semibold">
-              <span className="text-[#006E9E]">Pharma</span> DRA Solution
+              <span className="text-[#006E9E]">DRA</span> Solution
             </p>
           </div>
         </div>

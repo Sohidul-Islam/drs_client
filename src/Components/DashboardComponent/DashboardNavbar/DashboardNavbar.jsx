@@ -10,7 +10,6 @@ const DashboardNavbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { data } = useSelector((state) => state?.auth?.user);
-  console.log(data, "current user");
 
   const handleLogout = () => {
     dispatch(logout());
@@ -19,12 +18,12 @@ const DashboardNavbar = () => {
 
   return (
     <div className="flex justify-between px-5 py-2 border-b border-[#E9E9E9]">
-      <div className="flex gap-x-2 items-center">
+      <Link to="/" className="flex gap-x-2 items-center">
         <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
         <p className="text-sm font-semibold">
           <span className="text-[#006E9E]">DRA</span> Solution
         </p>
-      </div>
+      </Link>
       <div className="flex gap-x-2 items-center">
         <img className="w-9 h-9 bg-slate-700 rounded-full" src={user} alt="" />
         <div className="relative">

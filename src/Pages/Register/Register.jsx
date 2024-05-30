@@ -39,7 +39,7 @@ const Register = () => {
           <div className="flex items-center gap-3 mb-5 md:mb-10">
             <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
             <Link to="/" className="text-xl md:text-2xl font-semibold">
-              <span className="text-[#006E9E]">Pharma</span> DRA Solution
+              <span className="text-[#006E9E]">DRA</span> Solution
             </Link>
           </div>
           <p className="font-semibold mb-3">Create New Account!</p>

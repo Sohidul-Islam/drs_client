@@ -18,7 +18,7 @@ const Navbar = () => {
         {/* common portion for mobile and large device  */}
         <Link to="/" className="flex items-center gap-x-2">
           <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
-          <span className="text-base font-semibold">Pharma DRA Solution</span>
+          <span className="text-base font-semibold">DRA Solution</span>
         </Link>
 
         {/* responsive for large device  */}

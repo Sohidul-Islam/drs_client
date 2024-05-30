@@ -28,7 +28,7 @@ const Login = () => {
         login({ email: data.email, password: data.password })
       ).unwrap();
       if (res?.status) {
-        navigate("/");
+        navigate("/dashboard");
         toast.success("login successful", {
           position: "top-right",
           autoClose: 2000,
@@ -63,7 +63,7 @@ const Login = () => {
           <div className="flex items-center gap-3 mb-5 md:mb-10">
             <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
             <Link to="/" className="text-xl md:text-2xl font-semibold">
-              <span className="text-[#006E9E]">Pharma</span> DRA Solution
+              <span className="text-[#006E9E]">DRA</span> Solution
             </Link>
           </div>
           <div>
