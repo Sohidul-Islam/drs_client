@@ -1,48 +1,57 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { GoHome, GoTag, GoCpu , GoGitCompare} from "react-icons/go";
+import { AiOutlineDollarCircle, AiFillProduct, AiOutlineDatabase } from "react-icons/ai";
+import { GiDiscussion } from "react-icons/gi";
 
 const navList = [
   {
     id: 1,
     name: "Shop Dashboard",
     path: "/dashboard",
-    icon: "",
+    icon: <GoHome />,
   },
   {
     id: 2,
-    name: "Sales",
-    path: "/dashboard/sales",
-    icon: "",
+    name: "Purchase Overview",
+    path: "/dashboard/purchase-verview",
+    icon: <GoTag />,
   },
   {
     id: 3,
-    name: "Products",
-    path: "/dashboard/products",
-    icon: "",
+    name: "Sales",
+    path: "/dashboard/sales",
+    icon: <AiOutlineDollarCircle />,
   },
   {
     id: 4,
-    name: "Product Categories",
-    path: "/dashboard/product-categories",
-    icon: "",
+    name: "Products",
+    path: "/dashboard/products",
+    icon: <AiFillProduct />,
   },
   {
     id: 5,
-    name: "Customers",
-    path: "/dashboard/customers",
-    icon: "",
+    name: "Product Categories",
+    path: "/dashboard/product-categories",
+    icon: <AiOutlineDatabase />,
   },
   {
     id: 6,
-    name: "Manufacturer",
-    path: "/dashboard/manufacturer",
-    icon: "",
+    name: "Customers",
+    path: "/dashboard/customers",
+    icon: <GiDiscussion />,
   },
   {
     id: 7,
+    name: "Manufacturer",
+    path: "/dashboard/manufacturer",
+    icon: <GoCpu />,
+  },
+  {
+    id: 8,
     name: "Supplier",
     path: "/dashboard/supplier",
-    icon: "",
+    icon: <GoGitCompare />,
   },
 ];
 
@@ -54,9 +63,9 @@ const DashboardSidebar = () => {
           key={index}
           to={nav?.path}
           end={nav.path === '/dashboard'}
-          className={({isActive})=> `${isActive? "bg-[#006E9E] text-white" : "text-[#3F3F3F]"} w-full px-5 py-2 font-sora block`}
+          className={({isActive})=> `${isActive? "bg-[#006E9E] text-white" : "text-[#3F3F3F]"} w-full text-nowrap px-5 py-2 font-sora flex gap-x-2 items-center`}
         >
-          {nav?.name}
+          <span className="text-2xl">{nav?.icon}</span> {nav?.name}
         </NavLink>
       ))}
     </nav>
