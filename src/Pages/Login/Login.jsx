@@ -7,14 +7,13 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../features/auth/authSlice";
+import Spinner from "../../Components/Spinner/Spinner";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
-
-  // console.log(error, 'error')
 
   const {
     register,
@@ -29,30 +28,12 @@ const Login = () => {
       ).unwrap();
       if (res?.status) {
         navigate("/dashboard");
-        toast.success("login successful", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
+        toast.success("login successful");
         window.scrollTo(0, 0);
       }
       // console.log(res, 'res')
     } catch (error) {
-      toast.error("Something went wrong!!", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error("incorrect email or password");
       // console.log("login error: ", error);
     }
   };
@@ -134,20 +115,19 @@ const Login = () => {
                 </button>
               </div>
               {errors.password && (
-                <p role="alert" className="text-red-500 text-xs mb-3">
+                <p className="text-red-500 text-xs mb-3">
                   {errors.password.message}
                 </p>
               )}
-              {/* authentication error  */}
-              {/* this message will show on toaster , for temporary i have put here  */}
-              {error && <p className="text-red-500 text-xs mb-3">{error}</p>}
 
               <button
                 disabled={loading}
                 type="submit"
-                className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4"
+                className={`${
+                  loading && "bg-[#394856]"
+                } bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-[#003660] mb-4`}
               >
-                {loading ? "Logging in..." : "LOG IN"}
+                {loading ? <Spinner /> : "LOG IN"}
               </button>
               <span className="text-sm">
                 Forgot password? <Link className="underline">Click here</Link>

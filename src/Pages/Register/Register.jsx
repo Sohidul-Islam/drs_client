@@ -8,6 +8,8 @@ import "react-phone-input-2/lib/style.css";
 import HelpCard from "../../Components/HelpCard/HelpCard";
 import { useDispatch, useSelector } from "react-redux";
 import { registers } from "../../features/auth/authSlice";
+import Spinner from "../../Components/Spinner/Spinner";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,6 +22,7 @@ const Register = () => {
     register,
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -27,8 +30,10 @@ const Register = () => {
     try {
       await dispatch(registers(data)).unwrap();
       navigate("/dashboard");
+      toast.success("successfully created an account");
     } catch (error) {
-      console.error("Failed to register: ", error.message);
+      toast.error("something went wrong");
+      // console.error("Failed to register: ", error.message);
     }
   };
 
@@ -243,6 +248,12 @@ const Register = () => {
                     type={showPassword ? "text" : "password"}
                     {...register("password", {
                       required: "Password is required",
+                      pattern: {
+                        value:
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                        message:
+                          "Password must be at least 8 characters, include one uppercase letter, one lowercase letter, one number, and one special character",
+                      },
                     })}
                     className={`w-full border-b-2 ${
                       errors.password
@@ -277,6 +288,9 @@ const Register = () => {
                     type={showConfirmPassword ? "text" : "password"}
                     {...register("confirm_password", {
                       required: "Please confirm your password",
+                      validate: (value) =>
+                        value === getValues("password") ||
+                        "Passwords do not match",
                     })}
                     className={`w-full border-b-2 ${
                       errors.confirm_password
@@ -302,11 +316,13 @@ const Register = () => {
 
             {/* Register button  */}
             <button
-              className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4"
+              className={`${
+                loading && "bg-[#394856]"
+              } bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-[#003660] mb-4`}
               type="submit"
               disabled={loading}
             >
-              {loading ? "Progress..." : "REGISTER"}
+              {loading ? <Spinner /> : "REGISTER"}
             </button>
 
             {/* Forgot password  */}
