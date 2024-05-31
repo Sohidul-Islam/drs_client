@@ -6,6 +6,7 @@ import Login from "../Pages/Login/Login";
 import SubscriptionPlans from "../Pages/SubscriptionPlans/SubscriptionPlans";
 import Home from "../Pages/Home/Home/Home";
 import ProtectedRoute from "../Components/ProtectedRoute/ProtectedRoute";
+import Profile from "../Pages/Dashboard/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -62,7 +63,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <div>profile Page</div>,
+        element: <Profile />,
       },
     ],
   },

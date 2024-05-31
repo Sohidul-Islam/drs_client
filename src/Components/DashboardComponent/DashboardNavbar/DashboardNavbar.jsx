@@ -39,7 +39,7 @@ const DashboardNavbar = () => {
           <div
             className={`${
               isOpen ? "opacity-100" : "opacity-0"
-            } w-[274px] h-[61px] flex justify-between p-3 shadow-xl absolute top-14 -right-5  transition-all duration-300`}
+            } w-[274px] h-[61px] bg-white border border-gray-300 flex justify-between p-3 shadow-xl absolute top-12 -right-5  transition-all duration-300`}
           >
             <Link
               to="/dashboard/profile"
