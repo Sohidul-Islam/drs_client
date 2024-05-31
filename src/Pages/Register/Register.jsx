@@ -222,6 +222,9 @@ const Register = () => {
                         borderBottom: "2px solid #989898",
                         borderRadius: "0px",
                       }}
+                      
+                      autoFormat={false} // Disable autoformatting
+                
                     />
                   )}
                 />
