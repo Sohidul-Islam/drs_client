@@ -13,7 +13,7 @@ const DashboardLayout = () => {
         <div className="col-span-1 border-r border-[#E9E9E9] min-h-screen py-4">
           <DashboardSidebar />
         </div>
-        <div className="col-span-5 p-4 bg-[#F9F9F9]">
+        <div className="col-span-5 px-4 py-6 bg-[#F9F9F9]">
           <Outlet />
         </div>
       </div>

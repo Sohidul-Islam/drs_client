@@ -14,7 +14,7 @@ const navList = [
   {
     id: 2,
     name: "Purchase Overview",
-    path: "/dashboard/purchase-verview",
+    path: "/dashboard/purchase-overview",
     icon: <GoTag />,
   },
   {
