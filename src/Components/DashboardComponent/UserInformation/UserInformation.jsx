@@ -6,9 +6,9 @@ const UserInformation = () => {
   const [imageSrc, setImageSrc] = useState(
     "https://i.ibb.co/FYk6Y5G/Chairman.png"
   );
-  const [nidSrc, setNidSrc] = useState("https://i.ibb.co/FYk6Y5G/Chairman.png");
+  const [nidSrc, setNidSrc] = useState("https://i.ibb.co/KrT7qK8/nid.png");
   const [signatureSrc, setSignatureSrc] = useState(
-    "https://i.ibb.co/FYk6Y5G/Chairman.png"
+    "https://i.ibb.co/zFt3338/signature.png"
   );
   const [nidFileName, setNidFileName] = useState("Sabariya NID.jpg");
   const [signatureFileName, setSignatureFileName] =
