@@ -63,9 +63,9 @@ const DashboardSidebar = () => {
           key={index}
           to={nav?.path}
           end={nav.path === '/dashboard'}
-          className={({isActive})=> `${isActive? "bg-[#006E9E] text-white" : "text-[#3F3F3F]"} w-full text-nowrap px-5 py-2 flex gap-x-2 items-center`}
+          className={({isActive})=> `${isActive? "bg-[#006E9E] text-white" : "text-[#3F3F3F]"} w-full text-nowrap px-5 py-3 flex gap-x-2 items-center`}
         >
-          <span className="text-2xl">{nav?.icon}</span> {nav?.name}
+          <span className="text-xl">{nav?.icon}</span> <span className="text-sm">{nav?.name}</span>
         </NavLink>
       ))}
     </nav>

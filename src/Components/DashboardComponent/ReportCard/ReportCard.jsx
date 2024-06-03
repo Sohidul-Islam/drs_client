@@ -3,7 +3,7 @@ import { LuClipboardList } from "react-icons/lu";
 
 const ReportCard = () => {
   return (
-    <div className="bg-white border p-5 rounded-md">
+    <div className="bg-white border px-5 py-3 rounded-md">
       <div className="flex items-center gap-x-[6px]">
         <LuClipboardList size={20} />
         <p>Profit/Loss Report</p>
