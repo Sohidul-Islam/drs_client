@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const UserInformation = () => {
-  const { register, handleSubmit, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      phone_number: "01828632233", // Set the default value for phone number
+    },
+  });
   const [imageSrc, setImageSrc] = useState(
     "https://i.ibb.co/FYk6Y5G/Chairman.png"
   );
@@ -84,7 +94,7 @@ const UserInformation = () => {
                   type="text"
                   {...register("full-name", { required: true })}
                   defaultValue="Sabariya Muzumder"
-                  className="mt-1 block w-full bg-gray-200 text-gray-700 py-2 px-3 rounded-md"
+                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
               {/* email  */}
@@ -96,7 +106,7 @@ const UserInformation = () => {
                   type="email"
                   {...register("email", { required: true })}
                   defaultValue="sabariyamuzumder9921@gmail.com"
-                  className="mt-1 block w-full bg-gray-200 text-gray-700 py-2 px-3 rounded-md"
+                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
@@ -106,10 +116,9 @@ const UserInformation = () => {
                   Phone number
                 </label>
                 <input
-                  type="tel"
-                  {...register("phoneNumber", { required: true })}
-                  // defaultValue="+880-1994779217"
-                  className="mt-1 block w-full bg-gray-200 text-gray-700 py-2 px-3 rounded-md"
+                  type="number"
+                  {...register("phone_number", { required: true })}
+                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
@@ -121,7 +130,7 @@ const UserInformation = () => {
                   </label>
                   <select
                     {...register("gender", { required: true })}
-                    className="mt-1 block w-full border text-gray-700 py-2 px-3 rounded-md"
+                    className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                   >
                     <option value="">Select</option>
                     <option value="male">Male</option>
@@ -136,7 +145,7 @@ const UserInformation = () => {
                   <input
                     type="date"
                     {...register("dob", { required: true })}
-                    className="mt-1 block w-full border text-gray-700 py-1 px-3 rounded-md"
+                    className="mt-1 block w-full border outline-gray-300 text-gray-700 py-1 px-3 rounded-md"
                   />
                 </div>
               </div>
@@ -154,7 +163,7 @@ const UserInformation = () => {
                 </label>
                 <select
                   {...register("nationality", { required: true })}
-                  className="mt-1 block w-full border text-gray-700 py-2 px-3 rounded-md"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 >
                   <option value="">Select</option>
                   <option value="bangladeshi">Bangladeshi</option>
@@ -170,7 +179,7 @@ const UserInformation = () => {
                 <input
                   type="number"
                   {...register("nid-no", { required: true })}
-                  className="mt-1 block w-full border text-gray-700 py-[5px] px-3 rounded-md"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
                 />
               </div>
               {/* Upload NID Photo  */}
@@ -182,7 +191,7 @@ const UserInformation = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    {...register("nidImage", { required: true })}
+                    {...register("nidImage")}
                     onChange={(e) =>
                       handleImageUpload(
                         e,
@@ -223,7 +232,7 @@ const UserInformation = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    {...register("signatureImage", { required: true })}
+                    {...register("signatureImage")}
                     onChange={(e) =>
                       handleImageUpload(
                         e,
@@ -269,13 +278,26 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="password"
-                  {...register("password", { required: true })}
-                  className="my-1 block w-full border text-gray-700 py-[5px] px-3 rounded-md"
+                  {...register("password", {
+                    required: true,
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+                      message:
+                        "Password must be at least 6 characters long and contain both letters and numbers",
+                    },
+                  })}
+                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
                 />
-                <p className="text-[10px] text-[#989898]">
-                  Password (Minimum 6 characters with combination of letter &
-                  number){" "}
-                </p>
+                {errors.password ? (
+                  <p className="text-red-500 text-[10px]">
+                    {errors.password.message}
+                  </p>
+                ) : (
+                  <p className="text-[10px] text-[#989898]">
+                    Password (Minimum 6 characters with combination of letter &
+                    number)
+                  </p>
+                )}
               </div>
               {/* Confirm new password */}
               <div>
@@ -284,13 +306,19 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="password"
-                  {...register("confirm-password", { required: true })}
-                  className="my-1 block w-full border text-gray-700 py-[5px] px-3 rounded-md"
+                  {...register("confirm_password", {
+                    required: true,
+                    validate: (value) =>
+                      value === getValues("password") ||
+                      "Passwords do not match",
+                  })}
+                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
                 />
-                <p className="text-[10px] text-[#989898]">
-                  Password (Minimum 6 characters with combination of letter &
-                  number){" "}
-                </p>
+                {errors.confirm_password && (
+                  <p className="text-red-500 text-[10px]">
+                    {errors.confirm_password.message}
+                  </p>
+                ) }
               </div>
             </div>
           </div>
