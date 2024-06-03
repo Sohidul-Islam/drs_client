@@ -3,7 +3,7 @@ import PlanCard from "../PlanCard/PlanCard";
 
 const HomeSubscription = () => {
   return (
-    <div className="font-sora">
+    <div className="">
       <h3 className="text-xl font-semibold">সাবস্ক্রিপশন প্যাকেজসমূহ</h3>
       <p className="mt-2 text-xs leading-6">
         বাংলাদেশের খুঁচরা ঔষধ বিপনীগুলোর কাজ সহজসাধ্য করতে ঔষধ প্রশাসন

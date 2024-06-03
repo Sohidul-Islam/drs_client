@@ -41,7 +41,7 @@ const Login = () => {
   return (
     <div className="bg-bgLogin bg-cover bg-no-repeat">
       <div className="px-5 py-5 md:py-14 flex items-center justify-center h-full bg-[#1F23A8]/50 ">
-        <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white font-sora rounded-lg">
+        <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white rounded-lg">
           <div className="flex items-center gap-3 mb-5 md:mb-10">
             <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
             <Link to="/" className="text-xl md:text-2xl font-semibold">

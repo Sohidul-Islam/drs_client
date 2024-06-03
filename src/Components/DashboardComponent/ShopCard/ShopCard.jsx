@@ -4,7 +4,7 @@ import { GoChecklist } from "react-icons/go";
 const ShopCard = ({title,  color }) => {
   return (
     <div
-      className="h-[116px] rounded-md font-sora text-white px-4 py-4"
+      className="h-[116px] rounded-md text-white px-4 py-4"
       style={{ backgroundColor: color }}
     >
       <div className="flex items-center gap-x-2">

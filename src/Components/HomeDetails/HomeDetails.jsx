@@ -5,7 +5,7 @@ import FeatureList from "../FeatureList/FeatureList";
 
 const HomeDetails = () => {
   return (
-    <div className="font-sora">
+    <div className="">
       <h1 className="text-lg md:text-3xl font-semibold">
         Pharmacy Management Software
       </h1>

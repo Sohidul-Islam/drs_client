@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const SubscriptionPlans = () => {
   return (
-    <div className="container mx-auto p-5 md:p-10 font-sora ">
+    <div className="container mx-auto p-5 md:p-10 ">
       <Link to="/" className="flex items-center gap-3">
         <img className="w-10 md:h-8" src={logo} alt="DRA Solution logo" />
         <div className="text-xl md:text-2xl font-semibold">

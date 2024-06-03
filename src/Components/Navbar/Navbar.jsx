@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[#006E9E] text-white  font-sora">
+    <nav className="bg-[#006E9E] text-white">
       <div className="container mx-auto px-5 md:px-12 py-3 md:py-4 flex items-center justify-between">
         {/* common portion for mobile and large device  */}
         <Link to="/" className="flex items-center gap-x-2">
