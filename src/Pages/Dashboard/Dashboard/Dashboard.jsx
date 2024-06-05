@@ -3,6 +3,37 @@ import ShopCard from "../../../Components/DashboardComponent/ShopCard/ShopCard";
 import ReportCard from "../../../Components/DashboardComponent/ReportCard/ReportCard";
 import StoreCard from "../../../Components/DashboardComponent/StoreCard/StoreCard";
 
+const reports = [
+  {
+    id: "1",
+    title: "Sale/Purchase Report",
+    list1: "Day and Item Wise Sale",
+    list2: "Day Wise Purchase",
+    color: "#5066F2",
+  },
+  {
+    id: "2",
+    title: "Profit/Loss Report",
+    list1: "Today's Summary",
+    list2: "This Month Summary",
+    color: "#177833",
+  },
+  {
+    id: "3",
+    title: "Stock Report",
+    list1: "Stock Items",
+    list2: "Stock Item (batch Wise)",
+    color: "#006E9E",
+  },
+  {
+    id: "4",
+    title: "Medicine Expiry Report",
+    list1: "Expired Medicine/Products",
+    list2: "Expiring Within 06 Month",
+    color: "#E4B904",
+  },
+];
+
 const Dashboard = () => {
   return (
     <div>
@@ -32,13 +63,14 @@ const Dashboard = () => {
           />
         </div>
         <div className="col-span-2 grid grid-cols-2 gap-x-8 gap-y-3">
+          {reports.map((report, index) => (
+            <ReportCard key={index} report={report} />
+          ))}
+          {/* <ReportCard />
           <ReportCard />
           <ReportCard />
-          <ReportCard />
-          <ReportCard />
+          <ReportCard /> */}
         </div>
-
-        {/* <ReportCard/> */}
       </div>
     </div>
   );
