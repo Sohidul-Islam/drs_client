@@ -10,7 +10,10 @@ const UserInformation = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      phone_number: "01828632233", // Set the default value for phone number
+      phone_number: "01828632233",
+      image: "https://i.ibb.co/FYk6Y5G/Chairman.png",
+      nidImage: "https://i.ibb.co/KrT7qK8/nid.png",
+      signatureImage: "https://i.ibb.co/zFt3338/signature.png"
     },
   });
   const [imageSrc, setImageSrc] = useState(
@@ -36,7 +39,7 @@ const UserInformation = () => {
   ) => {
     const file = e.target.files[0];
     if (file) {
-      setValue(fieldName, file); // Set the image file in the form data
+      setValue(fieldName, file);
       setFileNameCallback(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
