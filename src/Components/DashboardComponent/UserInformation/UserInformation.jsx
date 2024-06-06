@@ -331,7 +331,7 @@ const UserInformation = () => {
             type="submit"
             className="cursor-pointer bg-[#006E9E] text-white px-7 py-[10px] text-sm"
           >
-            submit
+            Save
           </button>
         </div>
       </form>

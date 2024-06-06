@@ -6,39 +6,28 @@ const ShopInformation = () => {
     register,
     handleSubmit,
     setValue,
-    getValues,
-    formState: { errors },
+    // formState: { errors },
   } = useForm({
     defaultValues: {
-      phone_number: "01828632233",
+      shop_name: "MAA Pharmacy",
+      shop_email: "sabariyamuzumder9921@gmail.com",
+      shop_phone_number: "+8801994779217",
       image: "https://i.ibb.co/J7RfLqK/shope-photo.png",
     },
   });
   const [imageSrc, setImageSrc] = useState(
     "https://i.ibb.co/J7RfLqK/shope-photo.png"
   );
-  const [nidSrc, setNidSrc] = useState("https://i.ibb.co/KrT7qK8/nid.png");
-  const [signatureSrc, setSignatureSrc] = useState(
-    "https://i.ibb.co/zFt3338/signature.png"
-  );
-  const [nidFileName, setNidFileName] = useState("Sabariya NID.jpg");
-  const [signatureFileName, setSignatureFileName] =
-    useState("Sabariya Sign.PNG");
+  const [drugLicense, setDrugLicense] = useState("Choose file");
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
-  const handleImageUpload = (
-    e,
-    setImageSrcCallback,
-    fieldName,
-    setFileNameCallback
-  ) => {
+  const handleImageUpload = (e, setImageSrcCallback, fieldName) => {
     const file = e.target.files[0];
     if (file) {
       setValue(fieldName, file);
-      setFileNameCallback(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageSrcCallback(reader.result);
@@ -67,9 +56,7 @@ const ShopInformation = () => {
               type="file"
               accept="image/*"
               {...register("image")}
-              onChange={(e) =>
-                handleImageUpload(e, setImageSrc, "image", setNidFileName)
-              }
+              onChange={(e) => handleImageUpload(e, setImageSrc, "image")}
               className="hidden"
               id="file-upload"
             />
@@ -93,7 +80,8 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("shop-name", { required: true })}
+                  {...register("shop_name", { required: true })}
+                  placeholder="Shop name"
                   defaultValue="Larg Pharma"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -105,19 +93,21 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="email"
-                  {...register("email", { required: true })}
+                  {...register("shop_email", { required: true })}
+                  placeholder="Email"
                   defaultValue="largpharma1200@gmail.com"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
-              {/* phone number  */}
+              {/*shop phone number  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Phone number
                 </label>
                 <input
                   type="number"
-                  {...register("phone_number", { required: true })}
+                  {...register("shop_phone_number", { required: true })}
+                  placeholder="Phone number"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -162,7 +152,7 @@ const ShopInformation = () => {
               {/* Store/Pharmacy Category  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                Store/Pharmacy Category
+                  Store/Pharmacy Category
                 </label>
                 <select
                   {...register("store-category", { required: true })}
@@ -177,7 +167,7 @@ const ShopInformation = () => {
               {/* Store/Pharmacy Type  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                Store/Pharmacy Type
+                  Store/Pharmacy Type
                 </label>
                 <select
                   {...register("store-type", { required: true })}
@@ -199,114 +189,166 @@ const ShopInformation = () => {
               {/* Division */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                Division
+                  Division
                 </label>
                 <select
                   {...register("division", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 >
                   <option value="">Select</option>
-                  <option value="bangladeshi">Dhaka</option>
-                  <option value="indian">Chittagong</option>
-                  <option value="other">Khulna</option>
+                  <option value="dhaka">Dhaka</option>
+                  <option value="chittagong">Chittagong</option>
+                  <option value="khulna">Khulna</option>
                 </select>
               </div>
               {/* District */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                District
+                  District
                 </label>
                 <select
                   {...register("district", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 >
                   <option value="">Select</option>
-                  <option value="bangladeshi">Dhaka</option>
-                  <option value="indian">Cumilla</option>
-                  <option value="other">Feni</option>
+                  <option value="dhaka">Dhaka</option>
+                  <option value="cumilla">Cumilla</option>
+                  <option value="feni">Feni</option>
                 </select>
               </div>
               {/* Upazilla/Thana */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                Upazilla/Thana
+                  Upazilla/Thana
                 </label>
                 <select
                   {...register("upazila", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 >
                   <option value="">Select</option>
-                  <option value="bangladeshi">Dhaka</option>
-                  <option value="indian">Burichang</option>
-                  <option value="other">Goripur</option>
+                  <option value="dhaka">Dhaka</option>
+                  <option value="burichang">Burichang</option>
+                  <option value="goripur">Goripur</option>
                 </select>
               </div>
               {/* Postal Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                Postal Code
+                  Postal Code
                 </label>
                 <input
                   type="number"
                   {...register("postal-code", { required: true })}
+                  placeholder="Postal code"
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                />
+              </div>
+              {/* Address Line */}
+              <div className="md:col-span-">
+                <label className="block text-sm font-medium text-gray-700">
+                  Address Line
+                </label>
+                <textarea
+                  {...register("address-line", { required: true })}
+                  placeholder="Address line"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
                 />
               </div>
             </div>
           </div>
 
-          {/* Privacy Settings */}
+          {/* Owner Information */}
           <div>
-            <p className="border-b pb-2">Privacy Settings</p>
-            <div className="w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-              {/* New password  */}
+            <p className="border-b pb-2">Owner Information</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+              {/* Owner Name  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  New password
+                  Owner Name
                 </label>
                 <input
-                  type="password"
-                  {...register("password", {
-                    required: true,
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
-                      message:
-                        "Password must be at least 6 characters long and contain both letters and numbers",
-                    },
-                  })}
-                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                  type="text"
+                  {...register("owner-name", { required: true })}
+                  placeholder="Name"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
-                {errors.password ? (
-                  <p className="text-red-500 text-[10px]">
-                    {errors.password.message}
-                  </p>
-                ) : (
-                  <p className="text-[10px] text-[#989898]">
-                    Password (Minimum 6 characters with combination of letter &
-                    number)
-                  </p>
-                )}
               </div>
-              {/* Confirm new password */}
+              {/*Owner's Email  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Confirm new password
+                  Owner's Email
                 </label>
                 <input
-                  type="password"
-                  {...register("confirm_password", {
-                    required: true,
-                    validate: (value) =>
-                      value === getValues("password") ||
-                      "Passwords do not match",
-                  })}
-                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                  type="email"
+                  {...register("owner-email", { required: true })}
+                  placeholder="Email address"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
-                {errors.confirm_password && (
-                  <p className="text-red-500 text-[10px]">
-                    {errors.confirm_password.message}
-                  </p>
-                )}
+              </div>
+              {/* Owner's Phone Number  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Owner's Phone Number
+                </label>
+                <input
+                  type="number"
+                  {...register("owner-phone-number", { required: true })}
+                  placeholder="Phone number"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                />
+              </div>
+              {/* Pharmacist Name  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Pharmacist Name
+                </label>
+                <input
+                  type="text"
+                  {...register("pharmacist-name", { required: true })}
+                  placeholder="Pharmacist name"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                />
+              </div>
+              {/* Pharmacist Registration No. */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Pharmacist Registration No
+                </label>
+                <input
+                  type="number"
+                  {...register("pharmacist-reg-no", { required: true })}
+                  placeholder="Registration No"
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                />
+              </div>
+              <br />
+              {/* Upload Drug License  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Upload Drug License
+                </label>
+                <div className="mt-1 flex items-center border p-2 rounded-md">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    {...register("drug_license")}
+                    onChange={(e) => {
+                      setDrugLicense(e.target.files[0]?.name);
+                      setValue("drug_license", e.target.files[0]);
+                    }}
+                    className="hidden"
+                    id="drag-license-upload"
+                  />
+                  <label
+                    htmlFor="drag-license-upload"
+                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                  >
+                    Upload
+                  </label>
+                  <span className="text-xs text-gray-700 ml-2">
+                    {drugLicense}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -316,7 +358,7 @@ const ShopInformation = () => {
             type="submit"
             className="cursor-pointer bg-[#006E9E] text-white px-7 py-[10px] text-sm"
           >
-            submit
+            Save
           </button>
         </div>
       </form>
