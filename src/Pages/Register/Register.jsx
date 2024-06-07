@@ -1,35 +1,63 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import pharmaLogin from "../../assets/pharma-login.png";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import HelpCard from "../../Components/HelpCard/HelpCard";
+import { useDispatch, useSelector } from "react-redux";
+import { registers } from "../../features/auth/authSlice";
+import Spinner from "../../Components/Spinner/Spinner";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(registers(data)).unwrap();
+      navigate("/dashboard");
+      toast.success("successfully created an account");
+    } catch (error) {
+      toast.error("something went wrong");
+      // console.error("Failed to register: ", error.message);
+    }
+  };
+
   return (
-    <div className="bg-bgRegisterImage bg-cover">
+    <div className="bg-bgRegister bg-cover bg-no-repeat">
       <div className="px-5 py-5 md:py-14 flex items-center justify-center h-full bg-[#1F23A8]/50 ">
-        <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white font-sora rounded-lg">
+        <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white rounded-lg">
           <div className="flex items-center gap-3 mb-5 md:mb-10">
-            <img className="w-10 h-8" src={pharmaLogin} alt="Phara login" />
+            <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
             <Link to="/" className="text-xl md:text-2xl font-semibold">
-              <span className="text-[#006E9E]">Pharma</span> DRA Solution
+              <span className="text-[#006E9E]">DRA</span> Solution
             </Link>
           </div>
           <p className="font-semibold mb-3">Create New Account!</p>
           <p className="text-[13px]">
-            Already you have an account?{" "}
+            Already have an account?{" "}
             <Link to="/login" className="underline font-semibold">
               Sign In
             </Link>
-            . Takes let a minutes.
+            . Takes just a minute.
           </p>
 
           {/* start form  */}
-          <form className="mt-11">
+          <form className="mt-11" onSubmit={handleSubmit(onSubmit)}>
             {/* Full name & Shop name  */}
             <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10 md:mb-3">
               {/* Full name  */}
@@ -39,8 +67,20 @@ const Register = () => {
                 </label>
                 <input
                   type="text"
-                  className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                  {...register("shop_owner_name", {
+                    required: "Full name is required",
+                  })}
+                  className={`w-full border-b-2 ${
+                    errors.shop_owner_name
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
+                  } outline-none block p-1`}
                 />
+                {errors.shop_owner_name && (
+                  <p className="text-red-500 text-xs">
+                    {errors.shop_owner_name.message}
+                  </p>
+                )}
               </div>
               {/* Shop name  */}
               <div>
@@ -49,8 +89,20 @@ const Register = () => {
                 </label>
                 <input
                   type="text"
-                  className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                  {...register("shop_name", {
+                    required: "Shop name is required",
+                  })}
+                  className={`w-full border-b-2 ${
+                    errors.shop_name
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
+                  } outline-none block p-1`}
                 />
+                {errors.shop_name && (
+                  <p className="text-red-500 text-xs">
+                    {errors.shop_name.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -59,29 +111,72 @@ const Register = () => {
               {/* Division */}
               <div>
                 <label className="block text-[#989898] text-xs">Division</label>
-                <select className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1">
+                <select
+                  {...register("division", {
+                    required: "Division is required",
+                  })}
+                  className={`w-full border-b-2 ${
+                    errors.division
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
+                  } outline-none block p-1`}
+                >
                   <option value="">------</option>
-                  {/* Add options for divisions here */}
-                  {/* <option value="Dhaka">Dhaka</option> */}
+                  <option value="Dhaka">Dhaka</option>
                 </select>
+                {errors.division && (
+                  <p className="text-red-500 text-xs">
+                    {errors.division.message}
+                  </p>
+                )}
               </div>
               {/* District */}
               <div>
                 <label className="block text-[#989898] text-xs">District</label>
-                <select className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1">
+                <select
+                  {...register("district", {
+                    required: "District is required",
+                  })}
+                  className={`w-full border-b-2 ${
+                    errors.district
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
+                  } outline-none block p-1`}
+                >
                   <option value="">...</option>
                   {/* Add options for districts here */}
+                  <option value="Dhaka">Dhaka</option>
                 </select>
+                {errors.district && (
+                  <p className="text-red-500 text-xs">
+                    {errors.district.message}
+                  </p>
+                )}
               </div>
-              {/* Upozila/Thana */}
+              {/* Upazila/Thana */}
               <div>
                 <label className="block text-[#989898] text-xs">
-                  Upozila/Thana
+                  Upazila/Thana
                 </label>
-                <select className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1">
+                <select
+                  {...register("upazila", {
+                    required: "Upazila/Thana is required",
+                  })}
+                  className={`w-full border-b-2 ${
+                    errors.upazila
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
+                  } outline-none block p-1`}
+                >
                   <option value="">...</option>
-                  {/* Add options for Upozila/Thana here */}
+                  {/* Add options for Upazila/Thana here */}
+                  <option value="Dhaka">Dhaka</option>
                 </select>
+                {errors.upazila && (
+                  <p className="text-red-500 text-xs">
+                    {errors.upazila.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -92,30 +187,52 @@ const Register = () => {
                 <label className="block text-[#989898] text-xs">Email</label>
                 <input
                   type="email"
-                  className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                  {...register("email", { required: "Email is required" })}
+                  className={`w-full border-b-2 ${
+                    errors.email
+                      ? "border-red-500 mb-1"
+                      : "border-[#989898] mb-5"
+                  } outline-none block p-1`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs">{errors.email.message}</p>
+                )}
               </div>
               {/* Mobile  */}
               <div>
                 <label className="block text-[#989898] text-xs">Mobile</label>
-                <PhoneInput
-                  country={"bd"}
-                  value={phone}
-                  onChange={setPhone}
-                  inputStyle={{
-                    width: "100%",
-                    border:"none",
-                    borderBottom: "2px solid #989898",
-                  borderRadius:"0px",
-                    outline: "none",
-                  }}
-                  buttonStyle={{
-                    backgroundColor: "white",
-                    border:"none",
-                    borderBottom: "2px solid #989898",
-                    borderRadius:"0px",
-                  }}
+                <Controller
+                  name="phone_number"
+                  control={control}
+                  rules={{ required: "Mobile number is required" }}
+                  render={({ field }) => (
+                    <PhoneInput
+                      {...field}
+                      country={"bd"}
+                      inputStyle={{
+                        width: "100%",
+                        border: "none",
+                        borderBottom: "2px solid #989898",
+                        borderRadius: "0px",
+                        outline: "none",
+                      }}
+                      buttonStyle={{
+                        backgroundColor: "white",
+                        border: "none",
+                        borderBottom: "2px solid #989898",
+                        borderRadius: "0px",
+                      }}
+                      
+                      autoFormat={false} // Disable autoformatting
+                
+                    />
+                  )}
                 />
+                {errors.phone_number && (
+                  <p className="text-red-500 text-xs">
+                    {errors.phone_number.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -132,7 +249,20 @@ const Register = () => {
                 <div className="flex relative">
                   <input
                     type={showPassword ? "text" : "password"}
-                    className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                    {...register("password", {
+                      required: "Password is required",
+                      pattern: {
+                        value:
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                        message:
+                          "Password must be at least 8 characters, include one uppercase letter, one lowercase letter, one number, and one special character",
+                      },
+                    })}
+                    className={`w-full border-b-2 ${
+                      errors.password
+                        ? "border-red-500 mb-1"
+                        : "border-[#989898] mb-5"
+                    } outline-none block p-1`}
                   />
                   <button
                     type="button"
@@ -142,34 +272,60 @@ const Register = () => {
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500 text-xs">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
               {/* Re-type password */}
               <div>
                 <label
                   className="block text-[#989898] text-xs"
-                  htmlFor="password"
+                  htmlFor="confirmPassword"
                 >
                   Re-type password
                 </label>
                 <div className="flex relative">
                   <input
-                    type={showPassword ? "text" : "password"}
-                    className="w-full border-b-2 border-[#989898] outline-none block mb-5 p-1"
+                    type={showConfirmPassword ? "text" : "password"}
+                    {...register("confirm_password", {
+                      required: "Please confirm your password",
+                      validate: (value) =>
+                        value === getValues("password") ||
+                        "Passwords do not match",
+                    })}
+                    className={`w-full border-b-2 ${
+                      errors.confirm_password
+                        ? "border-red-500 mb-1"
+                        : "border-[#989898] mb-5"
+                    } outline-none block p-1`}
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="text-gray-500 mt-2 absolute right-3"
                   >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
+                {errors.confirm_password && (
+                  <p className="text-red-500 text-xs">
+                    {errors.confirm_password.message}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Register button  */}
-            <button className="bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-blue-700 mb-4">
-              REGISTER
+            <button
+              className={`${
+                loading && "bg-[#394856]"
+              } bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-[#003660] mb-4`}
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? <Spinner /> : "REGISTER"}
             </button>
 
             {/* Forgot password  */}
@@ -181,7 +337,7 @@ const Register = () => {
 
           {/* Contact Info  */}
           <div className="mt-8 md:mt-14 flex justify-center">
-            <HelpCard display="md:flex"/>
+            <HelpCard display="md:flex" />
           </div>
         </div>
       </div>

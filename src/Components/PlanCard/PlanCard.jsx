@@ -3,7 +3,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 
 const PlanCard = ({planeType, price, month, backgroundColor}) => {
   return (
-    <div className={` w-full md:max-w-[302px] max-h-[516px] mx-auto bg-white border border-[#E2E2E2] rounded-lg shadow-lg p-5 relative font-sora ${backgroundColor}`}>
+    <div className={`relative w-full md:max-w-[302px] max-h-[516px] bg-white border border-[#E2E2E2] rounded-lg shadow-lg p-5 ${backgroundColor}`}>
       <span className=" bg-[#006E9E] text-white text-xs font-bold px-2 py-1 rounded">
         {planeType}
       </span>
