@@ -2,6 +2,7 @@ import React from "react";
 import ShopCard from "../../../Components/DashboardComponent/ShopCard/ShopCard";
 import ReportCard from "../../../Components/DashboardComponent/ReportCard/ReportCard";
 import StoreCard from "../../../Components/DashboardComponent/StoreCard/StoreCard";
+import ShopInvoiceTable from "../../../Components/DashboardComponent/InvoiceTable/InvoiceTable";
 
 const reports = [
   {
@@ -71,6 +72,12 @@ const Dashboard = () => {
           <ReportCard />
           <ReportCard /> */}
         </div>
+      </div>
+
+      {/*Shop Invoice Table  */}
+      <div className="px-5 mt-3 bg-white">
+        <h1 className=" pt-5 pb-2 border-b mb-3">Top 10 Products Sold In Last Month</h1>
+        <ShopInvoiceTable />
       </div>
     </div>
   );
