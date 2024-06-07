@@ -2,7 +2,8 @@ import React from "react";
 import ShopCard from "../../../Components/DashboardComponent/ShopCard/ShopCard";
 import ReportCard from "../../../Components/DashboardComponent/ReportCard/ReportCard";
 import StoreCard from "../../../Components/DashboardComponent/StoreCard/StoreCard";
-import ShopInvoiceTable from "../../../Components/DashboardComponent/InvoiceTable/InvoiceTable";
+import ShopInvoiceTable from "../../../Components/DashboardComponent/ShopInvoiceTable/ShopInvoiceTable";
+import { GoHome } from "react-icons/go";
 
 const reports = [
   {
@@ -38,7 +39,11 @@ const reports = [
 const Dashboard = () => {
   return (
     <div>
-      <p>Dashboard Home Page</p>
+      <div className="flex items-center gap-x-[10px]">
+        <GoHome className="text-lg"/>
+        <p>Dashboard Home Page</p>
+      </div>
+
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
         <ShopCard title="Sale Order" color="#006E9E" />
         <ShopCard title="Purchase Order" color="#955176" />
@@ -76,7 +81,9 @@ const Dashboard = () => {
 
       {/*Shop Invoice Table  */}
       <div className="px-5 mt-3 bg-white">
-        <h1 className=" pt-5 pb-2 border-b mb-3">Top 10 Products Sold In Last Month</h1>
+        <h1 className=" pt-5 pb-2 border-b mb-3">
+          Top 10 Products Sold In Last Month
+        </h1>
         <ShopInvoiceTable />
       </div>
     </div>

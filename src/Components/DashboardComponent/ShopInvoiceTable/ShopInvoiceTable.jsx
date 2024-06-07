@@ -23,7 +23,7 @@ const ShopInvoiceTable = () => {
               <th
                 key={heading}
                 scope="col"
-                className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider text-nowrap"
+                className="px-4 py-3 text-left text-xs font-medium tracking-wider text-nowrap"
               >
                 {heading}
               </th>
@@ -33,13 +33,13 @@ const ShopInvoiceTable = () => {
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((row, idx) => (
             <tr key={idx}>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.product}</td>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.strength}</td>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.generic}</td>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.manufacturer}</td>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.dosageForm}</td>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.category}</td>
-              <td className="px-4 py-1 text-[12px] text-gray-500 h-12">{row.soldQuantity}</td>
+              <td className="px-4 py-1 text-[12px] h-12 text-[#0085FF]">{row.product}</td>
+              <td className="px-4 py-1 text-[12px] h-12">{row.strength}</td>
+              <td className="px-4 py-1 text-[12px] h-12">{row.generic}</td>
+              <td className="px-4 py-1 text-[12px] h-12">{row.manufacturer}</td>
+              <td className="px-4 py-1 text-[12px] h-12">{row.dosageForm}</td>
+              <td className="px-4 py-1 text-[12px] h-12">{row.category}</td>
+              <td className="px-4 py-1 text-[12px] h-12">{row.soldQuantity}</td>
             </tr>
           ))}
         </tbody>
