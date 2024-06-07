@@ -7,6 +7,13 @@ import SubscriptionPlans from "../Pages/SubscriptionPlans/SubscriptionPlans";
 import Home from "../Pages/Home/Home/Home";
 import ProtectedRoute from "../Components/ProtectedRoute/ProtectedRoute";
 import Profile from "../Pages/Dashboard/Profile/Profile";
+import PurchaseOverview from "../Pages/Dashboard/PurchaseOverview/PurchaseOverview";
+import Sales from "../Pages/Dashboard/Sales/Sales";
+import Products from "../Pages/Dashboard/Products/Products";
+import ProductCategory from "../Pages/Dashboard/ProductCategory/ProductCategory";
+import Customers from "../Pages/Dashboard/Customers/Customers";
+import Manufacturer from "../Pages/Dashboard/Manufacturer/Manufacturer";
+import Supplier from "../Pages/Dashboard/Supplier/Supplier";
 
 export const router = createBrowserRouter([
   {
@@ -38,32 +45,33 @@ export const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "sales",
-        element: <div>sales Shop Page</div>,
+        path: "purchase-overview",
+        element: <PurchaseOverview />,
       },
       {
-        path: "purchase-overview",
-        element: <div>Purchase Overview Page</div>,
+        path: "sales",
+        element: <Sales />,
       },
+
       {
         path: "products",
-        element: <div>products Page</div>,
+        element: <Products />,
       },
       {
         path: "product-categories",
-        element: <div>product-categories Page</div>,
+        element: <ProductCategory />,
       },
       {
         path: "customers",
-        element: <div>customers Page</div>,
+        element: <Customers />,
       },
       {
         path: "manufacturer",
-        element: <div>manufacturer Page</div>,
+        element: <Manufacturer />,
       },
       {
         path: "supplier",
-        element: <div>supplier Page</div>,
+        element: <Supplier />,
       },
       {
         path: "profile",
