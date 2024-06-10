@@ -2,7 +2,7 @@ import React from "react";
 import ShopCard from "../../../Components/DashboardComponent/ShopCard/ShopCard";
 import ReportCard from "../../../Components/DashboardComponent/ReportCard/ReportCard";
 import StoreCard from "../../../Components/DashboardComponent/StoreCard/StoreCard";
-import ShopInvoiceTable from "../../../Components/DashboardComponent/ShopInvoiceTable/ShopInvoiceTable";
+import ShopInvoiceTable from "../../../Components/DashboardComponent/Table/ShopInvoiceTable/ShopInvoiceTable";
 import { GoHome } from "react-icons/go";
 import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
 
