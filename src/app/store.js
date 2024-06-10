@@ -7,16 +7,16 @@
 //   },
 // });
 
-
 // store.js
 
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import authReducer from '../features/auth/authSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import authReducer from "../features/auth/authSlice";
+import { adminBaseApi } from "../features/api/admin/adminBaseApi";
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
 };
 
@@ -25,7 +25,9 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
+    [adminBaseApi.reducerPath]: adminBaseApi.reducer,
   },
+  middleware: (getDefault) => getDefault().concat(adminBaseApi.middleware),
 });
 
 export const persistor = persistStore(store);

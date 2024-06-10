@@ -4,6 +4,7 @@ import ReportCard from "../../../Components/DashboardComponent/ReportCard/Report
 import StoreCard from "../../../Components/DashboardComponent/StoreCard/StoreCard";
 import ShopInvoiceTable from "../../../Components/DashboardComponent/ShopInvoiceTable/ShopInvoiceTable";
 import { GoHome } from "react-icons/go";
+import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
 
 const reports = [
   {
@@ -37,6 +38,9 @@ const reports = [
 ];
 
 const Dashboard = () => {
+  const { data } = useGetAllManufactureQuery();
+  console.log(data, 'manufacture data from dashboard')
+
   return (
     <div>
       <div className="flex items-center gap-x-[10px]">
