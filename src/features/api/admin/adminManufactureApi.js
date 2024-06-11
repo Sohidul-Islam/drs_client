@@ -3,8 +3,7 @@ import { adminBaseApi } from "./adminBaseApi";
 const adminManufactureApi = adminBaseApi.injectEndpoints({
   tagTypes: ["Manufactures"],
   endpoints: (builder) => ({
-    
-    // get all manufacturer 
+    // get all manufacturer
     getAllManufacture: builder.query({
       query: () => "/manufacture/all",
       transformResponse: (response) => {
@@ -23,27 +22,8 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Manufactures"],
     }),
-
-    // update manufacturer
-    // updateManufacturer: builder.mutation({
-    //   query: ({ id, manufacturerData }) => ({
-    //     url: `/manufacturer/update/${id}`,
-    //     method: "PUT",
-    //     body: manufacturerData,
-    //   }),
-    //   invalidatesTags: ["Manufactures"],
-    // }),
-
-    // delete manufacturer
-    // deleteManufacturer: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/manufacturer/delete/${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: ["Manufactures"],
-    // }),
   }),
 });
 
-export const { useGetAllManufactureQuery, useUpdateManufacturerMutation } =
+export const { useGetAllManufactureQuery, useAddManufacturerMutation } =
   adminManufactureApi;

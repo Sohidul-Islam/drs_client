@@ -2,12 +2,35 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { GoCpu } from "react-icons/go";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
+import {  useSelector } from "react-redux";
+import { useAddManufacturerMutation } from "../../../features/api/admin/adminManufactureApi";
+import { toast } from "react-toastify";
 
 const CreateManufacturer = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const { user } = useSelector((state) => state.auth);
+  // console.log('user from manufacturer', user.data.id);
+  const [addManufacturer] = useAddManufacturerMutation();
 
-  const onSubmit = (data) => {
-    console.log("Create Manufacturer:", data);
+  const onSubmit = async (data) => {
+    const manufacture = {
+      name: data.name,
+      status: data.status,
+      sellerId: user.data.id,
+    };
+    // console.log("Manufacturer data:", manufacture, typeof user.data.id);
+    try {
+      const { data } = await addManufacturer(manufacture);
+      if (data.status) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+
+      // console.log("response", data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -32,7 +55,7 @@ const CreateManufacturer = () => {
               />
             </div>
             {/* Store */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 Store
               </label>
@@ -45,7 +68,7 @@ const CreateManufacturer = () => {
                 <option value="sabariya-pharma">Sabariya Pharma</option>
                 <option value="laz-pharma">Laz Pharma</option>
               </select>
-            </div>
+            </div> */}
             {/* Active Status */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -56,8 +79,8 @@ const CreateManufacturer = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="active">Yes</option>
+                <option value="inactive">No</option>
               </select>
             </div>
           </div>
@@ -75,13 +98,13 @@ const CreateManufacturer = () => {
                 Save
               </button>
               <button
-                // type="submit"
+                onClick={() => reset()}
                 className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
               >
                 <span className="mr-2">
                   <FaRegTrashCan />
                 </span>
-                Save
+                Clear all
               </button>
             </div>
           </div>
