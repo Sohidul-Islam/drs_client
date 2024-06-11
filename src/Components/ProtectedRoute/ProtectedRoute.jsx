@@ -1,9 +1,9 @@
-// ProtectedRoute.js
 import React from "react";
 import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("accessToken");
+  const token = Cookies.get('accessToken') || null
 
   if (!token) {
     return <Navigate to="/login" />;
