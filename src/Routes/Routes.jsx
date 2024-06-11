@@ -15,6 +15,7 @@ import Customers from "../Pages/Dashboard/Customers/Customers";
 import Manufacturer from "../Pages/Dashboard/Manufacturer/Manufacturer";
 import Supplier from "../Pages/Dashboard/Supplier/Supplier";
 import CreateManufacturer from "../Pages/Dashboard/Manufacturer/CreateManufacturer";
+import CreateSupplier from "../Pages/Dashboard/Supplier/CreateSupplier";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: "supplier",
         element: <Supplier />,
+      },
+      {
+        path: "supplier/create-supplier",
+        element: <CreateSupplier />,
       },
       {
         path: "profile",
