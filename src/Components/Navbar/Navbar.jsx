@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useSelector } from "react-redux";
+import CreateAdmin from "./CreateAdmin";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  console.log(user, "user");
+  // console.log(user, "user");
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -50,7 +51,10 @@ const Navbar = () => {
                   className="text-sm bg-red-700 px-4 py-2 rounded text-white hover:bg-red-800"
                 >
                   Register
-                </Link>
+                  </Link>
+
+                  {/* for temporary create a admin  */}
+                  <CreateAdmin/>
               </div>
             )}
           </div>
@@ -97,6 +101,7 @@ const Navbar = () => {
         >
           Register
         </Link>
+       
       </div>
     </nav>
   );
