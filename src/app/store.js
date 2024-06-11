@@ -14,6 +14,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import authReducer from "../features/auth/authSlice";
 import { adminBaseApi } from "../features/api/admin/adminBaseApi";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 const persistConfig = {
   key: "root",
@@ -30,4 +31,5 @@ export const store = configureStore({
   middleware: (getDefault) => getDefault().concat(adminBaseApi.middleware),
 });
 
+setupListeners(store.dispatch);
 export const persistor = persistStore(store);

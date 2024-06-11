@@ -5,11 +5,14 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // get all manufacturer
     getAllManufacture: builder.query({
-      query: () => "/manufacture/all",
-      transformResponse: (response) => {
-        // return response.data.map(({ id, name }) => ({ id, name }));
-        return response.data;
-      },
+      query: ({ page, pageSize, searchKey }) =>({
+        url: 'manufacturer/all',
+        params: { page, pageSize, searchKey },
+      }),
+      // transformResponse: (response) => {
+      //   return response.data.map(({ id, name }) => ({ id, name }));
+      //   return response.data;
+      // },
       providesTags: ["Manufactures"],
     }),
 

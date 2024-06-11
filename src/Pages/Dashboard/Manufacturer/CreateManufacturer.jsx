@@ -22,9 +22,11 @@ const CreateManufacturer = () => {
     try {
       const { data } = await addManufacturer(manufacture);
       if (data.status) {
+        reset()
         toast.success(data.message);
       } else {
         toast.error(data.message);
+        reset()
       }
 
       // console.log("response", data);

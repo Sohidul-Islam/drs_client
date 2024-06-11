@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useGetAllManufactureQuery } from "../../../../features/api/admin/adminManufactureApi";
 
-const data = [
+const datas = [
   {
     id: 1,
     store_name: "Tech Haven",
     manufacturer_name: "Gadget Corp",
     updater: "John Doe",
     date: "05/01/2024",
-    active: "yes"
+    active: "yes",
   },
   {
     id: 2,
@@ -15,7 +16,7 @@ const data = [
     manufacturer_name: "Innovate Inc",
     updater: "Jane Smith",
     date: "12/02/2024",
-    active: "no"
+    active: "no",
   },
   {
     id: 3,
@@ -23,7 +24,7 @@ const data = [
     manufacturer_name: "Tech Masters",
     updater: "Michael Johnson",
     date: "23/03/2024",
-    active: "yes"
+    active: "yes",
   },
   {
     id: 4,
@@ -31,7 +32,7 @@ const data = [
     manufacturer_name: "Future Tech",
     updater: "Emily Davis",
     date: "17/04/2024",
-    active: "no"
+    active: "no",
   },
   {
     id: 5,
@@ -39,7 +40,7 @@ const data = [
     manufacturer_name: "ElectroWorks",
     updater: "Chris Brown",
     date: "09/05/2024",
-    active: "yes"
+    active: "yes",
   },
   {
     id: 6,
@@ -47,7 +48,7 @@ const data = [
     manufacturer_name: "GizmoTech",
     updater: "Anna Wilson",
     date: "14/06/2024",
-    active: "no"
+    active: "no",
   },
   {
     id: 7,
@@ -55,7 +56,7 @@ const data = [
     manufacturer_name: "Smart Devices",
     updater: "James Taylor",
     date: "21/07/2024",
-    active: "yes"
+    active: "yes",
   },
   {
     id: 8,
@@ -63,7 +64,7 @@ const data = [
     manufacturer_name: "Hi-Tech Solutions",
     updater: "Patricia Miller",
     date: "30/08/2024",
-    active: "no"
+    active: "no",
   },
   {
     id: 9,
@@ -71,7 +72,7 @@ const data = [
     manufacturer_name: "Innovative Gadgets",
     updater: "Robert Moore",
     date: "11/09/2024",
-    active: "yes"
+    active: "yes",
   },
   {
     id: 10,
@@ -79,19 +80,34 @@ const data = [
     manufacturer_name: "Techno Corp",
     updater: "Linda Martinez",
     date: "25/10/2024",
-    active: "no"
-  }
+    active: "no",
+  },
 ];
 
-
 const ManufactureTable = () => {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
+  const [searchKey, setSearchKey] = useState("Sample");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { data, error, isLoading } = useGetAllManufactureQuery({
+    page,
+    pageSize,
+    searchKey,
+  });
+
+  console.log(error)
+
+  if (isLoading) {
+    <div>Loading...</div>
+  }
+  console.log("manufacturer", data);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredData = data.filter((row) =>
+  const filteredData = datas.filter((row) =>
     Object.values(row).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
