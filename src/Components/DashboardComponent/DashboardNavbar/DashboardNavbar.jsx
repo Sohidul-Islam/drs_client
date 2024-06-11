@@ -9,7 +9,7 @@ const DashboardNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data } = useSelector((state) => state?.auth?.user);
+  const { data } = useSelector((state) => state?.auth?.user || {user:undefined});
 
   const handleLogout = () => {
     dispatch(logout());
