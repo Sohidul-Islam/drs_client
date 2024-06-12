@@ -96,14 +96,10 @@ const ManufactureTable = () => {
     searchKey: "",
   });
 
-  console.log(isLoading)
-  console.log("manufacturer:", data);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
  
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
