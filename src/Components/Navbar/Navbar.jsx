@@ -54,7 +54,7 @@ const Navbar = () => {
                   </Link>
 
                   {/* for temporary create a admin  */}
-                  <CreateAdmin/>
+                  {/* <CreateAdmin/> */}
               </div>
             )}
           </div>

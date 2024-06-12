@@ -163,7 +163,7 @@ const ManufactureTable = () => {
                   {row.updater}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
+                  {row.date.slice(0, 10)}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.status}
