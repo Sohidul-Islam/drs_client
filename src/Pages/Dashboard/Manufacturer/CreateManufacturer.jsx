@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 const CreateManufacturer = () => {
   const { register, handleSubmit, reset } = useForm();
   const { user } = useSelector((state) => state.auth);
-  // console.log('user from manufacturer', user.data.id);
+  // console.log('user from manufacturer', user);
+  
   const [addManufacturer] = useAddManufacturerMutation();
 
   const onSubmit = async (data) => {
@@ -18,7 +19,6 @@ const CreateManufacturer = () => {
       status: data?.status,
       sellerId: user?.data?.id,
     };
-    // console.log("Manufacturer data:", manufacture, typeof user.data.id);
     try {
       const { data } = await addManufacturer(manufacture);
       if (data?.status) {
