@@ -1,118 +1,102 @@
 import React, { useState } from "react";
-import { useGetAllManufactureQuery } from "../../../../features/api/admin/adminManufactureApi";
 
-const datas = [
+const suppliers = [
   {
     id: 1,
-    store_name: "Tech Haven",
-    manufacturer_name: "Gadget Corp",
-    updater: "John Doe",
+    store_name: "Health Haven",
+    supplier_name: "Gizmo Corp",
+    updater: "Alex Johnson",
     date: "05/01/2024",
     active: "yes",
   },
   {
     id: 2,
-    store_name: "Electro World",
-    manufacturer_name: "Innovate Inc",
-    updater: "Jane Smith",
+    store_name: "Wellness World",
+    supplier_name: "InnovaTech",
+    updater: "Samantha Williams",
     date: "12/02/2024",
     active: "no",
   },
   {
     id: 3,
-    store_name: "Gizmo Galaxy",
-    manufacturer_name: "Tech Masters",
-    updater: "Michael Johnson",
+    store_name: "Pharma Galaxy",
+    supplier_name: "Tech Giants",
+    updater: "Daniel Robinson",
     date: "23/03/2024",
     active: "yes",
   },
   {
     id: 4,
-    store_name: "Device Depot",
-    manufacturer_name: "Future Tech",
-    updater: "Emily Davis",
+    store_name: "Medic Depot",
+    supplier_name: "Future Innovations",
+    updater: "Victoria Clark",
     date: "17/04/2024",
     active: "no",
   },
   {
     id: 5,
-    store_name: "Gadget Zone",
-    manufacturer_name: "ElectroWorks",
-    updater: "Chris Brown",
+    store_name: "Drug Zone",
+    supplier_name: "ElectroTech",
+    updater: "Andrew Lee",
     date: "09/05/2024",
     active: "yes",
   },
   {
     id: 6,
-    store_name: "Tech Hub",
-    manufacturer_name: "GizmoTech",
-    updater: "Anna Wilson",
+    store_name: "Medicine Store",
+    supplier_name: "Gizmo Solutions",
+    updater: "Megan Turner",
     date: "14/06/2024",
     active: "no",
   },
   {
     id: 7,
-    store_name: "Digital Den",
-    manufacturer_name: "Smart Devices",
-    updater: "James Taylor",
+    store_name: "Pharmacy Hub",
+    supplier_name: "Smart Gadgets",
+    updater: "Jonathan Harris",
     date: "21/07/2024",
     active: "yes",
   },
   {
     id: 8,
-    store_name: "ElectroMart",
-    manufacturer_name: "Hi-Tech Solutions",
-    updater: "Patricia Miller",
+    store_name: "HealthMart",
+    supplier_name: "High-Tech Innovations",
+    updater: "Natalie Walker",
     date: "30/08/2024",
     active: "no",
   },
   {
     id: 9,
-    store_name: "Gadget City",
-    manufacturer_name: "Innovative Gadgets",
-    updater: "Robert Moore",
+    store_name: "Medic Land",
+    supplier_name: "Innovative Solutions",
+    updater: "Kevin Edwards",
     date: "11/09/2024",
     active: "yes",
   },
   {
     id: 10,
-    store_name: "Device Central",
-    manufacturer_name: "Techno Corp",
-    updater: "Linda Martinez",
+    store_name: "Drug Central",
+    supplier_name: "Tech Innovations",
+    updater: "Sophia Harris",
     date: "25/10/2024",
     active: "no",
   },
 ];
 
-const ManufactureTable = () => {
-  // const [page, setPage] = useState(1);
-  // const [pageSize, setPageSize] = useState(2);
-  // const [searchKey, setSearchKey] = useState("Sample");
+
+const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const { data, error, isLoading } = useGetAllManufactureQuery({
-    page: 1,
-    pageSize: 15,
-    searchKey: "",
-  });
-
-  console.log(isLoading)
-  console.log("manufacturer:", data);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
- 
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredData = datas.filter((row) =>
+  const filteredData = suppliers.filter((row) =>
     Object.values(row).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
+
   return (
     <div className="bg-white px-5">
       {/* search field  */}
@@ -132,7 +116,7 @@ const ManufactureTable = () => {
               {[
                 "ID",
                 "Store",
-                "Manufacturer Name",
+                "Supplier Name",
                 "Updater",
                 "Updater On",
                 "Active",
@@ -148,7 +132,7 @@ const ManufactureTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((row, index) => (
+            {filteredData.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -157,7 +141,7 @@ const ManufactureTable = () => {
                   {row.store_name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.manufacturer_name}
+                  {row.supplier_name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.updater}
@@ -166,7 +150,7 @@ const ManufactureTable = () => {
                   {row.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.status}
+                  {row.active}
                 </td>
               </tr>
             ))}
@@ -177,4 +161,4 @@ const ManufactureTable = () => {
   );
 };
 
-export default ManufactureTable;
+export default SupplierTable;
