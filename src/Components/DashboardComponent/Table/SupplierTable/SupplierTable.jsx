@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useGetAllSupplierQuery } from "../../../../features/api/admin/adminSupplierApi";
 
 const suppliers = [
   {
@@ -86,6 +87,15 @@ const suppliers = [
 
 const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { data, isLoading } = useGetAllSupplierQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: "",
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -132,7 +142,7 @@ const SupplierTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((row, index) => (
+            {data.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -150,7 +160,7 @@ const SupplierTable = () => {
                   {row.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.active}
+                  {row.status}
                 </td>
               </tr>
             ))}
