@@ -85,23 +85,24 @@ const datas = [
 ];
 
 const ManufactureTable = () => {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
-  const [searchKey, setSearchKey] = useState("Sample");
+  // const [page, setPage] = useState(1);
+  // const [pageSize, setPageSize] = useState(2);
+  // const [searchKey, setSearchKey] = useState("Sample");
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, error, isLoading } = useGetAllManufactureQuery({
-    page,
-    pageSize,
-    searchKey,
+    page: 1,
+    pageSize: 15,
+    searchKey: "",
   });
 
-  console.log(error)
+  console.log(isLoading)
+  console.log("manufacturer:", data);
 
   if (isLoading) {
-    <div>Loading...</div>
+    return <div>Loading...</div>;
   }
-  console.log("manufacturer", data);
+ 
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -147,7 +148,7 @@ const ManufactureTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((row, index) => (
+            {data.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -165,7 +166,7 @@ const ManufactureTable = () => {
                   {row.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.active}
+                  {row.status}
                 </td>
               </tr>
             ))}
