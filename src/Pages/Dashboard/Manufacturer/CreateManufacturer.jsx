@@ -14,18 +14,18 @@ const CreateManufacturer = () => {
 
   const onSubmit = async (data) => {
     const manufacture = {
-      name: data.name,
-      status: data.status,
-      sellerId: user.data.id,
+      name: data?.name,
+      status: data?.status,
+      sellerId: user?.data?.id,
     };
     // console.log("Manufacturer data:", manufacture, typeof user.data.id);
     try {
       const { data } = await addManufacturer(manufacture);
-      if (data.status) {
+      if (data?.status) {
         reset()
-        toast.success(data.message);
+        toast.success(data?.message);
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
         reset()
       }
 

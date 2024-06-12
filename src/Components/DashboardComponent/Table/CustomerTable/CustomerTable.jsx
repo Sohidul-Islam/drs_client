@@ -1,118 +1,113 @@
-import React, { useState } from "react";
-import { useGetAllManufactureQuery } from "../../../../features/api/admin/adminManufactureApi";
+import React, { useState } from 'react';
 
-const datas = [
+const customers = [
   {
     id: 1,
-    store_name: "Tech Haven",
-    manufacturer_name: "Gadget Corp",
-    updater: "John Doe",
+    customer_name: "Alex Johnson",
+    store_name: "Gizmo Corp",
+    mobile_number: "0123456789",
+    updater: "John Smith",
     date: "05/01/2024",
     active: "yes",
   },
   {
     id: 2,
-    store_name: "Electro World",
-    manufacturer_name: "Innovate Inc",
-    updater: "Jane Smith",
+    customer_name: "Samantha Williams",
+    store_name: "InnovaTech",
+    mobile_number: "0198765432",
+    updater: "Emily Johnson",
     date: "12/02/2024",
     active: "no",
   },
   {
     id: 3,
-    store_name: "Gizmo Galaxy",
-    manufacturer_name: "Tech Masters",
-    updater: "Michael Johnson",
+    customer_name: "Daniel Robinson",
+    store_name: "Tech Giants",
+    mobile_number: "0154321098",
+    updater: "Michael Brown",
     date: "23/03/2024",
     active: "yes",
   },
   {
     id: 4,
-    store_name: "Device Depot",
-    manufacturer_name: "Future Tech",
-    updater: "Emily Davis",
+    customer_name: "Victoria Clark",
+    store_name: "Future Innovations",
+    mobile_number: "0187654321",
+    updater: "Sarah Davis",
     date: "17/04/2024",
     active: "no",
   },
   {
     id: 5,
-    store_name: "Gadget Zone",
-    manufacturer_name: "ElectroWorks",
-    updater: "Chris Brown",
+    customer_name: "Andrew Lee",
+    store_name: "ElectroTech",
+    mobile_number: "0165432109",
+    updater: "Daniel Lee",
     date: "09/05/2024",
     active: "yes",
   },
   {
     id: 6,
-    store_name: "Tech Hub",
-    manufacturer_name: "GizmoTech",
-    updater: "Anna Wilson",
+    customer_name: "Megan Turner",
+    store_name: "Gizmo Solutions",
+    mobile_number: "0135792468",
+    updater: "Michelle Turner",
     date: "14/06/2024",
     active: "no",
   },
   {
     id: 7,
-    store_name: "Digital Den",
-    manufacturer_name: "Smart Devices",
-    updater: "James Taylor",
+    customer_name: "Jonathan Harris",
+    store_name: "Smart Gadgets",
+    mobile_number: "0178642093",
+    updater: "Richard Harris",
     date: "21/07/2024",
     active: "yes",
   },
   {
     id: 8,
-    store_name: "ElectroMart",
-    manufacturer_name: "Hi-Tech Solutions",
-    updater: "Patricia Miller",
+    customer_name: "Natalie Walker",
+    store_name: "High-Tech Innovations",
+    mobile_number: "0147382906",
+    updater: "Laura Edwards",
     date: "30/08/2024",
     active: "no",
   },
   {
     id: 9,
-    store_name: "Gadget City",
-    manufacturer_name: "Innovative Gadgets",
-    updater: "Robert Moore",
+    customer_name: "Kevin Edwards",
+    store_name: "Innovative Solutions",
+    mobile_number: "0112345678",
+    updater: "Jacob Martinez",
     date: "11/09/2024",
     active: "yes",
   },
   {
     id: 10,
-    store_name: "Device Central",
-    manufacturer_name: "Techno Corp",
-    updater: "Linda Martinez",
+    customer_name: "Sophia Harris",
+    store_name: "Tech Innovations",
+    mobile_number: "0198765432",
+    updater: "Emma Harris",
     date: "25/10/2024",
     active: "no",
   },
 ];
 
-const ManufactureTable = () => {
-  // const [page, setPage] = useState(1);
-  // const [pageSize, setPageSize] = useState(2);
-  // const [searchKey, setSearchKey] = useState("Sample");
+
+
+const CustomerTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const { data, error, isLoading } = useGetAllManufactureQuery({
-    page: 1,
-    pageSize: 15,
-    searchKey: "",
-  });
-
-  console.log(isLoading)
-  console.log("manufacturer:", data);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
- 
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredData = datas.filter((row) =>
+  const filteredData = customers.filter((row) =>
     Object.values(row).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
+
   return (
     <div className="bg-white px-5">
       {/* search field  */}
@@ -131,8 +126,9 @@ const ManufactureTable = () => {
             <tr>
               {[
                 "ID",
+                "Customer Name",
                 "Store",
-                "Manufacturer Name",
+                "Mobile",
                 "Updater",
                 "Updater On",
                 "Active",
@@ -148,16 +144,19 @@ const ManufactureTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((row, index) => (
+            {filteredData.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.customer_name}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.store_name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.manufacturer_name}
+                  {row.mobile_number}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.updater}
@@ -166,7 +165,7 @@ const ManufactureTable = () => {
                   {row.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.status}
+                  {row.active}
                 </td>
               </tr>
             ))}
@@ -177,4 +176,4 @@ const ManufactureTable = () => {
   );
 };
 
-export default ManufactureTable;
+export default CustomerTable;
