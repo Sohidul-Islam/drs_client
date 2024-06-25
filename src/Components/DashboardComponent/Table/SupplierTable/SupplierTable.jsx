@@ -1,111 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetAllSupplierQuery } from "../../../../features/api/admin/adminSupplierApi";
-
-const suppliers = [
-  {
-    id: 1,
-    store_name: "Health Haven",
-    supplier_name: "Gizmo Corp",
-    updater: "Alex Johnson",
-    date: "05/01/2024",
-    active: "yes",
-  },
-  {
-    id: 2,
-    store_name: "Wellness World",
-    supplier_name: "InnovaTech",
-    updater: "Samantha Williams",
-    date: "12/02/2024",
-    active: "no",
-  },
-  {
-    id: 3,
-    store_name: "Pharma Galaxy",
-    supplier_name: "Tech Giants",
-    updater: "Daniel Robinson",
-    date: "23/03/2024",
-    active: "yes",
-  },
-  {
-    id: 4,
-    store_name: "Medic Depot",
-    supplier_name: "Future Innovations",
-    updater: "Victoria Clark",
-    date: "17/04/2024",
-    active: "no",
-  },
-  {
-    id: 5,
-    store_name: "Drug Zone",
-    supplier_name: "ElectroTech",
-    updater: "Andrew Lee",
-    date: "09/05/2024",
-    active: "yes",
-  },
-  {
-    id: 6,
-    store_name: "Medicine Store",
-    supplier_name: "Gizmo Solutions",
-    updater: "Megan Turner",
-    date: "14/06/2024",
-    active: "no",
-  },
-  {
-    id: 7,
-    store_name: "Pharmacy Hub",
-    supplier_name: "Smart Gadgets",
-    updater: "Jonathan Harris",
-    date: "21/07/2024",
-    active: "yes",
-  },
-  {
-    id: 8,
-    store_name: "HealthMart",
-    supplier_name: "High-Tech Innovations",
-    updater: "Natalie Walker",
-    date: "30/08/2024",
-    active: "no",
-  },
-  {
-    id: 9,
-    store_name: "Medic Land",
-    supplier_name: "Innovative Solutions",
-    updater: "Kevin Edwards",
-    date: "11/09/2024",
-    active: "yes",
-  },
-  {
-    id: 10,
-    store_name: "Drug Central",
-    supplier_name: "Tech Innovations",
-    updater: "Sophia Harris",
-    date: "25/10/2024",
-    active: "no",
-  },
-];
-
 
 const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading } = useGetAllSupplierQuery({
-    page: 1,
-    pageSize: 15,
+    page: currentPage,
+    pageSize: pageSize,
     searchKey: "",
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [pageSize]);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  const { totalPages } = data.metadata;
 
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    const { value } = event.target;
+    setSearchQuery(value);
+    setCurrentPage(1);
   };
 
-  const filteredData = suppliers.filter((row) =>
-    Object.values(row).some((value) =>
+  const handlePageSizeChange = (event) => {
+    setPageSize(Number(event.target.value));
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Function to check if any field in the row matches the search query
+  const filterData = (rowData) => {
+    return Object.values(rowData).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  );
+    );
+  };
+
+  // Filter data based on search query
+  const filteredData = data?.data?.filter(filterData);
 
   return (
     <div className="bg-white px-5">
@@ -142,7 +87,7 @@ const SupplierTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((row, index) => (
+            {filteredData.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -157,7 +102,7 @@ const SupplierTable = () => {
                   {row.updater}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
+                {row.date.slice(0, 10)}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.status}
@@ -166,6 +111,48 @@ const SupplierTable = () => {
             ))}
           </tbody>
         </table>
+        <div className="border-t">
+          <div className="my-4 flex justify-between">
+            <div>
+              <label className="text-sm font-medium text-[#1F1F1F] mr-2">
+                Show
+              </label>
+              <select
+                className="text-sm border outline-gray-300 text-gray-700 py-1 px-1 rounded-md"
+                value={pageSize}
+                onChange={handlePageSizeChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+            <div>
+              <button
+                onClick={handlePrevious}
+                className={`border px-3 py-1 text-base ${
+                  currentPage === 1
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer"
+                }`}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNext}
+                className={`border px-3 py-1 text-base ${
+                  currentPage === totalPages
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer"
+                }`}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
