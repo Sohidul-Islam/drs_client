@@ -10,7 +10,7 @@ const adminSupplierApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data.map(
+        const data = res.data.map(
           ({ id, name, status, updatedAt, Seller, Updater }) => ({
             id,
             supplier_name: name,
@@ -20,6 +20,16 @@ const adminSupplierApi = adminBaseApi.injectEndpoints({
             updater: Updater.shop_owner_name,
           })
         );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+        return {
+          data: data,
+          metadata,
+        };
       },
       providesTags: ["Supplier"],
     }),
