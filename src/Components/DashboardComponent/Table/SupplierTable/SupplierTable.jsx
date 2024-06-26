@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import * as XLSX from "xlsx";
 import { useGetAllSupplierQuery } from "../../../../features/api/admin/adminSupplierApi";
 import { PiExportLight } from "react-icons/pi";
 
@@ -7,6 +10,7 @@ const SupplierTable = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { data, isLoading } = useGetAllSupplierQuery({
     page: currentPage,
@@ -50,13 +54,12 @@ const SupplierTable = () => {
     const matchesSearchQuery = Object.values(rowData).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
-  
+
     const matchesStatusFilter =
       statusFilter === "all" || rowData.status.toLowerCase() === statusFilter;
-  
+
     return matchesSearchQuery && matchesStatusFilter;
   };
-  
 
   // Filter data based on search query
   const filteredData = data?.data?.filter(filterData);
@@ -65,7 +68,61 @@ const SupplierTable = () => {
     setStatusFilter(event.target.value);
     setCurrentPage(1);
   };
-  
+
+  // export pdf and excel file
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    const tableColumn = [
+      "ID",
+      "Store",
+      "Supplier Name",
+      "Updater",
+      "Updater On",
+      "Active",
+    ];
+    const tableRows = [];
+
+    filteredData.forEach((row) => {
+      const rowData = [
+        row.id,
+        row.store_name,
+        row.supplier_name,
+        row.updater,
+        row.date.slice(0, 10),
+        row.status,
+      ];
+      tableRows.push(rowData);
+    });
+
+    doc.autoTable(tableColumn, tableRows, { startY: 20 });
+    doc.text("Supplier Report", 14, 15);
+    doc.save(`supplier_report_${new Date().toISOString()}.pdf`);
+  };
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = {
+      Sheets: { data: worksheet },
+      SheetNames: ["data"],
+    };
+    XLSX.writeFile(
+      workbook,
+      `supplier_report_${new Date().toISOString()}.xlsx`
+    );
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleExport = (type) => {
+    if (type === "pdf") {
+      exportToPDF();
+    } else if (type === "excel") {
+      exportToExcel();
+    }
+    setIsDropdownOpen(false);
+  };
 
   return (
     <div className="bg-white px-5">
@@ -95,9 +152,32 @@ const SupplierTable = () => {
               <option value="inactive">Inactive</option>
             </select>
           </div>
-          <button className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1">
-            <span className="text-sm">Export</span> <PiExportLight size={17} />{" "}
-          </button>
+          
+          <div className="relative">
+            <button
+              onClick={toggleDropdown}
+              className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1"
+            >
+              <span className="text-sm">Export</span>{" "}
+              <PiExportLight size={17} />
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
+                <button
+                  onClick={() => handleExport("pdf")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Export PDF
+                </button>
+                <button
+                  onClick={() => handleExport("excel")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Export Excel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
