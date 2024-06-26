@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
-import * as XLSX from "xlsx";
 import { useGetAllSupplierQuery } from "../../../../features/api/admin/adminSupplierApi";
 import { PiExportLight } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import {
+  exportExcel,
+  exportPDF,
+} from "../../../../features/export/exportSlice";
+
+const tableHead = [
+  "ID",
+  "Store",
+  "Supplier Name",
+  "Updater",
+  "Updater On",
+  "Active",
+];
 
 const SupplierTable = () => {
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,7 +73,6 @@ const SupplierTable = () => {
 
     return matchesSearchQuery && matchesStatusFilter;
   };
-
   // Filter data based on search query
   const filteredData = data?.data?.filter(filterData);
 
@@ -69,57 +81,22 @@ const SupplierTable = () => {
     setCurrentPage(1);
   };
 
-  // export pdf and excel file
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    const tableColumn = [
-      "ID",
-      "Store",
-      "Supplier Name",
-      "Updater",
-      "Updater On",
-      "Active",
-    ];
-    const tableRows = [];
-
-    filteredData.forEach((row) => {
-      const rowData = [
-        row.id,
-        row.store_name,
-        row.supplier_name,
-        row.updater,
-        row.date.slice(0, 10),
-        row.status,
-      ];
-      tableRows.push(rowData);
-    });
-
-    doc.autoTable(tableColumn, tableRows, { startY: 20 });
-    doc.text("Supplier Report", 14, 15);
-    doc.save(`supplier_report_${new Date().toISOString()}.pdf`);
-  };
-
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredData);
-    const workbook = {
-      Sheets: { data: worksheet },
-      SheetNames: ["data"],
-    };
-    XLSX.writeFile(
-      workbook,
-      `supplier_report_${new Date().toISOString()}.xlsx`
-    );
-  };
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
+  // Export PDF and Excel File
   const handleExport = (type) => {
+    const columns = [
+      "id",
+      "store_name",
+      "supplier_name",
+      "updater",
+      "date",
+      "status",
+    ];
+    const title = "Supplier Report";
+
     if (type === "pdf") {
-      exportToPDF();
+      dispatch(exportPDF({ columns, data: filteredData, title }));
     } else if (type === "excel") {
-      exportToExcel();
+      dispatch(exportExcel({ columns, data: filteredData, title }));
     }
     setIsDropdownOpen(false);
   };
@@ -152,10 +129,10 @@ const SupplierTable = () => {
               <option value="inactive">Inactive</option>
             </select>
           </div>
-          
+
           <div className="relative">
             <button
-              onClick={toggleDropdown}
+              onClick={()=> setIsDropdownOpen(!isDropdownOpen)}
               className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1"
             >
               <span className="text-sm">Export</span>{" "}
@@ -186,14 +163,7 @@ const SupplierTable = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {[
-                "ID",
-                "Store",
-                "Supplier Name",
-                "Updater",
-                "Updater On",
-                "Active",
-              ].map((heading) => (
+              {tableHead.map((heading) => (
                 <th
                   key={heading}
                   scope="col"
