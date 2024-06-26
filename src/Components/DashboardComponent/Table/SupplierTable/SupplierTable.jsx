@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useGetAllSupplierQuery } from "../../../../features/api/admin/adminSupplierApi";
+import { PiExportLight } from "react-icons/pi";
 
 const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState("all");
+
   const { data, isLoading } = useGetAllSupplierQuery({
     page: currentPage,
     pageSize: pageSize,
@@ -44,26 +47,61 @@ const SupplierTable = () => {
 
   // Function to check if any field in the row matches the search query
   const filterData = (rowData) => {
-    return Object.values(rowData).some((value) =>
+    const matchesSearchQuery = Object.values(rowData).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
+  
+    const matchesStatusFilter =
+      statusFilter === "all" || rowData.status.toLowerCase() === statusFilter;
+  
+    return matchesSearchQuery && matchesStatusFilter;
   };
+  
 
   // Filter data based on search query
   const filteredData = data?.data?.filter(filterData);
 
+  const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value);
+    setCurrentPage(1);
+  };
+  
+
   return (
     <div className="bg-white px-5">
-      {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
+      {/* Search and Export */}
+      <div className="flex justify-between py-5">
+        <div>
+          <label className="text-sm mr-2">Search:</label>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="border outline-gray-300 text-gray-700 py-[5px] px-2"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <div>
+            <label className="text-sm font-medium text-[#1F1F1F] mr-2">
+              Filter:
+            </label>
+            <select
+              className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
+              value={statusFilter}
+              onChange={handleStatusFilterChange}
+            >
+              <option value="all">Active Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <button className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1">
+            <span className="text-sm">Export</span> <PiExportLight size={17} />{" "}
+          </button>
+        </div>
       </div>
+
+      {/* supplier table  */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -102,7 +140,7 @@ const SupplierTable = () => {
                   {row.updater}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                {row.date.slice(0, 10)}
+                  {row.date.slice(0, 10)}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.status}
