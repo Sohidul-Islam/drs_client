@@ -1,15 +1,53 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { getUser } from "../../features/auth/authSlice";
+import Spinner from "../Spinner/Spinner";
 
 const ProtectedRoute = ({ children }) => {
-  const token = Cookies.get('accessToken') || null
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const userEmail = Cookies.get("email") || null;
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
-  if (!token) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await dispatch(getUser(userEmail)).unwrap();
+        const user = res?.data?.email;
+        setUser(user);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserData();
+    // if (userEmail) {
+    //   fetchUserData();
+    // } else {
+    //   setLoading(false);
+    // }
+  }, [dispatch, userEmail]);
+
+  if (loading) {
+    return (
+      <p className="text-center mt-5">
+        Loading...
+      </p>
+    );
   }
 
-  return children;
+  if (!user) {
+    return <Navigate to="/login" state={{ from: pathname }} />;
+  }
+
+  if (user) {
+    return children;
+  }
 };
 
 export default ProtectedRoute;
