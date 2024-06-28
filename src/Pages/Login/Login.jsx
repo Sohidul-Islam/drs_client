@@ -127,7 +127,7 @@ const Login = () => {
                   loading && "bg-[#394856] cursor-not-allowed"
                 } bg-[#006E9E] text-white font-semibold py-4 px-4 rounded w-full text-xs hover:bg-[#003660] mb-4`}
               >
-                {loading ? <Spinner /> : "LOG IN"}
+                {loading ? <Spinner/> : "LOG IN"}
               </button>
               <span className="text-sm">
                 Forgot password? <Link className="underline">Click here</Link>

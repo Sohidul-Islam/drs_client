@@ -40,7 +40,7 @@ export const getUser = createAsyncThunk(
   "auth/getUser",
   async (email, thunkAPI) => {
     try {
-      const { data } = await axiosInstance.get(`/api/user?email=${email}`);
+      const { data } = await axiosInstance.get(`/user?email=${email}`);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.message);
