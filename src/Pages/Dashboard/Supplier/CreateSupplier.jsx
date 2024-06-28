@@ -9,15 +9,17 @@ import { toast } from "react-toastify";
 const CreateSupplier = () => {
   const { register, handleSubmit, reset } = useForm();
   const { user } = useSelector((state) => state.auth);
+  
   const [addSupplier] = useAddSupplierMutation();
 
   const onSubmit = async (data) => {
     const supplierData = {
       name: data.name,
       status: data.status,
-      sellerId: user?.data?.id,
+      sellerId: user?.id,
     };
     // console.log("supplier data:", supplierData);
+    // console.log(user,"user")
     try {
       const { data } = await addSupplier(supplierData);
       if (data?.status) {
