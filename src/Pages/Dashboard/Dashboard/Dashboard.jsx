@@ -38,8 +38,8 @@ const reports = [
 ];
 
 const Dashboard = () => {
-  const { data } = useGetAllManufactureQuery();
-  console.log(data, 'manufacture data from dashboard')
+  // const { data } = useGetAllManufactureQuery();
+  // console.log(data, 'manufacture data from dashboard')
 
   return (
     <div>

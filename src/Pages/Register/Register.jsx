@@ -222,9 +222,7 @@ const Register = () => {
                         borderBottom: "2px solid #989898",
                         borderRadius: "0px",
                       }}
-                      
                       autoFormat={false} // Disable autoformatting
-                
                     />
                   )}
                 />
@@ -325,7 +323,7 @@ const Register = () => {
               type="submit"
               disabled={loading}
             >
-              {loading ? <Spinner /> : "REGISTER"}
+              {loading ? <Spinner/> : "REGISTER"}
             </button>
 
             {/* Forgot password  */}
