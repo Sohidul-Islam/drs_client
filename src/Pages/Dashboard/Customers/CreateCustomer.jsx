@@ -21,7 +21,7 @@ const CreateCustomer = () => {
       status: data?.status,
     };
 
-    console.log('customer data', customer)
+    // console.log('customer data', customer)
     
     try {
       const { data } = await addCustomer(customer);

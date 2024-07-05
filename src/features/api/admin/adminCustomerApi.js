@@ -4,18 +4,38 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
   tagTypes: ["Customers"],
   endpoints: (builder) => ({
     // get all customers
+    getAllCustomer: builder.query({
+      query: ({ page, pageSize, searchKey }) => ({
+        url: "customer/all",
+        params: { page, pageSize, searchKey },
+      }),
+      transformResponse: (res) => {
+        return res.data.map(
+          ({ id, name, store, phoneNumber, updatedAt, status }) => ({
+            id,
+            customer_name: name,
+            store_name: store.shop_name,
+            mobile_number: phoneNumber,
+            updater: store.shop_owner_name,
+            date: updatedAt,
+            status,
+          })
+        );
+      },
+      providesTags: ["Manufactures"],
+    }),
 
-    
     // add cunstomer
     addCustomer: builder.mutation({
       query: (customerData) => ({
         url: "/customer/create",
         method: "POST",
-        body: customerData
+        body: customerData,
       }),
-      invalidatesTags: ["Customers"]
+      invalidatesTags: ["Customers"],
     }),
   }),
 });
 
-export const { useAddCustomerMutation} = adminCustomerApi;
+export const { useGetAllCustomerQuery, useAddCustomerMutation } =
+  adminCustomerApi;
