@@ -18,7 +18,7 @@ const Customers = () => {
             to="create-customer"
             className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
           >
-            <span className="text-3xl mr-2">+</span>Create new Supplier
+            <span className="text-3xl mr-2">+</span>Create new Customer
           </Link>
         </div>
         <CustomerTable />

@@ -2,26 +2,28 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { GoCpu } from "react-icons/go";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
-import {  useSelector } from "react-redux";
-import { useAddManufacturerMutation } from "../../../features/api/admin/adminManufactureApi";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useAddProductCategoryMutation } from "../../../features/api/admin/adminProductCategoryApi";
 
-const CreateManufacturer = () => {
+const CreateProductCategory = () => {
   const { register, handleSubmit, reset } = useForm();
   const { user } = useSelector((state) => state.auth);
-  // console.log('user from manufacturer', user);
-  
-  const [addManufacturer] = useAddManufacturerMutation();
+  // console.log('user from category', user);
+
+  const [addProductCategory] = useAddProductCategoryMutation();
 
   const onSubmit = async (data) => {
-    const manufacture = {
+    // console.log(data)
+    const category = {
       name: data?.name,
-      status: data?.status,
       sellerId: user?.id,
+      status: data?.status,
     };
-    // console.log('Manufacture' ,manufacture)
+    // console.log('category' ,category)
     try {
-      const { data } = await addManufacturer(manufacture);
+      const { data } = await addProductCategory(category);
+      // console.log(data, 'res')
       if (data?.status) {
         reset()
         toast.success(data?.message);
@@ -29,8 +31,6 @@ const CreateManufacturer = () => {
         toast.error(data?.message);
         reset()
       }
-
-      // console.log("response", data);
     } catch (error) {
       console.log(error);
     }
@@ -40,16 +40,16 @@ const CreateManufacturer = () => {
     <div className="relative h-screen">
       <div className="flex items-center gap-x-[10px]">
         <GoCpu className="text-lg" />
-        <p>Create New Manufacturer</p>
+        <p>Create New Category</p>
       </div>
 
       <div className="px-5 py-3 mt-3 bg-white ">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-3 gap-x-12">
-            {/* Manufacturer Name */}
+            {/* Category Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Manufacturer Name
+                Category Name
               </label>
               <input
                 type="text"
@@ -57,21 +57,7 @@ const CreateManufacturer = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
-            {/* Store */}
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Store
-              </label>
-              <select
-                {...register("store", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="maa-pharmacy">MAA Pharmacy</option>
-                <option value="sabariya-pharma">Sabariya Pharma</option>
-                <option value="laz-pharma">Laz Pharma</option>
-              </select>
-            </div> */}
+
             {/* Active Status */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -82,8 +68,8 @@ const CreateManufacturer = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
-                <option value="active">Yes</option>
-                <option value="inactive">No</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
               </select>
             </div>
           </div>
@@ -117,4 +103,4 @@ const CreateManufacturer = () => {
   );
 };
 
-export default CreateManufacturer;
+export default CreateProductCategory;

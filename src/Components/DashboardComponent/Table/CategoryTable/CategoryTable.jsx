@@ -96,7 +96,7 @@ import { useGetAllCustomerQuery } from '../../../../features/api/admin/adminCust
 
 
 
-const CustomerTable = () => {
+const CategoryTable = () => {
   const [searchQuery, setSearchQuery] = useState("")
 
   const { data, isLoading } = useGetAllCustomerQuery({
@@ -112,12 +112,6 @@ const CustomerTable = () => {
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
-  // const filteredData = customers.filter((row) =>
-  //   Object.values(row).some((value) =>
-  //     value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-  //   )
-  // );
 
   return (
     <div className="bg-white px-5">
@@ -187,4 +181,4 @@ const CustomerTable = () => {
   );
 };
 
-export default CustomerTable;
+export default CategoryTable;
