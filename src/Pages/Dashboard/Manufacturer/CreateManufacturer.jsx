@@ -17,8 +17,9 @@ const CreateManufacturer = () => {
     const manufacture = {
       name: data?.name,
       status: data?.status,
-      sellerId: user?.data?.id,
+      sellerId: user?.id,
     };
+    console.log('Manufacture' ,manufacture)
     try {
       const { data } = await addManufacturer(manufacture);
       if (data?.status) {
