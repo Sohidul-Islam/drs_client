@@ -25,6 +25,16 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
       providesTags: ["Manufactures"],
     }),
 
+    // get single customer
+    getSingleCustomer: builder.query({
+      query: ({ customerId }) => ({
+        url: "customer/single",
+        params: { id: customerId },
+      }),
+      transformResponse: (res) => res.data,
+      providesTags: ["Manufactures"],
+    }),
+
     // add cunstomer
     addCustomer: builder.mutation({
       query: (customerData) => ({
@@ -37,5 +47,8 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllCustomerQuery, useAddCustomerMutation } =
-  adminCustomerApi;
+export const {
+  useGetAllCustomerQuery,
+  useGetSingleCustomerQuery,
+  useAddCustomerMutation,
+} = adminCustomerApi;
