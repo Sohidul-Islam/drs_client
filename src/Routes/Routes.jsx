@@ -11,6 +11,7 @@ import PurchaseOverview from "../Pages/Dashboard/PurchaseOverview/PurchaseOvervi
 import Sales from "../Pages/Dashboard/Sales/Sales";
 import Products from "../Pages/Dashboard/Products/Products";
 import ProductCategory from "../Pages/Dashboard/ProductCategory/ProductCategory";
+import CreateProductCategory from "../Pages/Dashboard/ProductCategory/CreateProductCategory";
 import Customers from "../Pages/Dashboard/Customers/Customers";
 import Manufacturer from "../Pages/Dashboard/Manufacturer/Manufacturer";
 import Supplier from "../Pages/Dashboard/Supplier/Supplier";
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: "product-categories",
         element: <ProductCategory />,
+      },
+      {
+        path: "product-categories/create-product-category",
+        element: <CreateProductCategory />,
       },
       {
         path: "customers",
