@@ -18,6 +18,7 @@ import Supplier from "../Pages/Dashboard/Supplier/Supplier";
 import CreateManufacturer from "../Pages/Dashboard/Manufacturer/CreateManufacturer";
 import CreateSupplier from "../Pages/Dashboard/Supplier/CreateSupplier";
 import CreateCustomer from "../Pages/Dashboard/Customers/CreateCustomer";
+import CreateProduct from "../Pages/Dashboard/Products/CreateProduct";
 
 export const router = createBrowserRouter([
   {
@@ -56,10 +57,13 @@ export const router = createBrowserRouter([
         path: "sales",
         element: <Sales />,
       },
-
       {
         path: "products",
         element: <Products />,
+      },
+      {
+        path: "products/create-product",
+        element: <CreateProduct />,
       },
       {
         path: "product-categories",
