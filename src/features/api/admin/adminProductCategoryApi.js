@@ -23,6 +23,16 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
       providesTags: ["ProductCategories"]
     }),
 
+     // get single product category
+     getSingleProductCategory: builder.query({
+      query: ({ sellerId }) => ({
+        url: "product-categories/single",
+        params: { id: sellerId },
+      }),
+      transformResponse: (res) => res?.data?.id,
+      providesTags: ["ProductCategories"],
+    }),
+
     // add product category
     addProductCategory: builder.mutation({
       query: (categoryData) => ({
@@ -35,5 +45,5 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllProductCategoryQuery, useAddProductCategoryMutation } =
+export const { useGetAllProductCategoryQuery,useGetSingleProductCategoryQuery, useAddProductCategoryMutation } =
   adminProductCategoryApi;

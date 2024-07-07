@@ -3,37 +3,57 @@ import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useAddProductCategoryMutation } from "../../../features/api/admin/adminProductCategoryApi";
 import { AiFillProduct } from "react-icons/ai";
+import { useAddProductMutation } from "../../../features/api/admin/adminProductApi";
+import { useGetSingleProductCategoryQuery } from "../../../features/api/admin/adminProductCategoryApi";
+import { useGetSingleManufacturerQuery } from "../../../features/api/admin/adminManufactureApi";
 
 const CreateProduct = () => {
   const { register, handleSubmit, reset } = useForm();
-  // const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   // console.log('user from category', user);
 
-  // const [addProductCategory] = useAddProductCategoryMutation();
+  const { data: manufacturerId } = useGetSingleProductCategoryQuery({ sellerId: user?.id })
+  const { data: categoryId } = useGetSingleManufacturerQuery({ sellerId: user?.id })
+
+  // console.log('product category id: ', categoryId)
+  // console.log('manufacturerId: ', manufacturerId)
+  
+  const [addProduct] = useAddProductMutation();
 
   const onSubmit = async (data) => {
-    console.log(data)
-    // const category = {
-    //   name: data?.name,
+    // console.log(data)
+    data.manufacturerId = manufacturerId;
+    data.categoryId = categoryId
+    // const products = {
+    //   productName: data?.productName,
+    //   strength:data?.strength,
+    //   genericName: data?.genericName,
+    //   categoryId,
+    //   manufacturerId,
+    //   dosageForm: data?.dosageForm,
+    //   unit: data?.unit,
+    //   packBoxSize: data?.boxSize,
+    //   tradePrice: data?.tradePrice,
+    //   vat: data?.vat,
+    //   totalPrice: data?.totalPrice,
     //   sellerId: user?.id,
     //   status: data?.status,
     // };
-    // console.log('category' ,category)
-    // try {
-    //   const { data } = await addProductCategory(category);
-    //   // console.log(data, 'res')
-    //   if (data?.status) {
-    //     reset();
-    //     toast.success(data?.message);
-    //   } else {
-    //     toast.error(data?.message);
-    //     reset();
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    // console.log('products' ,data)
+    try {
+      const { data: res } = await addProduct(data);
+      console.log(res, 'res')
+      if (res?.status) {
+        reset();
+        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
+        reset();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -145,12 +165,12 @@ const CreateProduct = () => {
                 Pack/Box Size
               </label>
               <select
-                {...register("boxSize", { required: true })}
+                {...register("packBoxSize", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
-                <option value="active">5</option>
-                <option value="inactive">10</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
               </select>
             </div>
             {/* Trade Price */}
@@ -159,7 +179,7 @@ const CreateProduct = () => {
                 Trade Price <span className="text-[#FF0027]">*</span>
               </label>
               <input
-                type="text"
+                type="number"
                 {...register("tradePrice", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -171,7 +191,7 @@ const CreateProduct = () => {
                 Vat (%)
               </label>
               <input
-                type="text"
+                type="number"
                 {...register("vat", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -183,7 +203,7 @@ const CreateProduct = () => {
                 Total Price <span className="text-[#FF0027]">*</span>
               </label>
               <input
-                type="text"
+                type="number"
                 {...register("totalPrice", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -198,8 +218,8 @@ const CreateProduct = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
-                <option value="active">Laz Pharma</option>
-                <option value="inactive">Saba Pharma</option>
+                <option value="laz-pharma">Laz Pharma</option>
+                <option value="saba-pharma">Saba Pharma</option>
               </select>
             </div>
             {/* Active Status */}
