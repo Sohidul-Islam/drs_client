@@ -15,9 +15,6 @@ const CreateProduct = () => {
 
   const { data: manufacturerId } = useGetSingleProductCategoryQuery({ sellerId: user?.id })
   const { data: categoryId } = useGetSingleManufacturerQuery({ sellerId: user?.id })
-
-  // console.log('product category id: ', categoryId)
-  // console.log('manufacturerId: ', manufacturerId)
   
   const [addProduct] = useAddProductMutation();
 
@@ -25,22 +22,6 @@ const CreateProduct = () => {
     // console.log(data)
     data.manufacturerId = manufacturerId;
     data.categoryId = categoryId
-    // const products = {
-    //   productName: data?.productName,
-    //   strength:data?.strength,
-    //   genericName: data?.genericName,
-    //   categoryId,
-    //   manufacturerId,
-    //   dosageForm: data?.dosageForm,
-    //   unit: data?.unit,
-    //   packBoxSize: data?.boxSize,
-    //   tradePrice: data?.tradePrice,
-    //   vat: data?.vat,
-    //   totalPrice: data?.totalPrice,
-    //   sellerId: user?.id,
-    //   status: data?.status,
-    // };
-    // console.log('products' ,data)
     try {
       const { data: res } = await addProduct(data);
       console.log(res, 'res')

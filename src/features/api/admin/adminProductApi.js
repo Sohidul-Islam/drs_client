@@ -4,24 +4,41 @@ const adminProductApi = adminBaseApi.injectEndpoints({
   tagTypes: ["Products"],
   endpoints: (builder) => ({
     // all product
-    // getAllProductCategory: builder.query({
-    //   query: ({ page, pageSize, searchKey }) => ({
-    //     url: "product/all",
-    //     params: { page, pageSize, searchKey },
-    //   }),
-    //   transformResponse: (res) => {
-    //     return console.log(res?.data, 'res')
-    //     return res.data.map(({ id, name,Seller, Updater, updatedAt, status }) => ({
-    //       id,
-    //       category_name: name,
-    //       store_name: Seller.shop_name,
-    //       updater: Updater?.shop_owner_name,
-    //       date: updatedAt?.split('T')[0],
-    //       status,
-    //     }));
-    //   },
-    //   providesTags: ["Products"]
-    // }),
+    getAllProduct: builder.query({
+      query: ({ page, pageSize, searchKey }) => ({
+        url: "product/all",
+        params: { page, pageSize, searchKey },
+      }),
+      transformResponse: (res) => {
+        // return console.log(res?.data, 'res')
+        return res.data.map(
+          ({
+            id,
+            productName,
+            store,
+            genericName,
+            menufacturer,
+            strength,
+            dosageForm,
+            Updater,
+            updatedAt,
+            status,
+          }) => ({
+            id,
+            productName,
+            store,
+            genericName,
+            manufacturer: menufacturer.name,
+            strength,
+            dosageForm,
+            Updater,
+            date: updatedAt?.split("T")[0],
+            status,
+          })
+        );
+      },
+      providesTags: ["Products"],
+    }),
 
     // add product
     addProduct: builder.mutation({
