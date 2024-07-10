@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -9,25 +9,45 @@ import { useGetSingleProductCategoryQuery } from "../../../features/api/admin/ad
 import { useGetSingleManufacturerQuery } from "../../../features/api/admin/adminManufactureApi";
 
 const CreateProduct = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm();
   const { user } = useSelector((state) => state.auth);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [loading, setLoading] = useState(false);
   // console.log('user from category', user);
 
-  const { data: manufacturerId } = useGetSingleProductCategoryQuery({ sellerId: user?.id })
-  const { data: categoryId } = useGetSingleManufacturerQuery({ sellerId: user?.id })
-  
+  const tradePrice = watch("tradePrice", 0); // default value of 0
+  const vat = watch("vat", 0); // default value of 0
+
+  useEffect(() => {
+    const tradePriceValue = parseFloat(tradePrice) || 0;
+    const vatValue = parseFloat(vat) || 0;
+    const calculatedTotalPrice =
+      tradePriceValue + (tradePriceValue * vatValue) / 100;
+    setTotalPrice(calculatedTotalPrice.toFixed(2)); // set the calculated total price with 2 decimal places
+  }, [tradePrice, vat]);
+
+  const { data: manufacturerId } = useGetSingleProductCategoryQuery({
+    sellerId: user?.id,
+  });
+  const { data: categoryId } = useGetSingleManufacturerQuery({
+    sellerId: user?.id,
+  });
+
   const [addProduct] = useAddProductMutation();
 
   const onSubmit = async (data) => {
-    // console.log(data)
+    setLoading(true);
     data.manufacturerId = manufacturerId;
-    data.categoryId = categoryId
+    data.categoryId = categoryId;
+    data.totalPrice = totalPrice;
+    // console.log(data)
     try {
       const { data: res } = await addProduct(data);
-      console.log(res, 'res')
+      // console.log(res, "res");
       if (res?.status) {
         reset();
         toast.success(res?.message);
+        setLoading(false);
       } else {
         toast.error(res?.message);
         reset();
@@ -185,12 +205,13 @@ const CreateProduct = () => {
               </label>
               <input
                 type="number"
-                {...register("totalPrice", { required: true })}
+                value={totalPrice}
+                disabled
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
             {/* Store */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 Store
               </label>
@@ -202,7 +223,7 @@ const CreateProduct = () => {
                 <option value="laz-pharma">Laz Pharma</option>
                 <option value="saba-pharma">Saba Pharma</option>
               </select>
-            </div>
+            </div> */}
             {/* Active Status */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -224,12 +245,20 @@ const CreateProduct = () => {
             <div className="flex gap-x-5">
               <button
                 type="submit"
-                className="text-[#139238] border border-[#139238] rounded-md px-3 py-1 flex items-center font-medium"
+                disabled={loading}
+                className={`${
+                  loading
+                    ? "text-gray-400 border-gray-400 cursor-no-drop"
+                    : "text-[#139238] border-[#139238]"
+                } border rounded-md px-3 py-1 flex items-center font-medium`}
               >
                 <span className="mr-2">
                   <FaFileMedical />
                 </span>
-                Save
+                Save{" "}
+                {loading && (
+                  <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
+                )}
               </button>
               <button
                 onClick={() => reset()}

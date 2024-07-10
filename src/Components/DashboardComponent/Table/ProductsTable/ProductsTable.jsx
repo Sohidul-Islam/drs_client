@@ -13,7 +13,7 @@ const ProductsTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  // console.log(data, 'category')
+  // console.log(data, 'product')
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);

@@ -28,7 +28,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
             productName,
             store,
             genericName,
-            manufacturer: menufacturer.name,
+            manufacturer: menufacturer?.name,
             strength,
             dosageForm,
             Updater,
