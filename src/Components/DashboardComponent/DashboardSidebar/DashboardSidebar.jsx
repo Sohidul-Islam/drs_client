@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { GoHome, GoTag, GoCpu , GoGitCompare} from "react-icons/go";
 import { AiOutlineDollarCircle, AiFillProduct, AiOutlineDatabase } from "react-icons/ai";
 import { GiDiscussion } from "react-icons/gi";
+import { RiStore3Line } from "react-icons/ri";
+import { PiRowsPlusTop } from "react-icons/pi";
 
 const navList = [
   {
@@ -52,6 +54,18 @@ const navList = [
     name: "Supplier",
     path: "/dashboard/supplier",
     icon: <GoGitCompare />,
+  },
+  {
+    id: 9,
+    name: "Stock Adjustment",
+    path: "/dashboard/stock-adjustment",
+    icon: <RiStore3Line />,
+  },
+  {
+    id: 10,
+    name: "Stock Item",
+    path: "/dashboard/stock-item",
+    icon: <PiRowsPlusTop />,
   },
 ];
 
