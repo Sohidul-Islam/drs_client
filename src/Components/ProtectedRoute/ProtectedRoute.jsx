@@ -3,7 +3,6 @@ import { Navigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../features/auth/authSlice";
-import Spinner from "../Spinner/Spinner";
 
 const ProtectedRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -18,7 +17,7 @@ const ProtectedRoute = ({ children }) => {
         const res = await dispatch(getUser(userEmail)).unwrap();
         const user = res?.data?.email;
         setUser(user);
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       } finally {

@@ -24,6 +24,16 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
       providesTags: ["Manufactures"],
     }),
 
+     // get single manufacturer
+     getSingleManufacturer: builder.query({
+      query: ({ sellerId }) => ({
+        url: "manufacturer/single",
+        params: { id: sellerId },
+      }),
+      transformResponse: (res) => res?.data?.id,
+      providesTags: ["Manufactures"],
+    }),
+
     // add manufacturer
     addManufacturer: builder.mutation({
       query: (manufacturerData) => ({
@@ -36,5 +46,5 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllManufactureQuery, useAddManufacturerMutation } =
+export const { useGetAllManufactureQuery, useGetSingleManufacturerQuery, useAddManufacturerMutation } =
   adminManufactureApi;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../../assets/logo.png";
-import user from "../../../assets/user.png";
+import userImage from "../../../assets/user.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../features/auth/authSlice";
@@ -9,7 +9,9 @@ const DashboardNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data } = useSelector((state) => state?.auth?.user || {user:undefined});
+  // const { data } = useSelector((state) => state?.auth || { user: undefined });
+  const { user } = useSelector((state) => state?.auth || { user: undefined });
+  // console.log(user, 'user from dashboard navbar')
 
   const handleLogout = () => {
     dispatch(logout());
@@ -25,14 +27,15 @@ const DashboardNavbar = () => {
         </p>
       </Link>
       <div className="flex gap-x-2 items-center">
-        <img className="w-9 h-9 bg-slate-700 rounded-full" src={user} alt="" />
+        {/* <img className="w-9 h-9 bg-slate-700 rounded-full" src={user?.image} alt="user-img" /> */}
+        <img className="w-9 h-9 bg-slate-700 rounded-full" src={userImage} alt="user-img" />
         <div className="relative">
           <button onClick={() => setIsOpen(!isOpen)}>
-            <p className="text-sm font-semibold w-24 truncate">
-              {data?.shop_owner_name || "User Name"}
+            <p className="text-left text-sm font-semibold w-24 truncate">
+              {user?.shop_owner_name || "User Name"}
             </p>
-            <p className="text-xs text-[#6B6B6B]">
-              {data?.shop_name || "Shope Name"}
+            <p className="text-left text-xs text-[#6B6B6B]">
+              {user?.shop_name || "Shope Name"}
             </p>
           </button>
 
