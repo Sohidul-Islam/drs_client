@@ -18,6 +18,9 @@ import Supplier from "../Pages/Dashboard/Supplier/Supplier";
 import CreateManufacturer from "../Pages/Dashboard/Manufacturer/CreateManufacturer";
 import CreateSupplier from "../Pages/Dashboard/Supplier/CreateSupplier";
 import CreateCustomer from "../Pages/Dashboard/Customers/CreateCustomer";
+import CreateProduct from "../Pages/Dashboard/Products/CreateProduct";
+import StockAdjustment from "../Pages/Dashboard/StockAdjustment/StockAdjustment";
+import StockItem from "../Pages/Dashboard/StockItem/StockItem";
 
 export const router = createBrowserRouter([
   {
@@ -56,10 +59,13 @@ export const router = createBrowserRouter([
         path: "sales",
         element: <Sales />,
       },
-
       {
         path: "products",
         element: <Products />,
+      },
+      {
+        path: "products/create-product",
+        element: <CreateProduct />,
       },
       {
         path: "product-categories",
@@ -92,6 +98,14 @@ export const router = createBrowserRouter([
       {
         path: "supplier/create-supplier",
         element: <CreateSupplier />,
+      },
+      {
+        path: "stock-adjustment",
+        element: <StockAdjustment />,
+      },
+      {
+        path: "stock-item",
+        element: <StockItem />,
       },
       {
         path: "profile",

@@ -19,6 +19,7 @@ const Navbar = () => {
         const res = await dispatch(getUser(userEmail)).unwrap();
         const user = res?.data?.email;
         setUser(user);
+        setUserData(true);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       } finally {

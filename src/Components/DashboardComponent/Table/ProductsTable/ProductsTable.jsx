@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useGetAllProductCategoryQuery } from '../../../../features/api/admin/adminProductCategoryApi';
+import { useGetAllProductQuery } from '../../../../features/api/admin/adminProductApi';
 
-const CategoryTable = () => {
+const ProductsTable = () => {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const { data, isLoading } = useGetAllProductCategoryQuery({
+  const { data, isLoading } = useGetAllProductQuery({
     page: 1,
     pageSize: 15,
     searchKey: "",
@@ -13,7 +13,7 @@ const CategoryTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  // console.log(data, 'category')
+  // console.log(data, 'product')
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -37,8 +37,12 @@ const CategoryTable = () => {
             <tr>
               {[
                 "ID",
-                "Categories Name",
+                "Product Name",
                 "Store",
+                "Generic Name",
+                "Manufacturer",
+                "Strength",
+                "Dosage Form",
                 "Updater",
                 "Updater On",
                 "Active",
@@ -46,7 +50,7 @@ const CategoryTable = () => {
                 <th
                   key={heading}
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-medium tracking-wider"
+                  className="px-4 py-3 text-left text-[13px] font-medium tracking-wider whitespace-nowrap"
                 >
                   {heading}
                 </th>
@@ -60,10 +64,22 @@ const CategoryTable = () => {
                   {row.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.category_name}
+                  {row.productName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.store_name}
+                  {row.store}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.genericName}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.manufacturer}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.strength}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.dosageForm}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.updater}
@@ -83,4 +99,4 @@ const CategoryTable = () => {
   );
 };
 
-export default CategoryTable;
+export default ProductsTable;
