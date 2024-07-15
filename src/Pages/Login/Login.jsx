@@ -107,7 +107,7 @@ const Login = () => {
                   } outline-none block p-1`}
                 />
                 <button
-                  type="submit"
+                  type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="text-gray-500 mt-2 absolute right-3"
                 >
