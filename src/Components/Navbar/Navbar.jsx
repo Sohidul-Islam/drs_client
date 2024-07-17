@@ -43,7 +43,7 @@ const Navbar = () => {
         </Link>
 
         {/* for temporary create a admin  */}
-        <CreateAdmin/>
+        {/* <CreateAdmin/> */}
 
         {/* responsive for large device  */}
         <div className="hidden md:block">

@@ -21,6 +21,7 @@ import CreateCustomer from "../Pages/Dashboard/Customers/CreateCustomer";
 import CreateProduct from "../Pages/Dashboard/Products/CreateProduct";
 import StockAdjustment from "../Pages/Dashboard/StockAdjustment/StockAdjustment";
 import StockItem from "../Pages/Dashboard/StockItem/StockItem";
+import AdminProtectedRoute from "../Components/AdminProtectedRoute/AdminProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -73,7 +74,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "product-categories/create-product-category",
-        element: <CreateProductCategory />,
+        element: (
+          <AdminProtectedRoute>
+            <CreateProductCategory />
+          </AdminProtectedRoute>
+        ),
       },
       {
         path: "customers",
@@ -89,7 +94,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "manufacturer/create-manufacturer",
-        element: <CreateManufacturer/>
+        element: (
+          <AdminProtectedRoute>
+            <CreateManufacturer />
+          </AdminProtectedRoute>
+        ),
       },
       {
         path: "supplier",

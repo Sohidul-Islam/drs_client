@@ -68,7 +68,7 @@ const navList = [
     name: "Product Categories",
     path: "/dashboard/product-categories",
     icon: <AiOutlineDatabase />,
-    roles: ["admin"],
+    roles: ["user", "admin"],
   },
   {
     id: 9,
@@ -82,7 +82,7 @@ const navList = [
     name: "Manufacturer",
     path: "/dashboard/manufacturer",
     icon: <GoCpu />,
-    roles: ["admin"],
+    roles: ["user", "admin"],
   },
   {
     id: 11,
@@ -139,7 +139,7 @@ const DashboardSidebar = () => {
 
       {/* temporary test user and admin, when you will remove this portion, also remove useState hook  */}
       <div className="ml-5 mt-5">
-        <p className="text-xs">Temporary Button</p>
+        <p className="text-xs">Temporary Button - {role}</p>
         <button
           onClick={() => setRole("user")}
           className="mr-3 bg-red-700 text-white text-sm px-2 py-1 rounded"
