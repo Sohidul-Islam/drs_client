@@ -8,7 +8,7 @@ const CreateAdmin = () => {
     const url = "https://dra-server.onrender.com/api/admin/default";
 
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         url,
         {},
         {
@@ -17,16 +17,17 @@ const CreateAdmin = () => {
           },
         }
       );
-
-      setResponse(response.data);
+      setResponse(res.data);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
+  console.log(response)
+
   return (
     <div>
-      <button onClick={postData}>Create Admin</button>
+      <button onClick={postData} className="text-green-500 bg-black hover:bg-red-700 px-2 py-1 hover:text-white">Create Admin</button>
     </div>
   );
 };
