@@ -51,6 +51,7 @@ export const getUser = createAsyncThunk(
 // initial state 
 const initialState = {
   user: null,
+  role: null,
   token: Cookies.get('accessToken') || null,
   email: Cookies.get('email') || null,
   loading: false,
@@ -63,11 +64,11 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.role = null;
       state.token = null;
       state.email = null;
       Cookies.remove('accessToken');
       Cookies.remove('email');
-      // localStorage.removeItem("accessToken");
     },
   },
 
@@ -98,7 +99,6 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.token = Cookies.get('accessToken');
         state.email = Cookies.get('email');
-        // state.token = localStorage.getItem("accessToken");
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -115,6 +115,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.user = action.payload.data;
+      state.role = action.payload.data.accountType;
     })
     .addCase(getUser.rejected, (state, action) => {
       state.loading = false;

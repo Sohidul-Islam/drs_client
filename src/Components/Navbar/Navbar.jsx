@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../features/auth/authSlice";
-// import CreateAdmin from './CreateAdmin'
+import CreateAdmin from './CreateAdmin'
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,6 +42,9 @@ const Navbar = () => {
           <span className="text-base font-semibold">DRA Solution</span>
         </Link>
 
+        {/* for temporary create a admin  */}
+        {/* <CreateAdmin/> */}
+
         {/* responsive for large device  */}
         <div className="hidden md:block">
           <div className="flex items-center gap-x-4">
@@ -77,15 +80,10 @@ const Navbar = () => {
                     >
                       Register
                     </Link>
-
-                    {/* for temporary create a admin  */}
-                    {/* <CreateAdmin/> */}
                   </div>
                 ))}
             </div>
           </div>
-          {/* for temporary create a admin  */}
-          {/* <CreateAdmin/> */}
         </div>
 
         {/* mobile view menu button  */}

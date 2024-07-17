@@ -25,11 +25,6 @@ const ProtectedRoute = ({ children }) => {
       }
     };
     fetchUserData();
-    // if (userEmail) {
-    //   fetchUserData();
-    // } else {
-    //   setLoading(false);
-    // }
   }, [dispatch, userEmail]);
 
   if (loading) {
