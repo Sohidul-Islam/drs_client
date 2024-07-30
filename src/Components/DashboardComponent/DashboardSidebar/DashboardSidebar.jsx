@@ -8,6 +8,8 @@ import {
   AiOutlineCopy,
   AiOutlineReconciliation,
   AiOutlineAudit,
+  AiFillCreditCard,
+  AiOutlineGroup
 } from "react-icons/ai";
 import { GiDiscussion } from "react-icons/gi";
 import { RiStore3Line } from "react-icons/ri";
@@ -111,6 +113,20 @@ const navList = [
     path: "/dashboard/manage-plan",
     icon: <AiOutlineAudit />,
     roles: ["admin"],
+  },
+  {
+    id: 15,
+    name: "Expiring Stock",
+    path: "/dashboard/expiring-stock",
+    icon: <AiFillCreditCard />,
+    roles: ["user"],
+  },
+  {
+    id: 16,
+    name: "Expired Stock",
+    path: "/dashboard/expired-stock",
+    icon: <AiOutlineGroup />,
+    roles: ["user"],
   },
 ];
 
