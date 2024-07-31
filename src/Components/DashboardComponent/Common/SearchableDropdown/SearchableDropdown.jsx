@@ -1,33 +1,42 @@
 import React from "react";
+import { Controller } from "react-hook-form";
+import Select from "react-select";
 
 const SearchableDropdown = ({
-  register,
+  labelText,
+  name,
+  control,
   data,
-  labelName,
-  placeholderText,
-  inputName,
+  placeholder,
+  required,
+  propertyValue,
   propertyName,
-  valueName,
-}) => (
-  <div>
-    <label className="block text-sm font-medium text-gray-700">
-      {labelName} <span className="text-[#FF0027]">*</span>
-    </label>
-    <input
-      list={`${inputName}-data`}
-      placeholder={placeholderText}
-      type="text"
-      {...register(inputName, { required: true })}
-      className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-    />
-    <datalist id={`${inputName}-data`}>
-      {data.map((item, index) => (
-        <option key={index} value={item[valueName]}>
-          {item[propertyName]}
-        </option>
-      ))}
-    </datalist>
-  </div>
-);
+}) => {
+  const options = data.map((item) => ({
+    value: item[propertyValue],
+    label: item[propertyName],
+  }));
 
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700">
+        {labelText} {required && <span className="text-[#FF0027]">*</span>}
+      </label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <Select
+            {...field}
+            options={options}
+            isClearable
+            placeholder={placeholder}
+            className="mt-1"
+            classNamePrefix="react-select"
+          />
+        )}
+      />
+    </div>
+  );
+};
 export default SearchableDropdown;

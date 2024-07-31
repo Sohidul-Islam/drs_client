@@ -11,7 +11,7 @@ import { RiStore3Line } from "react-icons/ri";
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
 
 const CreateAdjustment = () => {
-  const { register, handleSubmit, reset, watch } = useForm();
+  const { register, handleSubmit, reset, watch, control } = useForm();
   const { user } = useSelector((state) => state.auth);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -40,10 +40,9 @@ const CreateAdjustment = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(products, "products from create adjustment page");
-
   const onSubmit = async (data) => {
-    console.log('Adjustment', data)
+    const adjustment = { ...data, productId: data.product.value };
+    delete adjustment.product;
     // setLoading(true);
     // data.totalPrice = totalPrice;
     // console.log(data)
@@ -127,13 +126,14 @@ const CreateAdjustment = () => {
               </datalist>
             </div> */}
             <SearchableDropdown
-              register={register}
+              labelText="Product"
+              name="product"
+              control={control}
               data={products}
-              labelName="Product"
-              placeholderText="search product"
-              inputName="productId"
+              placeholder="search a product..."
+              required="false"
+              propertyValue="id"
               propertyName="productName"
-              valueName="id"
             />
             {/* Batch No */}
             <div>
