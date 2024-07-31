@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useGetAllAdjustmentQuery } from "../../../../features/api/seller/stockAdjustmentApi";
-import { IoEyeOutline } from "react-icons/io5";
-import { RiDeleteBinLine } from "react-icons/ri";
+import { useGetAllAdjustmentQuery, useDeleteAdjustmentMutation } from "../../../../features/api/seller/stockAdjustmentApi";
+import EditButton from "../../Common/EditButton/EditButton";
+// import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
 const StockAdjustmentTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,14 +12,24 @@ const StockAdjustmentTable = () => {
     searchKey: "",
   });
 
+  const [deleteAdjustment] = useDeleteAdjustmentMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  console.log("adjustment data", data);
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteAdjustment(id).unwrap();
+      alert("Adjustment deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete the adjustment", error);
+      alert("Failed to delete the adjustment");
+    }
   };
 
   return (
@@ -96,12 +106,8 @@ const StockAdjustmentTable = () => {
                     {row.updater}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <button className="bg-[#27BD02] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm">
-                      <IoEyeOutline size={12} />
-                    </button>
-                    <button className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm">
-                      <RiDeleteBinLine />
-                    </button>
+                    <EditButton />
+                    <button onClick={() => handleDelete(row.id)}>Delete</button>
                   </td>
                 </tr>
               ))}

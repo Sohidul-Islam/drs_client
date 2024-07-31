@@ -47,8 +47,17 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Adjustments"],
     }),
+
+    // delete stock adjustment
+    deleteAdjustment: builder.mutation({
+      query: (id) => ({
+        url: `/stock/delete?id=${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Adjustments"],
+    }),
   }),
 });
 
-export const { useGetAllAdjustmentQuery, useAddAdjustmentMutation } =
+export const { useGetAllAdjustmentQuery, useAddAdjustmentMutation, useDeleteAdjustmentMutation } =
   stockAdjustmentApi;
