@@ -9,24 +9,25 @@ import {
 } from "../../../features/api/admin/adminProductApi";
 import { RiStore3Line } from "react-icons/ri";
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
+import { useAddAdjustmentMutation } from "../../../features/api/seller/stockAdjustmentApi";
 
 const CreateAdjustment = () => {
   const { register, handleSubmit, reset, watch, control } = useForm();
   const { user } = useSelector((state) => state.auth);
-  const [totalPrice, setTotalPrice] = useState(0);
+  // const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
-  // console.log('user from category', user);
+  // console.log("user", user);
 
-  const tradePrice = watch("tradePrice", 0); // default value of 0
-  const vat = watch("vat", 0); // default value of 0
+  // const tradePrice = watch("tradePrice", 0); // default value of 0
+  // const vat = watch("vat", 0); // default value of 0
 
-  useEffect(() => {
-    const tradePriceValue = parseFloat(tradePrice) || 0;
-    const vatValue = parseFloat(vat) || 0;
-    const calculatedTotalPrice =
-      tradePriceValue + (tradePriceValue * vatValue) / 100;
-    setTotalPrice(calculatedTotalPrice.toFixed(2)); // set the calculated total price with 2 decimal places
-  }, [tradePrice, vat]);
+  // useEffect(() => {
+  //   const tradePriceValue = parseFloat(tradePrice) || 0;
+  //   const vatValue = parseFloat(vat) || 0;
+  //   const calculatedTotalPrice =
+  //     tradePriceValue + (tradePriceValue * vatValue) / 100;
+  //   setTotalPrice(calculatedTotalPrice.toFixed(2));
+  // }, [tradePrice, vat]);
 
   const { data: products, isLoading } = useGetAllProductQuery({
     page: 1,
@@ -34,39 +35,42 @@ const CreateAdjustment = () => {
     searchKey: "",
   });
 
-  const [addProduct] = useAddProductMutation();
+  const [addAdjustment] = useAddAdjustmentMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   const onSubmit = async (data) => {
-    const adjustment = { ...data, productId: data.product.value };
+    const adjustment = {
+      ...data,
+      productId: data.product.value,
+      sellerId: user.id,
+    };
     delete adjustment.product;
-    // setLoading(true);
+    setLoading(true);
     // data.totalPrice = totalPrice;
-    // console.log(data)
-    // try {
-    //   const { data: res } = await addProduct(data);
-    //   console.log(res, "res");
-    //   if (res?.status) {
-    //     reset();
-    //     toast.success(res?.message);
-    //     setLoading(false);
-    //   } else {
-    //     toast.error(res?.message);
-    //     reset();
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const { data: res } = await addAdjustment(adjustment);
+      console.log(res, "res");
+      if (res?.status) {
+        reset();
+        toast.success(res?.message);
+        setLoading(false);
+      } else {
+        toast.error(res?.message);
+        reset();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="relative h-screen">
       <div className="flex items-center gap-x-[10px]">
         <RiStore3Line className="text-lg" />
-        <p>Create New Stock Ajustment</p>
+        <p>Create New Stock Adjustment</p>
       </div>
 
       <div className="px-5 py-3 mt-3 bg-white ">

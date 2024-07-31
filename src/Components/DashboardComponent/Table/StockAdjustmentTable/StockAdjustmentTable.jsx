@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useGetAllCustomerQuery } from "../../../../features/api/admin/adminCustomerApi";
+import { useGetAllAdjustmentQuery } from "../../../../features/api/seller/stockAdjustmentApi";
+import { IoEyeOutline } from "react-icons/io5";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const StockAdjustmentTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data, isLoading } = useGetAllCustomerQuery({
+  const { data, isLoading } = useGetAllAdjustmentQuery({
     page: 1,
     pageSize: 15,
     searchKey: "",
@@ -13,6 +15,8 @@ const StockAdjustmentTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  console.log("adjustment data", data);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -65,22 +69,39 @@ const StockAdjustmentTable = () => {
                     {row.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.customer_name}
+                    {row.productName}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.store_name}
+                    {row.batchNo}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.mobile_number}
+                    {row.adjustmentType}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.eventType}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.transactionType}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.quantity}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.unitPrice}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.productTotalPrice}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row.updater}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.date}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.status}
+                  <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                    <button className="bg-[#27BD02] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm">
+                      <IoEyeOutline size={12} />
+                    </button>
+                    <button className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm">
+                      <RiDeleteBinLine />
+                    </button>
                   </td>
                 </tr>
               ))}
