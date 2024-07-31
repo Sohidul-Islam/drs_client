@@ -24,6 +24,7 @@ import StockItem from "../Pages/Dashboard/StockItem/StockItem";
 import AdminProtectedRoute from "../Components/AdminProtectedRoute/AdminProtectedRoute";
 import ExpiringStock from "../Pages/Dashboard/ExpiringStock/ExpiringStock";
 import ExpiredStock from "../Pages/Dashboard/ExpiredStock/ExpiredStock";
+import CreateAdjustment from "../Pages/Dashboard/StockAdjustment/CreateAdjustment";
 
 export const router = createBrowserRouter([
   {
@@ -113,6 +114,10 @@ export const router = createBrowserRouter([
       {
         path: "stock-adjustment",
         element: <StockAdjustment />,
+      },
+      {
+        path: "stock-adjustment/create-adjustment",
+        element: <CreateAdjustment />,
       },
       {
         path: "stock-item",
