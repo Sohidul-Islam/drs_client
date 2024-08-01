@@ -131,7 +131,7 @@ const navList = [
 ];
 
 const DashboardSidebar = () => {
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState("user");
 
   return (
     <nav>

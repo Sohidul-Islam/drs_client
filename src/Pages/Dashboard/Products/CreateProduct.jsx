@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -9,22 +9,22 @@ import { useGetSingleProductCategoryQuery } from "../../../features/api/admin/ad
 import { useGetSingleManufacturerQuery } from "../../../features/api/admin/adminManufactureApi";
 
 const CreateProduct = () => {
-  const { register, handleSubmit, reset, watch } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { user } = useSelector((state) => state.auth);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   // console.log('user from category', user);
+  
+  // const [totalPrice, setTotalPrice] = useState(0);
+  // const tradePrice = watch("tradePrice", 0); // default value of 0
+  // const vat = watch("vat", 0); // default value of 0
 
-  const tradePrice = watch("tradePrice", 0); // default value of 0
-  const vat = watch("vat", 0); // default value of 0
-
-  useEffect(() => {
-    const tradePriceValue = parseFloat(tradePrice) || 0;
-    const vatValue = parseFloat(vat) || 0;
-    const calculatedTotalPrice =
-      tradePriceValue + (tradePriceValue * vatValue) / 100;
-    setTotalPrice(calculatedTotalPrice.toFixed(2)); // set the calculated total price with 2 decimal places
-  }, [tradePrice, vat]);
+  // useEffect(() => {
+  //   const tradePriceValue = parseFloat(tradePrice) || 0;
+  //   const vatValue = parseFloat(vat) || 0;
+  //   const calculatedTotalPrice =
+  //     tradePriceValue + (tradePriceValue * vatValue) / 100;
+  //   setTotalPrice(calculatedTotalPrice.toFixed(2));
+  // }, [tradePrice, vat]);
 
   const { data: manufacturerId } = useGetSingleProductCategoryQuery({
     sellerId: user?.id,
@@ -39,20 +39,27 @@ const CreateProduct = () => {
     setLoading(true);
     data.manufacturerId = manufacturerId;
     data.categoryId = categoryId;
-    data.totalPrice = totalPrice;
+    // data.totalPrice = totalPrice;
+    // totalPrice, unit, vat and trade price are temporary i will remove it later 
+    data.totalPrice = 100;
+    data.unit = 'box';
+    data.vat = 0.05;
+    data.tradePrice = 5.50;
     // console.log(data)
     try {
       const { data: res } = await addProduct(data);
-      // console.log(res, "res");
+      console.log(res, "res");
       if (res?.status) {
         reset();
         toast.success(res?.message);
         setLoading(false);
       } else {
         toast.error(res?.message);
+        setLoading(false);
         reset();
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -70,7 +77,7 @@ const CreateProduct = () => {
             {/* Product Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Product Name <span className="text-[#FF0027]">*</span>
+              Product Name <span className="text-[10px]">(e,g; Napa)</span> <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
@@ -82,13 +89,16 @@ const CreateProduct = () => {
             {/* Strength */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Strength <span className="text-[#FF0027]">*</span>
+              Strength <span className="text-[#FF0027]">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 {...register("strength", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+              >
+                <option value="">Select</option>
+                <option value="mg">mg</option>
+                <option value="mp">mp</option>
+              </select>
             </div>
 
             {/* Generic Name */}
@@ -135,7 +145,7 @@ const CreateProduct = () => {
             {/* Dosage Form */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Dosage Form
+                Dosage Form <span className="text-[#FF0027]">*</span>
               </label>
               <select
                 {...register("dosageForm", { required: true })}
@@ -146,20 +156,7 @@ const CreateProduct = () => {
                 <option value="inactive">Dosage Form-2</option>
               </select>
             </div>
-            {/* Unit */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Unit
-              </label>
-              <select
-                {...register("unit", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">MG</option>
-                <option value="inactive">MP</option>
-              </select>
-            </div>
+            
             {/* Pack/Box Size */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -172,70 +169,6 @@ const CreateProduct = () => {
                 <option value="">Select</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
-              </select>
-            </div>
-            {/* Trade Price */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Trade Price <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="number"
-                {...register("tradePrice", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-
-            {/* Vat (%) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Vat (%)
-              </label>
-              <input
-                type="number"
-                {...register("vat", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-
-            {/* Total Price */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Total Price <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="number"
-                value={totalPrice}
-                disabled
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-            {/* Store */}
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Store
-              </label>
-              <select
-                {...register("store", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="laz-pharma">Laz Pharma</option>
-                <option value="saba-pharma">Saba Pharma</option>
-              </select>
-            </div> */}
-            {/* Active Status */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Active Status
-              </label>
-              <select
-                {...register("status", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
               </select>
             </div>
           </div>
