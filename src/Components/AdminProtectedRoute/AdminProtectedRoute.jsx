@@ -7,7 +7,7 @@ const AdminProtectedRoute = ({ children }) => {
   // console.log(role); output: admin
 
   const { pathname } = useLocation();
-  const role = "user" //this is temporary, i have to remove it later
+  const role = "user" //this is temporary, i have to remove it later and uncomment line no 6
 
   if (role === "user") {
     return <Navigate to="/dashboard" state={{ from: pathname }} />;

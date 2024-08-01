@@ -155,31 +155,33 @@ const CustomerTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((row, index) => (
-              <tr key={index}>
-                <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.id}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.customer_name}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.store_name}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.mobile_number}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updater}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.status}
-                </td>
-              </tr>
-            ))}
+            {
+              data.length>0 ? data.map((row, index) => (
+                <tr key={index}>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
+                    {row.id}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.customer_name}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.store_name}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.mobile_number}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.updater}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.date}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.status}
+                  </td>
+                </tr>
+              )) : <p className='text-center py-1'>No data available</p>
+            }
           </tbody>
         </table>
       </div>

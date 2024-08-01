@@ -2,9 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineDatabase } from "react-icons/ai";
 import CategoryTable from "../../../Components/DashboardComponent/Table/CategoryTable/CategoryTable";
+import { useSelector } from "react-redux";
 
 const ProductCategory = () => {
-  const admin = "user";
+  // const { role } = useSelector((state) => state.auth);
+  // console.log(role)
+  const role = "user"; //this is temporary, i have to remove it later and uncomment line no 8
 
   return (
     <div>
@@ -15,7 +18,7 @@ const ProductCategory = () => {
 
       {/*Supplier Table  */}
       <div className="mt-3">
-        {admin === "admin" && (
+        {role === "admin" && (
           <div className="flex justify-end mr-5 mb-3">
             <Link
               to="create-product-category"

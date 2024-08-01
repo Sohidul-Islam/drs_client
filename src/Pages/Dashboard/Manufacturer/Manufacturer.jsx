@@ -4,7 +4,10 @@ import ManufactureTable from "../../../Components/DashboardComponent/Table/Manuf
 import { Link } from "react-router-dom";
 
 const Manufacturer = () => {
-  const admin = "user"; // this is temporary, i have to remove it later
+    // const { role } = useSelector((state) => state.auth);
+  // console.log(role)
+  const role = "user"; //this is temporary, i have to remove it later and uncomment line no 7
+
   return (
     <div>
       <div className="flex items-center gap-x-[10px]">
@@ -14,7 +17,7 @@ const Manufacturer = () => {
 
       {/*Manufacture Table  */}
       <div className="mt-3">
-        {admin === "admin" && (
+        {role === "admin" && (
           <div className="flex justify-end mr-5 mb-3">
             <Link
               to="create-manufacturer"
