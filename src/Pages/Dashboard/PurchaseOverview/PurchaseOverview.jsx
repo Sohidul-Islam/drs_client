@@ -1,7 +1,7 @@
 import React from "react";
 import { GoTag } from "react-icons/go";
-import PurchaseInvoiceTable from "../../../Components/DashboardComponent/Table/PurchaseInvoiceTable/PurchaseInvoiceTable";
 import { Link } from "react-router-dom";
+import PurchaseInvoiceTable from '../../../Components/DashboardComponent/Table/PurchaseInvoiceTable/PurchaseInvoiceTable'
 
 const PurchaseOverview = () => {
   return (
