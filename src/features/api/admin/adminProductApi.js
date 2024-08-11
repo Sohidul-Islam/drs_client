@@ -52,11 +52,13 @@ const adminProductApi = adminBaseApi.injectEndpoints({
 
     // delete a product
     deleteProduct: builder.mutation({
-      query: ({ id, name, status }) => ({
-        url: `/product/delete`,
+      query: (id) => ({
+        // url: `product/delete`,
+        url: `product/delete?id=${id}`,
         method: "DELETE",
-        params:{id},
-        body: { id, name, status }
+        // params: {id:6},
+        // body: { id, name, status }
+        body: { id }
       }),
       invalidatesTags: ["Products"],
     }),

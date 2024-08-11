@@ -26,17 +26,11 @@ const ProductsTable = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleDelete = async (product) => {
-    // console.log(product)
-    const productData = {
-      id: product?.id,
-      name: product?.productName,
-      status: product?.status,
-    };
+  const handleDelete = async (id) => {
+    console.log('product id: ', id)
     try {
-      const res = await deleteProduct(productData).unwrap();
+      const res = await deleteProduct(id).unwrap();
       console.log(res)
-      alert("Product deleted successfully");
     } catch (error) {
       console.error("Failed to delete the product:", error);
     }
@@ -113,7 +107,7 @@ const ProductsTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
                   <button
-                    onClick={() => handleDelete(row)}
+                    onClick={() => handleDelete(row.id)}
                     className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
                   >
                     <RiDeleteBinLine />
