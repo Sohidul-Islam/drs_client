@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import EditButton from "../../Common/EditButton/EditButton";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const data = [
   {
     id: "#01",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A00P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -16,7 +17,6 @@ const data = [
   },
   {
     id: "#02",
-    store: "RJ Pharmacy",
     invoiceNumber: "#DRA32-A01P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -29,7 +29,6 @@ const data = [
   },
   {
     id: "#03",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A02P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -42,7 +41,6 @@ const data = [
   },
   {
     id: "#04",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A03P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -55,7 +53,6 @@ const data = [
   },
   {
     id: "#05",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A04P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -68,7 +65,6 @@ const data = [
   },
   {
     id: "#06",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A05P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -81,7 +77,6 @@ const data = [
   },
   {
     id: "#07",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A06P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -94,7 +89,6 @@ const data = [
   },
   {
     id: "#08",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A07P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -107,7 +101,6 @@ const data = [
   },
   {
     id: "#09",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A07P",
     invoiceDate: "05/06/2024",
     manufacturer: "IHF Pharmacy",
@@ -120,7 +113,6 @@ const data = [
   },
   {
     id: "#10",
-    store: "MAA Pharmacy",
     invoiceNumber: "#DRA32-A07P",
     invoiceDate: "05/06/2024",
     manufacturer: "ACI Pharmacy",
@@ -145,6 +137,11 @@ const PurchaseInvoiceTable = () => {
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
+
+  const handleDelete = (id) => {
+    console.log(id)
+  }
+
   return (
     <div className="bg-white px-5">
       {/* search field  */}
@@ -159,20 +156,18 @@ const PurchaseInvoiceTable = () => {
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 whitespace-nowrap">
             <tr>
               {[
                 "ID",
-                "Store",
                 "Invoice Number",
                 "Invoice Date",
                 "Manufacturer",
                 "Total",
                 "Paid",
                 "Due",
-                "Approval Status",
-                "Updater",
                 "Updater On",
+                "Action"
               ].map((heading) => (
                 <th
                   key={heading}
@@ -189,9 +184,6 @@ const PurchaseInvoiceTable = () => {
               <tr key={idx}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.store}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.invoiceNumber}
@@ -212,13 +204,16 @@ const PurchaseInvoiceTable = () => {
                   {row.due}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.approvalStatus}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updater}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.updaterOn}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                  <EditButton />
+                  <button
+                    onClick={() => handleDelete(row.id)}
+                    className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
+                  >
+                    <RiDeleteBinLine />
+                  </button>
                 </td>
               </tr>
             ))}
