@@ -26,7 +26,7 @@ const navList = [
   {
     id: 2,
     name: "Admin Dashboard",
-    path: "/admin-dashboard",
+    path: "/dashboard",
     icon: <GoHome />,
     roles: ["admin"],
   },
