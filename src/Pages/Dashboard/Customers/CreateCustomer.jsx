@@ -47,7 +47,7 @@ const CreateCustomer = () => {
         <p>Create New Customer</p>
       </div>
 
-      <div className="px-5 py-3 mt-3 bg-white ">
+      <div className="px-5 py-3 mt-3 bg-white">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-3 gap-x-12 gap-y-7">
             {/* Customer Name */}
