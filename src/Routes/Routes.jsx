@@ -25,6 +25,8 @@ import AdminProtectedRoute from "../Components/AdminProtectedRoute/AdminProtecte
 import ExpiringStock from "../Pages/Dashboard/ExpiringStock/ExpiringStock";
 import ExpiredStock from "../Pages/Dashboard/ExpiredStock/ExpiredStock";
 import CreateAdjustment from "../Pages/Dashboard/StockAdjustment/CreateAdjustment";
+import CreatePurchaseOverview from "../Pages/Dashboard/PurchaseOverview/CreatePurchaseOverview";
+import CreateSales from "../Pages/Dashboard/Sales/CreateSales";
 
 export const router = createBrowserRouter([
   {
@@ -60,8 +62,16 @@ export const router = createBrowserRouter([
         element: <PurchaseOverview />,
       },
       {
+        path: "purchase-overview/create-purchase",
+        element: <CreatePurchaseOverview />,
+      },
+      {
         path: "sales",
         element: <Sales />,
+      },
+      {
+        path: "sales/create-sales",
+        element: <CreateSales />,
       },
       {
         path: "products",

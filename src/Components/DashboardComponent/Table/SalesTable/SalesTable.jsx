@@ -5,127 +5,108 @@ import { RiDeleteBinLine } from "react-icons/ri";
 const data = [
   {
     id: "#01",
-    invoiceNumber: "#DRA32-A00P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "John Doe",
+    mobileNumber: "123-456-7890",
+    orderDate: "05/06/2024",
     total: 10000,
     paid: 7000,
     due: 3000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#02",
-    invoiceNumber: "#DRA32-A01P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Jane Smith",
+    mobileNumber: "987-654-3210",
+    orderDate: "05/06/2024",
     total: 15000,
     paid: 10000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#03",
-    invoiceNumber: "#DRA32-A02P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Alice Johnson",
+    mobileNumber: "555-123-4567",
+    orderDate: "05/06/2024",
     total: 20000,
     paid: 15000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#04",
-    invoiceNumber: "#DRA32-A03P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Bob Brown",
+    mobileNumber: "444-987-6543",
+    orderDate: "05/06/2024",
     total: 25000,
     paid: 20000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#05",
-    invoiceNumber: "#DRA32-A04P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Charlie Davis",
+    mobileNumber: "333-555-7777",
+    orderDate: "05/06/2024",
     total: 30000,
     paid: 25000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#06",
-    invoiceNumber: "#DRA32-A05P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Diana Evans",
+    mobileNumber: "222-444-6666",
+    orderDate: "05/06/2024",
     total: 35000,
     paid: 30000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#07",
-    invoiceNumber: "#DRA32-A06P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Frank Green",
+    mobileNumber: "111-222-3333",
+    orderDate: "05/06/2024",
     total: 40000,
     paid: 35000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#08",
-    invoiceNumber: "#DRA32-A07P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Grace Harris",
+    mobileNumber: "666-777-8888",
+    orderDate: "05/06/2024",
     total: 45000,
     paid: 40000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#09",
-    invoiceNumber: "#DRA32-A07P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "IHF Pharmacy",
+    customerName: "Henry Jackson",
+    mobileNumber: "999-000-1111",
+    orderDate: "05/06/2024",
     total: 50000,
     paid: 45000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
   {
     id: "#10",
-    invoiceNumber: "#DRA32-A07P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
+    customerName: "Ivy King",
+    mobileNumber: "888-999-0000",
+    orderDate: "05/06/2024",
     total: 55000,
     paid: 50000,
     due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
+    updatedOn: "05/06/2024",
   },
 ];
 
-const PurchaseInvoiceTable = () => {
+
+const SalesTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event) => {
@@ -160,9 +141,9 @@ const PurchaseInvoiceTable = () => {
             <tr>
               {[
                 "ID",
-                "Invoice Number",
-                "Invoice Date",
-                "Manufacturer",
+                "Customer Name",
+                "Mobile Number",
+                "Order Date",
                 "Total",
                 "Paid",
                 "Due",
@@ -186,13 +167,13 @@ const PurchaseInvoiceTable = () => {
                   {row.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.invoiceNumber}
+                  {row.customerName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.invoiceDate}
+                  {row.mobileNumber}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.manufacturer}
+                  {row.orderDate}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.total}
@@ -204,7 +185,7 @@ const PurchaseInvoiceTable = () => {
                   {row.due}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updaterOn}
+                  {row.updatedOn}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
@@ -224,4 +205,4 @@ const PurchaseInvoiceTable = () => {
   );
 };
 
-export default PurchaseInvoiceTable;
+export default SalesTable;
