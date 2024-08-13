@@ -27,6 +27,8 @@ import ExpiredStock from "../Pages/Dashboard/ExpiredStock/ExpiredStock";
 import CreateAdjustment from "../Pages/Dashboard/StockAdjustment/CreateAdjustment";
 import CreatePurchaseOverview from "../Pages/Dashboard/PurchaseOverview/CreatePurchaseOverview";
 import CreateSales from "../Pages/Dashboard/Sales/CreateSales";
+import ManageContent from "../Pages/AdminDashboard/ManageContent/ManageContent";
+import ManageStore from "../Pages/AdminDashboard/ManageStore/ManageStore";
 
 export const router = createBrowserRouter([
   {
@@ -144,6 +146,16 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+
+      // Admin route 
+      {
+        path: "manage-content",
+        element: <ManageContent />,
+      },
+      {
+        path: "manage-store",
+        element: <ManageStore />,
       },
     ],
   },

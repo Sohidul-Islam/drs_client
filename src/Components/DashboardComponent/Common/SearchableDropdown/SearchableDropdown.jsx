@@ -12,7 +12,7 @@ const SearchableDropdown = ({
   propertyValue,
   propertyName,
 }) => {
-  const options = data.map((item) => ({
+  const options = data?.map((item) => ({
     value: item[propertyValue],
     label: item[propertyName],
   }));

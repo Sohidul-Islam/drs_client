@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useGetAllProductCategoryQuery } from '../../../../features/api/admin/adminProductCategoryApi';
+import React, { useState } from "react";
+import { useGetAllProductCategoryQuery } from "../../../../features/api/admin/adminProductCategoryApi";
 
 const CategoryTable = () => {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading } = useGetAllProductCategoryQuery({
     page: 1,
@@ -13,7 +13,7 @@ const CategoryTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  // console.log(data, 'category')
+  console.log(data, "category");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -38,10 +38,10 @@ const CategoryTable = () => {
               {[
                 "ID",
                 "Categories Name",
-                "Store",
-                "Updater",
-                "Updater On",
-                "Active",
+                // "Store",
+                "Added By",
+                "Update On",
+                // "Active",
               ].map((heading) => (
                 <th
                   key={heading}
@@ -62,18 +62,20 @@ const CategoryTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.category_name}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                {/* <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.store_name}
-                </td>
+                </td> */}
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updater}
+                  <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
+                    {row?.Seller?.accountType === 'admin' ? "Global" : row.updater}
+                  </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                {/* <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.status}
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

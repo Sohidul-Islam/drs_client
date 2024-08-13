@@ -14,6 +14,7 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
         return res.data.map(({ id, name,Seller, Updater, updatedAt, status }) => ({
           id,
           category_name: name,
+          Seller,
           store_name: Seller.shop_name,
           updater: Updater?.shop_owner_name,
           date: updatedAt?.split('T')[0],
