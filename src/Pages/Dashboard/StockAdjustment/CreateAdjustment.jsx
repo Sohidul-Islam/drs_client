@@ -41,6 +41,8 @@ const CreateAdjustment = () => {
     return <div>Loading...</div>;
   }
 
+  // console.log(products, 'product from crate adjustment')
+
   const onSubmit = async (data) => {
     const adjustment = {
       ...data,

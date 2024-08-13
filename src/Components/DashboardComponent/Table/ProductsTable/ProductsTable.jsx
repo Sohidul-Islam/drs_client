@@ -20,7 +20,7 @@ const ProductsTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  // console.log(data, "product");
+  console.log(data, "product");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -61,7 +61,7 @@ const ProductsTable = () => {
                 "Dosage Form",
                 "Pack/Box",
                 "Quantity",
-                "Updater On",
+                "Update On",
                 "Action",
               ].map((heading) => (
                 <th
@@ -78,36 +78,36 @@ const ProductsTable = () => {
             {data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.id}
+                  {row?.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.productName}
+                  {row?.productName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.genericName}
+                  {row?.genericName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.manufacturer}
+                  {row?.menufacturer?.name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.strength}
+                  {row?.strength}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.dosageForm}
+                  {row?.dosageForm}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.packBoxSize} Pack's
+                  {row?.packBoxSize} Pack's
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.quantity}
+                  {row?.id} temp-data
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
+                  {row?.updatedAt?.split("T")[0]}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
                   <button
-                    onClick={() => handleDelete(row.id)}
+                    onClick={() => handleDelete(row?.id)}
                     className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
                   >
                     <RiDeleteBinLine />
