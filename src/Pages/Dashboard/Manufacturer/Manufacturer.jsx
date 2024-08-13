@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Manufacturer = () => {
     // const { role } = useSelector((state) => state.auth);
   // console.log(role)
-  const role = "user"; //this is temporary, i have to remove it later and uncomment line no 7
+  const role = "usr"; //this is temporary, i have to remove it later and uncomment line no 7
 
   return (
     <div>

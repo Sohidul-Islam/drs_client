@@ -16,6 +16,7 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
             manufacturer_name: name,
             status,
             date: updatedAt,
+            Seller,
             store_name: Seller.shop_name,
             updater: Updater.shop_owner_name,
           })

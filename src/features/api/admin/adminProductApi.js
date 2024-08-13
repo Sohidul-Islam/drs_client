@@ -10,32 +10,36 @@ const adminProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        // return console.log(res?.data, 'res')
-        return res.data.map(
-          ({
-            id,
-            productName,
-            genericName,
-            menufacturer,
-            strength,
-            dosageForm,
-            packBoxSize,
-            quantity,
-            updatedAt,
-            status,
-          }) => ({
-            id,
-            productName,
-            genericName,
-            manufacturer: menufacturer.name,
-            strength,
-            dosageForm,
-            packBoxSize,
-            quantity,
-            date: updatedAt?.split("T")[0],
-            status,
-          })
-        );
+        // return console.log(
+        //   "response of product data from admin product api",
+        //   res?.data
+        // );
+        return res.data
+        // return res.data.map(
+        //   ({
+        //     id,
+        //     productName,
+        //     genericName,
+        //     menufacturer,
+        //     strength,
+        //     dosageForm,
+        //     packBoxSize,
+        //     quantity,
+        //     updatedAt,
+        //     status,
+        //   }) => ({
+        //     id,
+        //     productName,
+        //     genericName,
+        //     manufacturer: menufacturer.name,
+        //     strength,
+        //     dosageForm,
+        //     packBoxSize,
+        //     quantity,
+        //     date: updatedAt?.split("T")[0],
+        //     status,
+        //   })
+        // );
       },
       providesTags: ["Products"],
     }),
@@ -55,10 +59,10 @@ const adminProductApi = adminBaseApi.injectEndpoints({
       query: (id) => ({
         // url: `product/delete`,
         url: `product/delete?id=${id}`,
-        method: "DELETE",
+        method: "POST",
         // params: {id:6},
         // body: { id, name, status }
-        body: { id }
+        body: { id },
       }),
       invalidatesTags: ["Products"],
     }),

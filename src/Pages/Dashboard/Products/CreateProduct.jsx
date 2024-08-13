@@ -1,54 +1,48 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { AiFillProduct } from "react-icons/ai";
 import { useAddProductMutation } from "../../../features/api/admin/adminProductApi";
-import { useGetSingleProductCategoryQuery } from "../../../features/api/admin/adminProductCategoryApi";
-import { useGetSingleManufacturerQuery } from "../../../features/api/admin/adminManufactureApi";
+import { useGetAllProductCategoryQuery } from "../../../features/api/admin/adminProductCategoryApi";
+import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
+import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
 
 const CreateProduct = () => {
-  const { register, handleSubmit, reset } = useForm();
-  const { user } = useSelector((state) => state.auth);
+  const { register, handleSubmit, reset, control } = useForm();
   const [loading, setLoading] = useState(false);
-  // console.log('user from category', user);
-  
-  // const [totalPrice, setTotalPrice] = useState(0);
-  // const tradePrice = watch("tradePrice", 0); // default value of 0
-  // const vat = watch("vat", 0); // default value of 0
 
-  // useEffect(() => {
-  //   const tradePriceValue = parseFloat(tradePrice) || 0;
-  //   const vatValue = parseFloat(vat) || 0;
-  //   const calculatedTotalPrice =
-  //     tradePriceValue + (tradePriceValue * vatValue) / 100;
-  //   setTotalPrice(calculatedTotalPrice.toFixed(2));
-  // }, [tradePrice, vat]);
-
-  const { data: manufacturerId } = useGetSingleProductCategoryQuery({
-    sellerId: user?.id,
+  const { data: manufactures, isLoading } = useGetAllManufactureQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: "",
   });
-  const { data: categoryId } = useGetSingleManufacturerQuery({
-    sellerId: user?.id,
+
+  const { data: categories } = useGetAllProductCategoryQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: "",
   });
 
   const [addProduct] = useAddProductMutation();
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const onSubmit = async (data) => {
     setLoading(true);
-    data.manufacturerId = manufacturerId;
-    data.categoryId = categoryId;
-    // data.totalPrice = totalPrice;
-    // totalPrice, unit, vat and trade price are temporary i will remove it later 
-    data.totalPrice = 100;
-    data.unit = 'box';
-    data.vat = 0.05;
-    data.tradePrice = 5.50;
-    // console.log(data)
+    data.manufacturerId = data.manufacturerId.value;
+    data.categoryId = data.categoryId.value;
+
+    data.totalPrice = 100; //temp data, remove later
+    data.unit = "box"; //temp data, remove later
+    data.vat = 0.05; //temp data, remove later
+    data.tradePrice = 5.5; //temp data, remove later
+
     try {
       const { data: res } = await addProduct(data);
-      console.log(res, "res");
+      // console.log(res, "res");
       if (res?.status) {
         reset();
         toast.success(res?.message);
@@ -77,7 +71,8 @@ const CreateProduct = () => {
             {/* Product Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-              Product Name <span className="text-[10px]">(e,g; Napa)</span> <span className="text-[#FF0027]">*</span>
+                Product Name <span className="text-[10px]">(e,g; Napa)</span>{" "}
+                <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
@@ -89,7 +84,7 @@ const CreateProduct = () => {
             {/* Strength */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-              Strength <span className="text-[#FF0027]">*</span>
+                Strength <span className="text-[#FF0027]">*</span>
               </label>
               <select
                 {...register("strength", { required: true })}
@@ -114,34 +109,28 @@ const CreateProduct = () => {
             </div>
 
             {/* Category */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Category <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("category", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">A</option>
-                <option value="inactive">B</option>
-              </select>
-            </div>
+            <SearchableDropdown
+              labelText="Category"
+              name="categoryId"
+              control={control}
+              data={categories}
+              placeholder="search a category"
+              required="true"
+              propertyValue="id"
+              propertyName="category_name"
+            />
 
             {/* Manufacturer */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Manufacturer <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("Manufacturer", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Manufacturer-1</option>
-                <option value="inactive">Manufacturer-2</option>
-              </select>
-            </div>
+            <SearchableDropdown
+              labelText="Manufacturer"
+              name="manufacturerId"
+              control={control}
+              data={manufactures}
+              placeholder="search a manufacture"
+              required="false"
+              propertyValue="id"
+              propertyName="manufacturer_name"
+            />
             {/* Dosage Form */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -156,7 +145,7 @@ const CreateProduct = () => {
                 <option value="inactive">Dosage Form-2</option>
               </select>
             </div>
-            
+
             {/* Pack/Box Size */}
             <div>
               <label className="block text-sm font-medium text-gray-700">

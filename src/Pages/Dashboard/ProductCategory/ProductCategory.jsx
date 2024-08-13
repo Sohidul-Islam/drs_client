@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineDatabase } from "react-icons/ai";
 import CategoryTable from "../../../Components/DashboardComponent/Table/CategoryTable/CategoryTable";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const ProductCategory = () => {
   // const { role } = useSelector((state) => state.auth);
   // console.log(role)
-  const role = "user"; //this is temporary, i have to remove it later and uncomment line no 8
+  const role = "admin"; //this is temporary, i have to remove it later and uncomment line no 8
 
   return (
     <div>
