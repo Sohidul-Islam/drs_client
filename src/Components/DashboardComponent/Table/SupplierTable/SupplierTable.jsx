@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "jspdf-autotable";
-import { useGetAllSupplierQuery } from "../../../../features/api/admin/adminSupplierApi";
+import {
+  useDeleteSupplierMutation,
+  useGetAllSupplierQuery,
+} from "../../../../features/api/admin/adminSupplierApi";
 import { PiExportLight } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import {
@@ -33,6 +36,8 @@ const SupplierTable = () => {
     pageSize: pageSize,
     searchKey: searchQuery,
   });
+
+  const [deleteSupplier] = useDeleteSupplierMutation();
 
   useEffect(() => {
     setCurrentPage(1);
@@ -92,15 +97,15 @@ const SupplierTable = () => {
     setIsDropdownOpen(false);
   };
 
-  // delete supplier 
+  // delete supplier
   const handleDelete = async (id) => {
-    console.log('product id: ', id)
-    // try {
-    //   const res = await deleteProduct(id).unwrap();
-    //   console.log(res)
-    // } catch (error) {
-    //   console.error("Failed to delete the product:", error);
-    // }
+    console.log("product id: ", id);
+    try {
+      const res = await deleteSupplier(id).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.error("Failed to delete the product:", error);
+    }
   };
 
   return (

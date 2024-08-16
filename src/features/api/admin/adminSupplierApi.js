@@ -43,8 +43,18 @@ const adminSupplierApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Supplier"],
     }),
+
+     // delete a supplier
+     deleteSupplier: builder.mutation({
+      query: (id) => ({
+        url: `suppliers/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["Supplier"],
+    }),
   }),
 });
 
-export const { useGetAllSupplierQuery, useAddSupplierMutation } =
+export const { useGetAllSupplierQuery, useAddSupplierMutation, useDeleteSupplierMutation } =
   adminSupplierApi;
