@@ -15,11 +15,11 @@ const CreateSupplier = () => {
   const onSubmit = async (data) => {
     const supplierData = {
       name: data.name,
-      status: data.status,
+      status: "active",
       sellerId: user?.id,
+      contactPersonName: data.contactPersonName,
+      phone: data.number
     };
-    // console.log("supplier data:", supplierData);
-    // console.log(user,"user")
     try {
       const { data } = await addSupplier(supplierData);
       if (data?.status) {
@@ -33,6 +33,7 @@ const CreateSupplier = () => {
       console.log(error);
     }
   };
+  
   return (
     <div className="relative h-screen">
       <div className="flex items-center gap-x-[10px]">
@@ -43,10 +44,10 @@ const CreateSupplier = () => {
       <div className="px-5 py-3 mt-3 bg-white ">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-3 gap-x-12">
-            {/* Manufacturer Name */}
+            {/* Supplier Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Supplier Name
+                Supplier Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
@@ -55,18 +56,27 @@ const CreateSupplier = () => {
               />
             </div>
 
+            {/* Contact Person Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Active Status
+              Contact Person Name <span className="text-[#FF0027]">*</span>
               </label>
-              <select
-                {...register("status", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Yes</option>
-                <option value="inactive">No</option>
-              </select>
+              <input
+                type="text"
+                {...register("contactPersonName", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
+            </div>
+            {/* Mobile Number */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+              Mobile Number <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="number"
+                {...register("contactPersonName", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
             </div>
           </div>
 

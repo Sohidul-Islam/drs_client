@@ -7,14 +7,17 @@ import {
   exportExcel,
   exportPDF,
 } from "../../../../features/export/exportSlice";
+import EditButton from "../../Common/EditButton/EditButton";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const tableHead = [
   "ID",
-  "Store",
   "Supplier Name",
-  "Updater",
+  "Added By",
+  "Contact Person",
+  "Mobile",
   "Updater On",
-  "Active",
+  "Action",
 ];
 
 const SupplierTable = () => {
@@ -28,7 +31,7 @@ const SupplierTable = () => {
   const { data, isLoading } = useGetAllSupplierQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: "",
+    searchKey: searchQuery,
   });
 
   useEffect(() => {
@@ -62,19 +65,7 @@ const SupplierTable = () => {
     }
   };
 
-  // Function to check if any field in the row matches the search query
-  const filterData = (rowData) => {
-    const matchesSearchQuery = Object.values(rowData).some((value) =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const matchesStatusFilter =
-      statusFilter === "all" || rowData.status.toLowerCase() === statusFilter;
-
-    return matchesSearchQuery && matchesStatusFilter;
-  };
-  // Filter data based on search query
-  const filteredData = data?.data?.filter(filterData);
+  // console.log("data", data?.data);
 
   const handleStatusFilterChange = (event) => {
     setStatusFilter(event.target.value);
@@ -85,20 +76,31 @@ const SupplierTable = () => {
   const handleExport = (type) => {
     const columns = [
       "id",
-      "store_name",
       "supplier_name",
       "updater",
+      "contactPerson",
+      "phone",
       "date",
-      "status",
     ];
     const title = "Supplier Report";
 
     if (type === "pdf") {
-      dispatch(exportPDF({ columns, data: filteredData, title }));
+      dispatch(exportPDF({ columns, data: data?.data, title }));
     } else if (type === "excel") {
-      dispatch(exportExcel({ columns, data: filteredData, title }));
+      dispatch(exportExcel({ columns, data: data?.data, title }));
     }
     setIsDropdownOpen(false);
+  };
+
+  // delete supplier 
+  const handleDelete = async (id) => {
+    console.log('product id: ', id)
+    // try {
+    //   const res = await deleteProduct(id).unwrap();
+    //   console.log(res)
+    // } catch (error) {
+    //   console.error("Failed to delete the product:", error);
+    // }
   };
 
   return (
@@ -132,7 +134,7 @@ const SupplierTable = () => {
 
           <div className="relative">
             <button
-              onClick={()=> setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1"
             >
               <span className="text-sm">Export</span>{" "}
@@ -161,6 +163,7 @@ const SupplierTable = () => {
       {/* supplier table  */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
+          {/* table head  */}
           <thead className="bg-gray-50">
             <tr>
               {tableHead.map((heading) => (
@@ -174,26 +177,39 @@ const SupplierTable = () => {
               ))}
             </tr>
           </thead>
+          {/* table body  */}
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((row, index) => (
+            {data.data.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.store_name}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.supplier_name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updater}
+                  <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
+                    {row?.Seller?.accountType === "admin" ? "Global" : "Store"}
+                  </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date.slice(0, 10)}
+                  {row.contactPerson}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.status}
+                  {row.phone}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.date}
+                </td>
+                {/* update and delete button  */}
+                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                  <EditButton />
+                  <button
+                    onClick={() => handleDelete(row?.id)}
+                    className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
+                  >
+                    <RiDeleteBinLine />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -201,6 +217,7 @@ const SupplierTable = () => {
         </table>
         <div className="border-t">
           <div className="my-4 flex justify-between">
+            {/* show selection  */}
             <div>
               <label className="text-sm font-medium text-[#1F1F1F] mr-2">
                 Show
@@ -215,6 +232,7 @@ const SupplierTable = () => {
                 <option value="15">15</option>
               </select>
             </div>
+            {/* next and previous button */}
             <div>
               <button
                 onClick={handlePrevious}
