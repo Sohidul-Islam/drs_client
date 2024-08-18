@@ -5,13 +5,19 @@ import {
   useGetAllSupplierQuery,
 } from "../../../../features/api/admin/adminSupplierApi";
 import { PiExportLight } from "react-icons/pi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   exportExcel,
   exportPDF,
 } from "../../../../features/export/exportSlice";
 import EditButton from "../../Common/EditButton/EditButton";
 import { RiDeleteBinLine } from "react-icons/ri";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import { toast } from "react-toastify";
 
 const tableHead = [
   "ID",
@@ -25,6 +31,8 @@ const tableHead = [
 
 const SupplierTable = () => {
   const dispatch = useDispatch();
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal);
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,19 +66,19 @@ const SupplierTable = () => {
     setPageSize(Number(event.target.value));
   };
 
+   // Pagination Previous Button 
   const handlePrevious = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
 
+  // Pagination Next Button 
   const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
-
-  // console.log("data", data?.data);
 
   const handleStatusFilterChange = (event) => {
     setStatusFilter(event.target.value);
@@ -97,16 +105,30 @@ const SupplierTable = () => {
     setIsDropdownOpen(false);
   };
 
-  // delete supplier
-  const handleDelete = async (id) => {
-    console.log("product id: ", id);
+  // Delete supplier - open modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm 
+  const handleConfirmDelete = async () => {
     try {
-      const res = await deleteSupplier(id).unwrap();
-      console.log(res);
+      const res = await deleteSupplier(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
     } catch (error) {
-      console.error("Failed to delete the product:", error);
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
     }
   };
+
+  // delete close modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
+
 
   return (
     <div className="bg-white px-5">
@@ -210,7 +232,7 @@ const SupplierTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
                   <button
-                    onClick={() => handleDelete(row?.id)}
+                    onClick={() => handleDeleteClick(row?.id)}
                     className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
                   >
                     <RiDeleteBinLine />
@@ -265,6 +287,13 @@ const SupplierTable = () => {
           </div>
         </div>
       </div>
+
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
