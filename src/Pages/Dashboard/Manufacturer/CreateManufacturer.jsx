@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { GoCpu } from "react-icons/go";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAddManufacturerMutation } from "../../../features/api/admin/adminManufactureApi";
 import { toast } from "react-toastify";
 
@@ -10,24 +10,26 @@ const CreateManufacturer = () => {
   const { register, handleSubmit, reset } = useForm();
   const { user } = useSelector((state) => state.auth);
   // console.log('user from manufacturer', user);
-  
+
   const [addManufacturer] = useAddManufacturerMutation();
 
   const onSubmit = async (data) => {
     const manufacture = {
       name: data?.name,
-      status: data?.status,
+      status: "active",
       sellerId: user?.id,
+      contactPerson: data?.contactPerson,
+      phone: data?.phone,
     };
     // console.log('Manufacture' ,manufacture)
     try {
       const { data } = await addManufacturer(manufacture);
       if (data?.status) {
-        reset()
+        reset();
         toast.success(data?.message);
       } else {
         toast.error(data?.message);
-        reset()
+        reset();
       }
 
       // console.log("response", data);
@@ -49,7 +51,7 @@ const CreateManufacturer = () => {
             {/* Manufacturer Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Manufacturer Name
+                Manufacturer Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
@@ -57,34 +59,29 @@ const CreateManufacturer = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
-            {/* Store */}
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Store
-              </label>
-              <select
-                {...register("store", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="maa-pharmacy">MAA Pharmacy</option>
-                <option value="sabariya-pharma">Sabariya Pharma</option>
-                <option value="laz-pharma">Laz Pharma</option>
-              </select>
-            </div> */}
-            {/* Active Status */}
+
+            {/* Contact Person Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Active Status
+                Contact Person Name <span className="text-[#FF0027]">*</span>
               </label>
-              <select
-                {...register("status", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Yes</option>
-                <option value="inactive">No</option>
-              </select>
+              <input
+                type="text"
+                {...register("contactPerson", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
+            </div>
+
+            {/* Mobile Number */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Mobile Number <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="text"
+                {...register("phone", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
             </div>
           </div>
 

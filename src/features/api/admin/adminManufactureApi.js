@@ -10,17 +10,7 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data.map(
-          ({ id, name, status, updatedAt, Seller, Updater }) => ({
-            id,
-            manufacturer_name: name,
-            status,
-            date: updatedAt,
-            Seller,
-            store_name: Seller.shop_name,
-            updater: Updater.shop_owner_name,
-          })
-        );
+        return res.data
       },
       providesTags: ["Manufactures"],
     }),
@@ -44,8 +34,18 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Manufactures"],
     }),
+
+     // delete a manufacturer
+     deleteManufacturer: builder.mutation({
+      query: (id) => ({
+        url: `manufacturer/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["Manufactures"],
+    }),
   }),
 });
 
-export const { useGetAllManufactureQuery, useGetSingleManufacturerQuery, useAddManufacturerMutation } =
+export const { useGetAllManufactureQuery, useGetSingleManufacturerQuery, useAddManufacturerMutation, useDeleteManufacturerMutation } =
   adminManufactureApi;
