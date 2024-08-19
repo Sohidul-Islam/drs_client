@@ -187,8 +187,9 @@ const SupplierTable = () => {
         </div>
       </div>
 
-      {/* supplier table  */}
+      {/* supplier table and pagination  */}
       <div className="overflow-x-auto">
+        {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           {/* table head  */}
           <thead className="bg-gray-50">
@@ -242,6 +243,8 @@ const SupplierTable = () => {
             ))}
           </tbody>
         </table>
+
+        {/* pagination  */}
         <div className="border-t">
           <div className="my-4 flex justify-between">
             {/* show selection  */}

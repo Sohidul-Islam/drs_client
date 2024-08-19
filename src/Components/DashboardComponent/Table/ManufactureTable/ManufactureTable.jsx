@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useDeleteManufacturerMutation,
   useGetAllManufactureQuery,
@@ -13,7 +13,10 @@ import {
 import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import { PiExportLight } from "react-icons/pi";
-import { exportExcel, exportPDF } from "../../../../features/export/exportSlice";
+import {
+  exportExcel,
+  exportPDF,
+} from "../../../../features/export/exportSlice";
 
 const ManufactureTable = () => {
   const dispatch = useDispatch();
@@ -22,26 +25,50 @@ const ManufactureTable = () => {
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // const [page, setPage] = useState(1);
-  // const [pageSize, setPageSize] = useState(2);
-  // const [searchKey, setSearchKey] = useState("Sample");
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data, error, isLoading } = useGetAllManufactureQuery({
-    page: 1,
-    pageSize: 15,
+  const { data, isLoading } = useGetAllManufactureQuery({
+    page: currentPage,
+    pageSize: pageSize,
     searchKey: searchQuery,
   });
 
   const [deleteManufacturer] = useDeleteManufacturerMutation();
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [pageSize]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  console.log(data, 'manufacture data')
+  const { totalPages } = data.metadata;
+
+  console.log(data, "manufacture data");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(Number(event.target.value));
+  };
+
+  // Pagination Previous Button
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Pagination Next Button
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   // Export PDF and Excel File
@@ -89,8 +116,8 @@ const ManufactureTable = () => {
 
   return (
     <div className="bg-white px-5">
-       {/* Search and Export */}
-       <div className="flex justify-between py-5">
+      {/* Search and Export */}
+      <div className="flex justify-between py-5">
         <div>
           <label className="text-sm mr-2">Search:</label>
           <input
@@ -144,8 +171,9 @@ const ManufactureTable = () => {
         </div>
       </div>
 
-      {/* Table  */}
+      {/* Table and pagination  */}
       <div className="overflow-x-auto">
+        {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -169,7 +197,7 @@ const ManufactureTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((row, index) => (
+            {data?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -207,6 +235,52 @@ const ManufactureTable = () => {
             ))}
           </tbody>
         </table>
+
+        {/* pagination  */}
+        <div className="border-t">
+          <div className="my-4 flex justify-between">
+            {/* show selection  */}
+            <div>
+              <label className="text-sm font-medium text-[#1F1F1F] mr-2">
+                Show
+              </label>
+              <select
+                className="text-sm border outline-gray-300 text-gray-700 py-1 px-1 rounded-md"
+                value={pageSize}
+                onChange={handlePageSizeChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+            {/* next and previous button */}
+            <div>
+              <button
+                onClick={handlePrevious}
+                className={`border px-3 py-1 text-base ${
+                  currentPage === 1
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer"
+                }`}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNext}
+                className={`border px-3 py-1 text-base ${
+                  currentPage === totalPages
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer"
+                }`}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Delete Modal  */}

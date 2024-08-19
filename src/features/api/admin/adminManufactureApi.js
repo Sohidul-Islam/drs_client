@@ -10,17 +10,27 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data.map(
+        const data = res.data?.map(
           ({ id, name, Seller, contactPerson, phone, updatedAt }) => ({
             id,
             manufacture_name: name,
             accountType: Seller.accountType,
             contactPerson,
-            shop_owner_nam:Seller.shop_owner_nam,
+            shop_owner_nam: Seller.shop_owner_nam,
             phone,
             date: updatedAt.split("T")[0],
           })
         );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+        return {
+          data: data,
+          metadata,
+        };
       },
       providesTags: ["Manufactures"],
     }),
