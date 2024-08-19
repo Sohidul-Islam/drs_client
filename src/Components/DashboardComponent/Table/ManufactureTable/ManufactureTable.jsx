@@ -12,12 +12,15 @@ import {
 } from "../../../../features/deleteModal/deleteModalSlice";
 import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import { PiExportLight } from "react-icons/pi";
+import { exportExcel, exportPDF } from "../../../../features/export/exportSlice";
 
 const ManufactureTable = () => {
   const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // const [page, setPage] = useState(1);
   // const [pageSize, setPageSize] = useState(2);
   // const [searchKey, setSearchKey] = useState("Sample");
@@ -26,7 +29,7 @@ const ManufactureTable = () => {
   const { data, error, isLoading } = useGetAllManufactureQuery({
     page: 1,
     pageSize: 15,
-    searchKey: "",
+    searchKey: searchQuery,
   });
 
   const [deleteManufacturer] = useDeleteManufacturerMutation();
@@ -35,10 +38,29 @@ const ManufactureTable = () => {
     return <div>Loading...</div>;
   }
 
-  // console.log(data, 'manufacture data')
+  console.log(data, 'manufacture data')
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  // Export PDF and Excel File
+  const handleExport = (type) => {
+    const columns = [
+      "id",
+      "manufacture_name",
+      "contactPerson",
+      "phone",
+      "date",
+    ];
+    const title = "Manufacture Report";
+
+    if (type === "pdf") {
+      dispatch(exportPDF({ columns, data: data, title }));
+    } else if (type === "excel") {
+      dispatch(exportExcel({ columns, data: data, title }));
+    }
+    setIsDropdownOpen(false);
   };
 
   // Delete manufacture - open modal
@@ -67,17 +89,62 @@ const ManufactureTable = () => {
 
   return (
     <div className="bg-white px-5">
-      {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
+       {/* Search and Export */}
+       <div className="flex justify-between py-5">
+        <div>
+          <label className="text-sm mr-2">Search:</label>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="border outline-gray-300 text-gray-700 py-[5px] px-2"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <div>
+            <label className="text-sm font-medium text-[#1F1F1F] mr-2">
+              Filter:
+            </label>
+            <select
+              className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
+              // value={statusFilter}
+              // onChange={handleStatusFilterChange}
+            >
+              <option value="all">Active Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1"
+            >
+              <span className="text-sm">Export</span>{" "}
+              <PiExportLight size={17} />
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
+                <button
+                  onClick={() => handleExport("pdf")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Export PDF
+                </button>
+                <button
+                  onClick={() => handleExport("excel")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Export Excel
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
+      {/* Table  */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -108,13 +175,13 @@ const ManufactureTable = () => {
                   {row.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.name}
+                  {row.manufacture_name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
-                    {row?.Seller?.accountType === "admin"
+                    {row?.accountType === "admin"
                       ? "Global"
-                      : row.Seller.shop_owner_nam}
+                      : row.shop_owner_nam}
                   </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
@@ -124,7 +191,7 @@ const ManufactureTable = () => {
                   {row?.phone}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updatedAt.split("T")[0]}
+                  {row.date}
                 </td>
                 {/* update and delete button  */}
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">

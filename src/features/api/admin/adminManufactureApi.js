@@ -10,13 +10,23 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data
+        return res.data.map(
+          ({ id, name, Seller, contactPerson, phone, updatedAt }) => ({
+            id,
+            manufacture_name: name,
+            accountType: Seller.accountType,
+            contactPerson,
+            shop_owner_nam:Seller.shop_owner_nam,
+            phone,
+            date: updatedAt.split("T")[0],
+          })
+        );
       },
       providesTags: ["Manufactures"],
     }),
 
-     // get single manufacturer
-     getSingleManufacturer: builder.query({
+    // get single manufacturer
+    getSingleManufacturer: builder.query({
       query: ({ sellerId }) => ({
         url: "manufacturer/single",
         params: { id: sellerId },
@@ -35,8 +45,8 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Manufactures"],
     }),
 
-     // delete a manufacturer
-     deleteManufacturer: builder.mutation({
+    // delete a manufacturer
+    deleteManufacturer: builder.mutation({
       query: (id) => ({
         url: `manufacturer/delete?id=${id}`,
         method: "POST",
@@ -47,5 +57,9 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllManufactureQuery, useGetSingleManufacturerQuery, useAddManufacturerMutation, useDeleteManufacturerMutation } =
-  adminManufactureApi;
+export const {
+  useGetAllManufactureQuery,
+  useGetSingleManufacturerQuery,
+  useAddManufacturerMutation,
+  useDeleteManufacturerMutation,
+} = adminManufactureApi;
