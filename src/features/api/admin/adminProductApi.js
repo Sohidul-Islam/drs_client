@@ -10,36 +10,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        // return console.log(
-        //   "response of product data from admin product api",
-        //   res?.data
-        // );
-        return res.data
-        // return res.data.map(
-        //   ({
-        //     id,
-        //     productName,
-        //     genericName,
-        //     menufacturer,
-        //     strength,
-        //     dosageForm,
-        //     packBoxSize,
-        //     quantity,
-        //     updatedAt,
-        //     status,
-        //   }) => ({
-        //     id,
-        //     productName,
-        //     genericName,
-        //     manufacturer: menufacturer.name,
-        //     strength,
-        //     dosageForm,
-        //     packBoxSize,
-        //     quantity,
-        //     date: updatedAt?.split("T")[0],
-        //     status,
-        //   })
-        // );
+        return res.data;
       },
       providesTags: ["Products"],
     }),
