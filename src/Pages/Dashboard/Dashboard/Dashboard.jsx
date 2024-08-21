@@ -4,7 +4,7 @@ import ReportCard from "../../../Components/DashboardComponent/ReportCard/Report
 import StoreCard from "../../../Components/DashboardComponent/StoreCard/StoreCard";
 import ShopInvoiceTable from "../../../Components/DashboardComponent/Table/ShopInvoiceTable/ShopInvoiceTable";
 import { GoHome } from "react-icons/go";
-import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
+// import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
 
 const reports = [
   {
@@ -44,16 +44,24 @@ const Dashboard = () => {
   return (
     <div>
       <div className="flex items-center gap-x-[10px]">
-        <GoHome className="text-lg"/>
+        <GoHome className="text-lg" />
         <p>Dashboard Home Page</p>
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
-        <ShopCard title="Sale Order" color="#006E9E" />
-        <ShopCard title="Purchase Order" color="#955176" />
+        <ShopCard title="Sale Order" color="#006E9E" path="sales/create-sales" />
+        <ShopCard
+          title="Purchase Order"
+          color="#955176"
+          path="purchase-overview/create-purchase"
+        />
         <ShopCard title="Total Products" color="#E79C25" />
         <ShopCard title="Stock Items" color="#AE463B" />
-        <ShopCard title="Stock Adjustment" color="#009F8E" />
+        <ShopCard
+          title="Stock Adjustment"
+          color="#009F8E"
+          path="stock-adjustment/create-adjustment"
+        />
       </div>
       <div className="mt-4 grid grid-cols-3 gap-x-8">
         <div className="col-span-1 grid grid-cols-1 gap-y-3">

@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../features/auth/authSlice";
-// import CreateAdmin from './CreateAdmin'
+import CreateAdmin from './CreateAdmin'
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -19,6 +19,7 @@ const Navbar = () => {
         const res = await dispatch(getUser(userEmail)).unwrap();
         const user = res?.data?.email;
         setUser(user);
+        setUserData(true);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       } finally {
@@ -40,6 +41,9 @@ const Navbar = () => {
           <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
           <span className="text-base font-semibold">DRA Solution</span>
         </Link>
+
+        {/* for temporary create a admin  */}
+        {/* <CreateAdmin/> */}
 
         {/* responsive for large device  */}
         <div className="hidden md:block">
@@ -76,15 +80,10 @@ const Navbar = () => {
                     >
                       Register
                     </Link>
-
-                    {/* for temporary create a admin  */}
-                    {/* <CreateAdmin/> */}
                   </div>
                 ))}
             </div>
           </div>
-          {/* for temporary create a admin  */}
-          {/* <CreateAdmin/> */}
         </div>
 
         {/* mobile view menu button  */}

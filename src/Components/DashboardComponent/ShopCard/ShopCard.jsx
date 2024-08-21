@@ -1,7 +1,8 @@
 import React from "react";
 import { GoChecklist } from "react-icons/go";
+import { Link } from "react-router-dom";
 
-const ShopCard = ({title,  color }) => {
+const ShopCard = ({ title, color, path }) => {
   return (
     <div
       className="h-[116px] rounded-md text-white px-4 py-4"
@@ -17,9 +18,9 @@ const ShopCard = ({title,  color }) => {
         </div>
       </div>
       <div className="text-end mt-3 text-[15px]">
-        <button>
+        <Link to={path}>
           +<span className="underline">Create New</span>
-        </button>
+        </Link>
       </div>
     </div>
   );

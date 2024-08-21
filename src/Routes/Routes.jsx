@@ -11,12 +11,24 @@ import PurchaseOverview from "../Pages/Dashboard/PurchaseOverview/PurchaseOvervi
 import Sales from "../Pages/Dashboard/Sales/Sales";
 import Products from "../Pages/Dashboard/Products/Products";
 import ProductCategory from "../Pages/Dashboard/ProductCategory/ProductCategory";
+import CreateProductCategory from "../Pages/Dashboard/ProductCategory/CreateProductCategory";
 import Customers from "../Pages/Dashboard/Customers/Customers";
 import Manufacturer from "../Pages/Dashboard/Manufacturer/Manufacturer";
 import Supplier from "../Pages/Dashboard/Supplier/Supplier";
 import CreateManufacturer from "../Pages/Dashboard/Manufacturer/CreateManufacturer";
 import CreateSupplier from "../Pages/Dashboard/Supplier/CreateSupplier";
 import CreateCustomer from "../Pages/Dashboard/Customers/CreateCustomer";
+import CreateProduct from "../Pages/Dashboard/Products/CreateProduct";
+import StockAdjustment from "../Pages/Dashboard/StockAdjustment/StockAdjustment";
+import StockItem from "../Pages/Dashboard/StockItem/StockItem";
+import AdminProtectedRoute from "../Components/AdminProtectedRoute/AdminProtectedRoute";
+import ExpiringStock from "../Pages/Dashboard/ExpiringStock/ExpiringStock";
+import ExpiredStock from "../Pages/Dashboard/ExpiredStock/ExpiredStock";
+import CreateAdjustment from "../Pages/Dashboard/StockAdjustment/CreateAdjustment";
+import CreatePurchaseOverview from "../Pages/Dashboard/PurchaseOverview/CreatePurchaseOverview";
+import CreateSales from "../Pages/Dashboard/Sales/CreateSales";
+import ManageContent from "../Pages/AdminDashboard/ManageContent/ManageContent";
+import ManageStore from "../Pages/AdminDashboard/ManageStore/ManageStore";
 
 export const router = createBrowserRouter([
   {
@@ -52,17 +64,36 @@ export const router = createBrowserRouter([
         element: <PurchaseOverview />,
       },
       {
+        path: "purchase-overview/create-purchase",
+        element: <CreatePurchaseOverview />,
+      },
+      {
         path: "sales",
         element: <Sales />,
       },
-
+      {
+        path: "sales/create-sales",
+        element: <CreateSales />,
+      },
       {
         path: "products",
         element: <Products />,
       },
       {
+        path: "products/create-product",
+        element: <CreateProduct />,
+      },
+      {
         path: "product-categories",
         element: <ProductCategory />,
+      },
+      {
+        path: "product-categories/create-product-category",
+        element: (
+          <AdminProtectedRoute>
+            <CreateProductCategory />
+          </AdminProtectedRoute>
+        ),
       },
       {
         path: "customers",
@@ -78,7 +109,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "manufacturer/create-manufacturer",
-        element: <CreateManufacturer/>
+        element: (
+          <AdminProtectedRoute>
+            <CreateManufacturer />
+          </AdminProtectedRoute>
+        ),
       },
       {
         path: "supplier",
@@ -89,8 +124,38 @@ export const router = createBrowserRouter([
         element: <CreateSupplier />,
       },
       {
+        path: "stock-adjustment",
+        element: <StockAdjustment />,
+      },
+      {
+        path: "stock-adjustment/create-adjustment",
+        element: <CreateAdjustment />,
+      },
+      {
+        path: "stock-item",
+        element: <StockItem />,
+      },
+      {
+        path: "expiring-stock",
+        element: <ExpiringStock/>,
+      },
+      {
+        path: "expired-stock",
+        element: <ExpiredStock />,
+      },
+      {
         path: "profile",
         element: <Profile />,
+      },
+
+      // Admin route 
+      {
+        path: "manage-content",
+        element: <ManageContent />,
+      },
+      {
+        path: "manage-store",
+        element: <ManageStore />,
       },
     ],
   },
