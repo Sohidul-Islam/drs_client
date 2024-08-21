@@ -6,21 +6,12 @@ import {
   exportPDF,
 } from "../../../../features/export/exportSlice";
 
-const SearchAndExport = ({ searchQuery, onSearchChange, data }) => {
+const SearchAndExport = ({ searchQuery, onSearchChange, data, columns, title }) => {
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Export PDF and Excel File
   const handleExport = (type) => {
-    const columns = [
-      "id",
-      "manufacture_name",
-      "contactPerson",
-      "phone",
-      "date",
-    ];
-    const title = "Manufacture Report";
-
     if (type === "pdf") {
       dispatch(exportPDF({ columns, data: data.data, title }));
     } else if (type === "excel") {

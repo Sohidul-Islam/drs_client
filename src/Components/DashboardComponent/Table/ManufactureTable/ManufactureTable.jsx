@@ -73,6 +73,8 @@ const ManufactureTable = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         data={data}
+        columns={["id", "manufacture_name", "contactPerson", "phone", "date"]}
+        title="Manufacture Report"
       />
 
       {/* Table and pagination  */}

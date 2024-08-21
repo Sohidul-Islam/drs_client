@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useGetAllCustomerQuery } from "../../../../features/api/admin/adminCustomerApi";
 import Pagination from "../../Common/Pagination/Pagination";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const CustomerTable = () => {
   const [pageSize, setPageSize] = useState(10);
@@ -10,7 +11,7 @@ const CustomerTable = () => {
   const { data, isLoading } = useGetAllCustomerQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: "",
+    searchKey: searchQuery,
   });
 
   if (isLoading) {
@@ -20,22 +21,24 @@ const CustomerTable = () => {
   const { totalPages } = data.metadata;
   // console.log('from customer table: ', data.data)
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
   return (
     <div className="bg-white px-5">
-      {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
-      </div>
+      {/* Search and Export */}
+      <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={data}
+        columns={[
+          "id",
+          "customer_name",
+          "store_name",
+          "mobile_number",
+          "updater",
+          "date",
+          "status",
+        ]}
+        title="Customer Report"
+      />
 
       <div className="overflow-x-auto">
         {/* Table  */}
