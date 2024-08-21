@@ -52,7 +52,7 @@ const Pagination = ({
             className={`border px-3 py-1 text-base ${
               currentPage === 1
                 ? "cursor-not-allowed opacity-50"
-                : "cursor-pointer"
+                : "cursor-pointer hover:bg-gray-300"
             }`}
             disabled={currentPage === 1}
           >
@@ -63,7 +63,7 @@ const Pagination = ({
             className={`border px-3 py-1 text-base ${
               currentPage === totalPages
                 ? "cursor-not-allowed opacity-50"
-                : "cursor-pointer"
+                : "cursor-pointer hover:bg-gray-300"
             }`}
             disabled={currentPage === totalPages}
           >

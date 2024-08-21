@@ -10,7 +10,7 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data.map(
+        const data = res.data.map(
           ({ id, name, store, phoneNumber, updatedAt, status }) => ({
             id,
             customer_name: name,
@@ -21,8 +21,18 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
             status,
           })
         );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+        return {
+          data: data,
+          metadata,
+        };
       },
-      providesTags: ["Manufactures"],
+      providesTags: ["Customers"],
     }),
 
     // get single customer
@@ -32,7 +42,7 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
         params: { id: customerId },
       }),
       transformResponse: (res) => res.data,
-      providesTags: ["Manufactures"],
+      providesTags: ["Customers"],
     }),
 
     // add cunstomer

@@ -75,7 +75,7 @@ const CreateCustomer = () => {
                 } })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
-              {errors.phoneNumber && <span className="absolute text-red-500 text-sm">{errors.phoneNumber.message}</span>}
+              {errors?.phoneNumber && <span className="absolute text-red-500 text-sm">{errors?.phoneNumber?.message}</span>}
             </div>
             {/* Store */}
             <div>

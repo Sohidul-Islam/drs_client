@@ -143,10 +143,10 @@ const ManufactureTable = () => {
         {/* pagination  */}
         <Pagination
           currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
           totalPages={totalPages}
           pageSize={pageSize}
           setPageSize={setPageSize}
-          setCurrentPage={setCurrentPage}
         />
       </div>
 
