@@ -12,19 +12,14 @@ import {
 } from "../../../../features/deleteModal/deleteModalSlice";
 import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
-import { PiExportLight } from "react-icons/pi";
-import {
-  exportExcel,
-  exportPDF,
-} from "../../../../features/export/exportSlice";
 import Pagination from "../../Common/Pagination/Pagination";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const ManufactureTable = () => {
   const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,31 +41,6 @@ const ManufactureTable = () => {
   }
 
   const { totalPages } = data.metadata;
-
-  console.log(data, "manufacture data");
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  // Export PDF and Excel File
-  const handleExport = (type) => {
-    const columns = [
-      "id",
-      "manufacture_name",
-      "contactPerson",
-      "phone",
-      "date",
-    ];
-    const title = "Manufacture Report";
-
-    if (type === "pdf") {
-      dispatch(exportPDF({ columns, data: data, title }));
-    } else if (type === "excel") {
-      dispatch(exportExcel({ columns, data: data, title }));
-    }
-    setIsDropdownOpen(false);
-  };
 
   // Delete manufacture - open modal
   const handleDeleteClick = (id) => {
@@ -99,59 +69,11 @@ const ManufactureTable = () => {
   return (
     <div className="bg-white px-5">
       {/* Search and Export */}
-      <div className="flex justify-between py-5">
-        <div>
-          <label className="text-sm mr-2">Search:</label>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <div>
-            <label className="text-sm font-medium text-[#1F1F1F] mr-2">
-              Filter:
-            </label>
-            <select
-              className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
-              // value={statusFilter}
-              // onChange={handleStatusFilterChange}
-            >
-              <option value="all">Active Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1"
-            >
-              <span className="text-sm">Export</span>{" "}
-              <PiExportLight size={17} />
-            </button>
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
-                <button
-                  onClick={() => handleExport("pdf")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Export PDF
-                </button>
-                <button
-                  onClick={() => handleExport("excel")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Export Excel
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={data}
+      />
 
       {/* Table and pagination  */}
       <div className="overflow-x-auto">
