@@ -17,6 +17,7 @@ import {
   exportExcel,
   exportPDF,
 } from "../../../../features/export/exportSlice";
+import Pagination from "../../Common/Pagination/Pagination";
 
 const ManufactureTable = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ const ManufactureTable = () => {
     (state) => state.deleteModal
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,24 +51,6 @@ const ManufactureTable = () => {
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
-  };
-
-  const handlePageSizeChange = (event) => {
-    setPageSize(Number(event.target.value));
-  };
-
-  // Pagination Previous Button
-  const handlePrevious = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Pagination Next Button
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
   };
 
   // Export PDF and Excel File
@@ -237,50 +219,13 @@ const ManufactureTable = () => {
         </table>
 
         {/* pagination  */}
-        <div className="border-t">
-          <div className="my-4 flex justify-between">
-            {/* show selection  */}
-            <div>
-              <label className="text-sm font-medium text-[#1F1F1F] mr-2">
-                Show
-              </label>
-              <select
-                className="text-sm border outline-gray-300 text-gray-700 py-1 px-1 rounded-md"
-                value={pageSize}
-                onChange={handlePageSizeChange}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-              </select>
-            </div>
-            {/* next and previous button */}
-            <div>
-              <button
-                onClick={handlePrevious}
-                className={`border px-3 py-1 text-base ${
-                  currentPage === 1
-                    ? "cursor-not-allowed opacity-50"
-                    : "cursor-pointer"
-                }`}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <button
-                onClick={handleNext}
-                className={`border px-3 py-1 text-base ${
-                  currentPage === totalPages
-                    ? "cursor-not-allowed opacity-50"
-                    : "cursor-pointer"
-                }`}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
 
       {/* Delete Modal  */}
