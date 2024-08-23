@@ -12,14 +12,12 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
       transformResponse: (res) => {
         // return console.log(res?.data, 'res')
         return res.data.map(
-          ({ id, name, Seller, Updater, updatedAt, status }) => ({
+          ({ id, name, Seller, Updater, updatedAt }) => ({
             id,
             category_name: name,
             Seller,
-            store_name: Seller.shop_name,
-            updater: Updater?.shop_owner_name,
+            addedBy: Updater?.shop_owner_name,
             date: updatedAt?.split("T")[0],
-            status,
           })
         );
       },

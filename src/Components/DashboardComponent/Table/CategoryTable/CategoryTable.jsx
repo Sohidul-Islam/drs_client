@@ -38,10 +38,9 @@ const CategoryTable = () => {
               {[
                 "ID",
                 "Categories Name",
-                // "Store",
                 "Added By",
-                "Update On",
-                // "Active",
+                "Updater On",
+                "Action",
               ].map((heading) => (
                 <th
                   key={heading}
@@ -62,20 +61,15 @@ const CategoryTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.category_name}
                 </td>
-                {/* <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.store_name}
-                </td> */}
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
-                    {row?.Seller?.accountType === 'admin' ? "Global" : row.updater}
+                    {row?.Seller?.accountType === 'admin' ? "Global" : row.addedBy}
                   </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
                 </td>
-                {/* <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.status}
-                </td> */}
+        
               </tr>
             ))}
           </tbody>
