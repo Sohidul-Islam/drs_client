@@ -10,7 +10,6 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        // return console.log(res?.data, 'res')
         const data = res.data.map(
           ({ id, name, Seller, Updater, updatedAt }) => ({
             id,

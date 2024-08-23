@@ -18,17 +18,20 @@ const CreateProduct = () => {
     searchKey: "",
   });
 
-  const { data: categories } = useGetAllProductCategoryQuery({
-    page: 1,
-    pageSize: 15,
-    searchKey: "",
-  });
+  const { data: categories} =
+    useGetAllProductCategoryQuery({
+      page: 1,
+      pageSize: 15,
+      searchKey: "",
+    });
 
   const [addProduct] = useAddProductMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  // console.log(manufactures.data, 'manufactures')
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -129,7 +132,7 @@ const CreateProduct = () => {
               placeholder="search a manufacture"
               required="false"
               propertyValue="id"
-              propertyName="manufacturer_name"
+              propertyName="manufacture_name"
             />
             {/* Dosage Form */}
             <div>

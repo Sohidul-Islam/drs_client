@@ -38,10 +38,6 @@ const CategoryTable = () => {
   // console.log(data, "category");
   const { totalPages } = data.metadata;
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
   // Delete
   // open delete modal
   const handleDeleteClick = (id) => {

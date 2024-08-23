@@ -4,15 +4,30 @@ import {
   useDeleteProductMutation,
 } from "../../../../features/api/admin/adminProductApi";
 import EditButton from "../../Common/EditButton/EditButton";
-import { RiDeleteBinLine } from "react-icons/ri";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import { toast } from "react-toastify";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Pagination from "../../Common/Pagination/Pagination";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const ProductsTable = () => {
+  const dispatch = useDispatch();
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading } = useGetAllProductQuery({
-    page: 1,
-    pageSize: 15,
-    searchKey: "",
+    page: currentPage,
+    pageSize: pageSize,
+    searchKey: searchQuery,
   });
 
   const [deleteProduct] = useDeleteProductMutation();
@@ -20,35 +35,57 @@ const ProductsTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  console.log(data, "product");
+  const { totalPages } = data.metadata;
+  // console.log(data, "data");
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+  // Delete
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
   };
 
-  const handleDelete = async (id) => {
-    console.log('product id: ', id)
+  // delete confirm
+  const handleConfirmDelete = async () => {
     try {
-      const res = await deleteProduct(id).unwrap();
-      console.log(res)
+      const res = await deleteProduct(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
     } catch (error) {
-      console.error("Failed to delete the product:", error);
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
     }
+  };
+
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
   };
 
   return (
     <div className="bg-white px-5">
-      {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
-      </div>
+      {/* Search and Export */}
+      <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={data}
+        columns={[
+          "id",
+          "productName",
+          "genericName",
+          "manufacturer",
+          "strength",
+          "dosageForm",
+          "packBoxSize",
+          "date",
+        ]}
+        title="Product Report"
+      />
+
+      {/* Table and Pagination */}
       <div className="overflow-x-auto">
+        {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -75,7 +112,7 @@ const ProductsTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data?.map((row, index) => (
+            {data?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row?.id}
@@ -87,7 +124,7 @@ const ProductsTable = () => {
                   {row?.genericName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.menufacturer?.name}
+                  {row?.manufacturer}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.strength}
@@ -102,22 +139,32 @@ const ProductsTable = () => {
                   {row?.id} temp-data
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.updatedAt?.split("T")[0]}
+                  {row?.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
-                  <button
-                    onClick={() => handleDelete(row?.id)}
-                    className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
-                  >
-                    <RiDeleteBinLine />
-                  </button>
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {/* pagination  */}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+      />
+
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
