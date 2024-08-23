@@ -31,11 +31,9 @@ const CustomerTable = () => {
         columns={[
           "id",
           "customer_name",
-          "store_name",
+          "address",
           "mobile_number",
-          "updater",
           "date",
-          "status",
         ]}
         title="Customer Report"
       />
@@ -48,11 +46,10 @@ const CustomerTable = () => {
               {[
                 "ID",
                 "Customer Name",
-                "Store",
+                "Address",
                 "Mobile",
-                "Updater",
                 "Updater On",
-                "Active",
+                "Action",
               ].map((heading) => (
                 <th
                   key={heading}
@@ -69,25 +66,22 @@ const CustomerTable = () => {
               data.data.map((row, index) => (
                 <tr key={index}>
                   <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                    {row.id}
+                    {row?.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.customer_name}
+                    {row?.customer_name}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.store_name}
+                    {row?.address}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.mobile_number}
+                    {row?.mobile_number}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.updater}
+                    {row?.date}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.date}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.status}
+                    
                   </td>
                 </tr>
               ))

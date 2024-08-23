@@ -10,15 +10,14 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
+        // console.log(res, 'customer')
         const data = res.data.map(
-          ({ id, name, store, phoneNumber, updatedAt, status }) => ({
+          ({ id, name, address, phoneNumber, updatedAt }) => ({
             id,
             customer_name: name,
-            store_name: store.shop_name,
+            address,
             mobile_number: phoneNumber,
-            updater: store.shop_owner_name,
-            date: updatedAt,
-            status,
+            date: updatedAt.split("T")[0],
           })
         );
         const metadata = {
