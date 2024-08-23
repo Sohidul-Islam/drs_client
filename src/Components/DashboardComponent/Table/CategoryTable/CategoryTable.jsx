@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import { useGetAllProductCategoryQuery } from "../../../../features/api/admin/adminProductCategoryApi";
+import { useDeleteProductCategoryMutation, useGetAllProductCategoryQuery } from "../../../../features/api/admin/adminProductCategoryApi";
+import EditButton from "../../Common/EditButton/EditButton";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import { toast } from "react-toastify";
+import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const CategoryTable = () => {
+  const dispatch = useDispatch()
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading } = useGetAllProductCategoryQuery({
@@ -10,6 +20,8 @@ const CategoryTable = () => {
     searchKey: "",
   });
 
+  const [deleteProductCategory] = useDeleteProductCategoryMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -17,6 +29,31 @@ const CategoryTable = () => {
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  // Delete 
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deleteProductCategory(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
   };
 
   return (
@@ -69,12 +106,22 @@ const CategoryTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
                 </td>
-        
+                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                    <EditButton />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
