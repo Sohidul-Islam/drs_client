@@ -1,23 +1,33 @@
 import React, { useState } from "react";
-import { useDeleteProductCategoryMutation, useGetAllProductCategoryQuery } from "../../../../features/api/admin/adminProductCategoryApi";
+import {
+  useDeleteProductCategoryMutation,
+  useGetAllProductCategoryQuery,
+} from "../../../../features/api/admin/adminProductCategoryApi";
 import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import { toast } from "react-toastify";
-import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import Pagination from "../../Common/Pagination/Pagination";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const CategoryTable = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading } = useGetAllProductCategoryQuery({
-    page: 1,
-    pageSize: 15,
-    searchKey: "",
+    page: currentPage,
+    pageSize: pageSize,
+    searchKey: searchQuery,
   });
 
   const [deleteProductCategory] = useDeleteProductCategoryMutation();
@@ -25,13 +35,14 @@ const CategoryTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  console.log(data, "category");
+  // console.log(data, "category");
+  const { totalPages } = data.metadata;
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  // Delete 
+  // Delete
   // open delete modal
   const handleDeleteClick = (id) => {
     dispatch(openModal({ id }));
@@ -58,17 +69,18 @@ const CategoryTable = () => {
 
   return (
     <div className="bg-white px-5">
-      {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
-      </div>
+     {/* Search and Export */}
+     <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={data}
+        columns={["id", "category_name", "addedBy", "date"]}
+        title="Product Category Report"
+      />
+
+      {/* Table and Pagination*/}
       <div className="overflow-x-auto">
+        {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -90,7 +102,7 @@ const CategoryTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data?.map((row, index) => (
+            {data?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -100,20 +112,31 @@ const CategoryTable = () => {
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
-                    {row?.Seller?.accountType === 'admin' ? "Global" : row.addedBy}
+                    {row?.Seller?.accountType === "admin"
+                      ? "Global"
+                      : row.addedBy}
                   </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <EditButton />
-                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
-                  </td>
+                  <EditButton />
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {/* pagination  */}
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+        />
       </div>
 
       {/* Delete Modal  */}

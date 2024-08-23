@@ -14,8 +14,8 @@ const CustomerTable = () => {
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
-  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading } = useGetAllCustomerQuery({
