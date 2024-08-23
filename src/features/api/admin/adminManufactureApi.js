@@ -64,6 +64,7 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Manufactures"],
     }),
+    
   }),
 });
 

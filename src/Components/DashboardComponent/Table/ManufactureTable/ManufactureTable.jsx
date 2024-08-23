@@ -4,7 +4,6 @@ import {
   useGetAllManufactureQuery,
 } from "../../../../features/api/admin/adminManufactureApi";
 import EditButton from "../../Common/EditButton/EditButton";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeModal,
@@ -14,6 +13,7 @@ import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import Pagination from "../../Common/Pagination/Pagination";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
 const ManufactureTable = () => {
   const dispatch = useDispatch();
@@ -42,7 +42,8 @@ const ManufactureTable = () => {
 
   const { totalPages } = data.metadata;
 
-  // Delete manufacture - open modal
+  // Delete 
+  // open delete modal
   const handleDeleteClick = (id) => {
     dispatch(openModal({ id }));
   };
@@ -61,7 +62,7 @@ const ManufactureTable = () => {
     }
   };
 
-  // delete close modal
+  // close delete modal
   const handleCancelDelete = () => {
     dispatch(closeModal());
   };
@@ -130,12 +131,7 @@ const ManufactureTable = () => {
                 {/* update and delete button  */}
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
-                  <button
-                    onClick={() => handleDeleteClick(row?.id)}
-                    className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
-                  >
-                    <RiDeleteBinLine />
-                  </button>
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}

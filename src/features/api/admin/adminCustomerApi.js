@@ -44,7 +44,7 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
       providesTags: ["Customers"],
     }),
 
-    // add cunstomer
+    // add customer
     addCustomer: builder.mutation({
       query: (customerData) => ({
         url: "/customer/create",
@@ -53,6 +53,17 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Customers"],
     }),
+
+    // delete a manufacturer
+    deleteCustomer: builder.mutation({
+      query: (id) => ({
+        url: `customer/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["Customers"],
+    }),
+
   }),
 });
 
@@ -60,4 +71,5 @@ export const {
   useGetAllCustomerQuery,
   useGetSingleCustomerQuery,
   useAddCustomerMutation,
+  useDeleteCustomerMutation
 } = adminCustomerApi;
