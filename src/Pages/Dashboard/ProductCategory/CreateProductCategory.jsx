@@ -18,7 +18,7 @@ const CreateProductCategory = () => {
     const category = {
       name: data?.name,
       sellerId: user?.id,
-      status: data?.status,
+      status: "active",
     };
     // console.log('category' ,category)
     try {
@@ -49,28 +49,13 @@ const CreateProductCategory = () => {
             {/* Category Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Category Name
+                Category Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
                 {...register("name", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
-            </div>
-
-            {/* Active Status */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Active Status
-              </label>
-              <select
-                {...register("status", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
             </div>
           </div>
 

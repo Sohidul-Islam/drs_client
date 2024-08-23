@@ -11,21 +11,23 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
       }),
       transformResponse: (res) => {
         // return console.log(res?.data, 'res')
-        return res.data.map(({ id, name,Seller, Updater, updatedAt, status }) => ({
-          id,
-          category_name: name,
-          Seller,
-          store_name: Seller.shop_name,
-          updater: Updater?.shop_owner_name,
-          date: updatedAt?.split('T')[0],
-          status,
-        }));
+        return res.data.map(
+          ({ id, name, Seller, Updater, updatedAt, status }) => ({
+            id,
+            category_name: name,
+            Seller,
+            store_name: Seller.shop_name,
+            updater: Updater?.shop_owner_name,
+            date: updatedAt?.split("T")[0],
+            status,
+          })
+        );
       },
-      providesTags: ["ProductCategories"]
+      providesTags: ["ProductCategories"],
     }),
 
-     // get single product category
-     getSingleProductCategory: builder.query({
+    // get single product category
+    getSingleProductCategory: builder.query({
       query: ({ sellerId }) => ({
         url: "product-categories/single",
         params: { id: sellerId },
@@ -43,8 +45,22 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["ProductCategories"],
     }),
+
+    // delete product category
+    deleteProductCategory: builder.mutation({
+      query: (id) => ({
+        url: `product-categories/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["ProductCategories"],
+    }),
   }),
 });
 
-export const { useGetAllProductCategoryQuery,useGetSingleProductCategoryQuery, useAddProductCategoryMutation } =
-  adminProductCategoryApi;
+export const {
+  useGetAllProductCategoryQuery,
+  useGetSingleProductCategoryQuery,
+  useAddProductCategoryMutation,
+  useDeleteProductCategoryMutation
+} = adminProductCategoryApi;

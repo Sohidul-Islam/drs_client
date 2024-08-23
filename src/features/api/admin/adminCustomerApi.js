@@ -54,7 +54,7 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Customers"],
     }),
 
-    // delete a manufacturer
+    // delete a customer
     deleteCustomer: builder.mutation({
       query: (id) => ({
         url: `customer/delete?id=${id}`,
