@@ -10,6 +10,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
+        console.log(res.data,'stock')
         const data =  res.data.map(
           ({
             id,
@@ -19,6 +20,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             eventType,
             transactionType,
             adjustedProductQuantity,
+            mrpPerUnit,
             productTotalPrice,
             updatedAt
           }) => ({
@@ -29,6 +31,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             eventType,
             transactionType,
             quantity: adjustedProductQuantity,
+            mrpPerUnit,
             productTotalPrice,
             date: updatedAt?.split("T")[0],
           })

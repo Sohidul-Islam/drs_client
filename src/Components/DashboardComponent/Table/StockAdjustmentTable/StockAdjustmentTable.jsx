@@ -38,6 +38,7 @@ const StockAdjustmentTable = () => {
   }
 
   const { totalPages } = data.metadata;
+  console.log('stock data',data)
 
   // Delete
   // open delete modal
@@ -139,10 +140,10 @@ const StockAdjustmentTable = () => {
                   {row.quantity}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.unitPrice}
+                  {row.mrpPerUnit} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.productTotalPrice}
+                  {row.productTotalPrice} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
