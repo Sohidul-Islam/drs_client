@@ -3,36 +3,31 @@ import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  useAddProductMutation,
-  useGetAllProductQuery,
-} from "../../../features/api/admin/adminProductApi";
+import { useGetAllProductQuery } from "../../../features/api/admin/adminProductApi";
 import { RiStore3Line } from "react-icons/ri";
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
 import { useAddAdjustmentMutation } from "../../../features/api/seller/stockAdjustmentApi";
 
 const CreateAdjustment = () => {
-  const { register, handleSubmit, reset, watch, control } = useForm();
+  const { register, handleSubmit, reset, watch, control, setValue } = useForm();
   const { user } = useSelector((state) => state.auth);
-  // const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
-  // console.log("user", user);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
-  // const tradePrice = watch("tradePrice", 0); // default value of 0
-  // const vat = watch("vat", 0); // default value of 0
+  const productQuantity = watch("adjustedProductQuantity", 0); // default value of 0
+  const productUnitPrice = watch("productUnitPrice", 0); // default value of 0
 
-  // useEffect(() => {
-  //   const tradePriceValue = parseFloat(tradePrice) || 0;
-  //   const vatValue = parseFloat(vat) || 0;
-  //   const calculatedTotalPrice =
-  //     tradePriceValue + (tradePriceValue * vatValue) / 100;
-  //   setTotalPrice(calculatedTotalPrice.toFixed(2));
-  // }, [tradePrice, vat]);
+  useEffect(() => {
+    const quantity = parseFloat(productQuantity) || 0;
+    const unitPrice = parseFloat(productUnitPrice) || 0;
+    const total = quantity * unitPrice;
+    setValue("productTotalPrice", total.toFixed(2));
+  }, [productQuantity, productUnitPrice, setValue]);
 
   const { data: products, isLoading } = useGetAllProductQuery({
     page: 1,
-    pageSize: 10,
-    searchKey: "",
+    pageSize: 15,
+    searchKey: searchInputValue,
   });
 
   const [addAdjustment] = useAddAdjustmentMutation();
@@ -49,9 +44,10 @@ const CreateAdjustment = () => {
       productId: data.product.value,
       sellerId: user.id,
     };
+
     delete adjustment.product;
     setLoading(true);
-    // data.totalPrice = totalPrice;
+
     try {
       const { data: res } = await addAdjustment(adjustment);
       console.log(res, "res");
@@ -140,6 +136,7 @@ const CreateAdjustment = () => {
               required="false"
               propertyValue="id"
               propertyName="productName"
+              setSearchInputValue={setSearchInputValue}
             />
             {/* Batch No */}
             <div>
@@ -181,12 +178,13 @@ const CreateAdjustment = () => {
             {/* Product Total Price (To be adjusted) */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Product Total Price{" "}
+                Product Total Price
                 <span className="text-[10px]">(To be adjusted)</span>{" "}
                 <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
+                readOnly
                 {...register("productTotalPrice", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -244,6 +242,7 @@ const CreateAdjustment = () => {
           {/* button  */}
           <div className="absolute bottom-0">
             <div className="flex gap-x-5">
+              {/* Save button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -261,6 +260,7 @@ const CreateAdjustment = () => {
                   <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
                 )}
               </button>
+              {/* Clear button */}
               <button
                 onClick={() => reset()}
                 className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"

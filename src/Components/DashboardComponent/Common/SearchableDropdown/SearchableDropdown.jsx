@@ -1,6 +1,5 @@
-import React from "react";
 import { Controller } from "react-hook-form";
-import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
 const SearchableDropdown = ({
   labelText,
@@ -11,8 +10,9 @@ const SearchableDropdown = ({
   required,
   propertyValue,
   propertyName,
+  setSearchInputValue,
 }) => {
-  const options = data?.map((item) => ({
+  const options = data?.data?.map((item) => ({
     value: item[propertyValue],
     label: item[propertyName],
   }));
@@ -20,19 +20,26 @@ const SearchableDropdown = ({
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700">
-        {labelText} {required && <span className="text-[#FF0027]">*</span>}
+        {labelText}
+        {required === "true" && <span className="text-[#FF0027]">*</span>}
       </label>
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <Select
+          <CreatableSelect
             {...field}
             options={options}
             isClearable
             placeholder={placeholder}
-            className="mt-1"
-            classNamePrefix="react-select"
+            isValidNewOption={() => false} // Disable option creation
+            onChange={(selectedOption) => {
+              field.onChange(selectedOption); // Update react-hook-form
+              setSearchInputValue(selectedOption ? selectedOption.value : ""); // Update local state with the value
+            }}
+            onInputChange={(value) => {
+              setSearchInputValue(value); // Capture typed text
+            }}
           />
         )}
       />

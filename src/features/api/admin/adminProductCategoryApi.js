@@ -10,22 +10,31 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        // return console.log(res?.data, 'res')
-        return res.data.map(({ id, name,Seller, Updater, updatedAt, status }) => ({
-          id,
-          category_name: name,
-          Seller,
-          store_name: Seller.shop_name,
-          updater: Updater?.shop_owner_name,
-          date: updatedAt?.split('T')[0],
-          status,
-        }));
+        const data = res.data.map(
+          ({ id, name, Seller, Updater, updatedAt }) => ({
+            id,
+            category_name: name,
+            Seller,
+            addedBy: Updater?.shop_owner_name,
+            date: updatedAt?.split("T")[0],
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+        return {
+          data: data,
+          metadata,
+        };
       },
-      providesTags: ["ProductCategories"]
+      providesTags: ["ProductCategories"],
     }),
 
-     // get single product category
-     getSingleProductCategory: builder.query({
+    // get single product category
+    getSingleProductCategory: builder.query({
       query: ({ sellerId }) => ({
         url: "product-categories/single",
         params: { id: sellerId },
@@ -43,8 +52,22 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["ProductCategories"],
     }),
+
+    // delete product category
+    deleteProductCategory: builder.mutation({
+      query: (id) => ({
+        url: `product-categories/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["ProductCategories"],
+    }),
   }),
 });
 
-export const { useGetAllProductCategoryQuery,useGetSingleProductCategoryQuery, useAddProductCategoryMutation } =
-  adminProductCategoryApi;
+export const {
+  useGetAllProductCategoryQuery,
+  useGetSingleProductCategoryQuery,
+  useAddProductCategoryMutation,
+  useDeleteProductCategoryMutation,
+} = adminProductCategoryApi;
