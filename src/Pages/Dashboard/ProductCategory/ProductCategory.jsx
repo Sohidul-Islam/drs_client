@@ -16,7 +16,7 @@ const ProductCategory = () => {
         <p>Product Category</p>
       </div>
 
-      {/*Supplier Table  */}
+      {/*Product Category Table  */}
       <div className="mt-3">
         {role === "admin" && (
           <div className="flex justify-end mr-5 mb-3">

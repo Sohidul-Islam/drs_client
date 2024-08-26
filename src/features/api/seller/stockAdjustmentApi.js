@@ -10,8 +10,8 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        // return console.log(res?.data, 'res from slice')
-        return res.data.map(
+        console.log(res.data,'stock')
+        const data =  res.data.map(
           ({
             id,
             product,
@@ -20,8 +20,9 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             eventType,
             transactionType,
             adjustedProductQuantity,
+            mrpPerUnit,
             productTotalPrice,
-            user,
+            updatedAt
           }) => ({
             id,
             productName: product.productName,
@@ -30,10 +31,22 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             eventType,
             transactionType,
             quantity: adjustedProductQuantity,
+            mrpPerUnit,
             productTotalPrice,
-            updater: user.shop_owner_name
+            date: updatedAt?.split("T")[0],
           })
         );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+
+        return {
+          data,
+          metadata,
+        };
       },
       providesTags: ["Adjustments"],
     }),
@@ -52,7 +65,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
     deleteAdjustment: builder.mutation({
       query: (id) => ({
         url: `/stock/delete?id=${id}`,
-        method: "DELETE",
+        method: "POST",
       }),
       invalidatesTags: ["Adjustments"],
     }),

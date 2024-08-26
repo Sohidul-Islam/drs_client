@@ -10,19 +10,28 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data.map(
-          ({ id, name, store, phoneNumber, updatedAt, status }) => ({
+        // console.log(res, 'customer')
+        const data = res.data.map(
+          ({ id, name, address, phoneNumber, updatedAt }) => ({
             id,
             customer_name: name,
-            store_name: store.shop_name,
+            address,
             mobile_number: phoneNumber,
-            updater: store.shop_owner_name,
-            date: updatedAt,
-            status,
+            date: updatedAt.split("T")[0],
           })
         );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+        return {
+          data: data,
+          metadata,
+        };
       },
-      providesTags: ["Manufactures"],
+      providesTags: ["Customers"],
     }),
 
     // get single customer
@@ -32,10 +41,10 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
         params: { id: customerId },
       }),
       transformResponse: (res) => res.data,
-      providesTags: ["Manufactures"],
+      providesTags: ["Customers"],
     }),
 
-    // add cunstomer
+    // add customer
     addCustomer: builder.mutation({
       query: (customerData) => ({
         url: "/customer/create",
@@ -44,6 +53,17 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Customers"],
     }),
+
+    // delete a customer
+    deleteCustomer: builder.mutation({
+      query: (id) => ({
+        url: `customer/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["Customers"],
+    }),
+
   }),
 });
 
@@ -51,4 +71,5 @@ export const {
   useGetAllCustomerQuery,
   useGetSingleCustomerQuery,
   useAddCustomerMutation,
+  useDeleteCustomerMutation
 } = adminCustomerApi;

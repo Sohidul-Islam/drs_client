@@ -18,7 +18,7 @@ const CreateCustomer = () => {
       phoneNumber: data?.phoneNumber,
       userId: user?.id,
       address: data.address,
-      status: data?.status,
+      status: "active",
     };
 
     // console.log('customer data', customer)
@@ -65,7 +65,7 @@ const CreateCustomer = () => {
             {/* Phone Number */}
             <div className='relative'>
               <label className="block text-sm font-medium text-gray-700">
-                Phone number
+                Phone number <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="tel"
@@ -75,24 +75,8 @@ const CreateCustomer = () => {
                 } })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
-              {errors.phoneNumber && <span className="absolute text-red-500 text-sm">{errors.phoneNumber.message}</span>}
+              {errors?.phoneNumber && <span className="absolute text-red-500 text-sm">{errors?.phoneNumber?.message}</span>}
             </div>
-            {/* Store */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Store
-              </label>
-              <select
-                {...register("store", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="maa-pharmacy">MAA Pharmacy</option>
-                <option value="sabariya-pharma">Sabariya Pharma</option>
-                <option value="laz-pharma">Laz Pharma</option>
-              </select>
-            </div>
-
             {/* Address */}
             <div className="">
               <label className="text-sm font-medium text-gray-700">
@@ -103,21 +87,6 @@ const CreateCustomer = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
                 rows="3"
               ></textarea>
-            </div>
-
-            {/* Active Status */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Active Status
-              </label>
-              <select
-                {...register("status", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
             </div>
           </div>
 
