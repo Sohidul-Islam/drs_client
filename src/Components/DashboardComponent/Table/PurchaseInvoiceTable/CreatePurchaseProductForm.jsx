@@ -7,7 +7,6 @@ import { useGetAllProductQuery } from "../../../../features/api/admin/adminProdu
 import { useSelector } from "react-redux";
 import { useAddPurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import { toast } from "react-toastify";
-import { FaFileMedical } from "react-icons/fa6";
 
 const CreatePurchaseProductForm = () => {
   const { user } = useSelector((state) => state.auth);
@@ -236,9 +235,6 @@ const CreatePurchaseProductForm = () => {
         </div>
 
         {/* Button  */}
-        {/* <button className="my-4 px-3 py-2 border text-white bg-[#0085FF]">
-          Add Product
-        </button> */}
         <button
           type="submit"
           disabled={loading}

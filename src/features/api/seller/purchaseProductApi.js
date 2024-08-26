@@ -4,52 +4,51 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
   tagTypes: ["Purchase-product"],
   endpoints: (builder) => ({
     // all purchase product
-    // getAllAdjustment: builder.query({
-    //   query: ({ page, pageSize, searchKey }) => ({
-    //     url: "purchase-product/all",
-    //     params: { page, pageSize, searchKey },
-    //   }),
-    //   transformResponse: (res) => {
-    //     console.log(res.data,'purchase-product')
-    //     const data =  res.data.map(
-    //       ({
-    //         id,
-    //         product,
-    //         batchNo,
-    //         adjustmentType,
-    //         eventType,
-    //         transactionType,
-    //         adjustedProductQuantity,
-    //         mrpPerUnit,
-    //         productTotalPrice,
-    //         updatedAt
-    //       }) => ({
-    //         id,
-    //         productName: product.productName,
-    //         batchNo,
-    //         adjustmentType,
-    //         eventType,
-    //         transactionType,
-    //         quantity: adjustedProductQuantity,
-    //         mrpPerUnit,
-    //         productTotalPrice,
-    //         date: updatedAt?.split("T")[0],
-    //       })
-    //     );
-    //     const metadata = {
-    //       totalItems: res.metadata.totalItems,
-    //       totalPages: res.metadata.totalPages,
-    //       currentPage: res.metadata.currentPage,
-    //       pageSize: res.metadata.pageSize,
-    //     };
+    getAllPurchaseProduct: builder.query({
+      query: ({ page, pageSize, searchKey, status, sellerId }) => ({
+        url: "purchase-product/all",
+        params: { page, pageSize, searchKey, status, sellerId },
+      }),
+      transformResponse: (res) => {
+        const data = res.data.map(
+          ({
+            id,
+            product,
+            batchNo,
+            manufacturedDate,
+            expiryDate,
+            quantity,
+            tradePrice,
+            VAT,
+            totalTradePrice,
+            MRP,
+          }) => ({
+            id,
+            genericName: product.genericName,
+            batchNo,
+            manufacturedDate: manufacturedDate?.split("T")[0],
+            expiryDate: expiryDate?.split("T")[0],
+            quantity,
+            tradePrice,
+            VAT,
+            totalTradePrice,
+            MRP,
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
 
-    //     return {
-    //       data,
-    //       metadata,
-    //     };
-    //   },
-    //   providesTags: ["Purchase-product"],
-    // }),
+        return {
+          data,
+          metadata,
+        };
+      },
+      providesTags: ["Purchase-product"],
+    }),
 
     // add purchase-product
     addPurchaseProduct: builder.mutation({
@@ -62,7 +61,7 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
     }),
 
     // delete purchase-product
-    // deleteAdjustment: builder.mutation({
+    // deletePurchaseProduct: builder.mutation({
     //   query: (id) => ({
     //     url: `/purchase-product/delete?id=${id}`,
     //     method: "POST",
@@ -72,5 +71,8 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllAdjustmentQuery, useAddPurchaseProductMutation, useDeleteAdjustmentMutation } =
-purchaseProductApi;
+export const {
+  useGetAllPurchaseProductQuery,
+  useAddPurchaseProductMutation,
+  useDeletePurchaseProductMutation,
+} = purchaseProductApi;
