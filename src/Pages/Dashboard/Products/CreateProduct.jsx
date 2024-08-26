@@ -11,19 +11,19 @@ import SearchableDropdown from "../../../Components/DashboardComponent/Common/Se
 const CreateProduct = () => {
   const { register, handleSubmit, reset, control } = useForm();
   const [loading, setLoading] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   const { data: manufactures, isLoading } = useGetAllManufactureQuery({
     page: 1,
     pageSize: 15,
-    searchKey: "",
+    searchKey: searchInputValue,
   });
 
-  const { data: categories} =
-    useGetAllProductCategoryQuery({
-      page: 1,
-      pageSize: 15,
-      searchKey: "",
-    });
+  const { data: categories } = useGetAllProductCategoryQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: searchInputValue,
+  });
 
   const [addProduct] = useAddProductMutation();
 
@@ -31,21 +31,12 @@ const CreateProduct = () => {
     return <div>Loading...</div>;
   }
 
-  // console.log(manufactures.data, 'manufactures')
-
   const onSubmit = async (data) => {
     setLoading(true);
     data.manufacturerId = data.manufacturerId.value;
     data.categoryId = data.categoryId.value;
-
-    data.totalPrice = 100; //temp data, remove later
-    data.unit = "box"; //temp data, remove later
-    data.vat = 0.05; //temp data, remove later
-    data.tradePrice = 5.5; //temp data, remove later
-
     try {
       const { data: res } = await addProduct(data);
-      // console.log(res, "res");
       if (res?.status) {
         reset();
         toast.success(res?.message);
@@ -85,7 +76,7 @@ const CreateProduct = () => {
             </div>
 
             {/* Strength */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 Strength <span className="text-[#FF0027]">*</span>
               </label>
@@ -97,6 +88,16 @@ const CreateProduct = () => {
                 <option value="mg">mg</option>
                 <option value="mp">mp</option>
               </select>
+            </div> */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Strength <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="text"
+                {...register("strength", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
             </div>
 
             {/* Generic Name */}
@@ -121,6 +122,7 @@ const CreateProduct = () => {
               required="true"
               propertyValue="id"
               propertyName="category_name"
+              setSearchInputValue={setSearchInputValue}
             />
 
             {/* Manufacturer */}
@@ -130,12 +132,13 @@ const CreateProduct = () => {
               control={control}
               data={manufactures}
               placeholder="search a manufacture"
-              required="false"
+              required="true"
               propertyValue="id"
               propertyName="manufacture_name"
+              setSearchInputValue={setSearchInputValue}
             />
             {/* Dosage Form */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 Dosage Form <span className="text-[#FF0027]">*</span>
               </label>
@@ -147,10 +150,20 @@ const CreateProduct = () => {
                 <option value="active">Dosage Form-1</option>
                 <option value="inactive">Dosage Form-2</option>
               </select>
+            </div> */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Dosage Form <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="text"
+                {...register("dosageForm", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
             </div>
 
             {/* Pack/Box Size */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 Pack/Box Size
               </label>
@@ -162,6 +175,16 @@ const CreateProduct = () => {
                 <option value="5">5</option>
                 <option value="10">10</option>
               </select>
+            </div> */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Pack/Box Size
+              </label>
+              <input
+                type="number"
+                {...register("packBoxSize", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
             </div>
           </div>
 
