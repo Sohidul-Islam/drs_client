@@ -10,9 +10,8 @@ const SearchableDropdown = ({
   required,
   propertyValue,
   propertyName,
-  setSearchInputValue
+  setSearchInputValue,
 }) => {
- 
   const options = data?.data?.map((item) => ({
     value: item[propertyValue],
     label: item[propertyName],
@@ -21,7 +20,8 @@ const SearchableDropdown = ({
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700">
-        {labelText} {required && <span className="text-[#FF0027]">*</span>}
+        {labelText}
+        {required === "true" && <span className="text-[#FF0027]">*</span>}
       </label>
       <Controller
         name={name}

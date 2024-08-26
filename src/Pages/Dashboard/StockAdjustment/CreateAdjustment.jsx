@@ -3,10 +3,7 @@ import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  useAddProductMutation,
-  useGetAllProductQuery,
-} from "../../../features/api/admin/adminProductApi";
+import { useGetAllProductQuery } from "../../../features/api/admin/adminProductApi";
 import { RiStore3Line } from "react-icons/ri";
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
 import { useAddAdjustmentMutation } from "../../../features/api/seller/stockAdjustmentApi";
@@ -245,6 +242,7 @@ const CreateAdjustment = () => {
           {/* button  */}
           <div className="absolute bottom-0">
             <div className="flex gap-x-5">
+              {/* Save button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -262,6 +260,7 @@ const CreateAdjustment = () => {
                   <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
                 )}
               </button>
+              {/* Clear button */}
               <button
                 onClick={() => reset()}
                 className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
