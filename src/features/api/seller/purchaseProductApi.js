@@ -61,13 +61,13 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
     }),
 
     // delete purchase-product
-    // deletePurchaseProduct: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/purchase-product/delete?id=${id}`,
-    //     method: "POST",
-    //   }),
-    //   invalidatesTags: ["Purchase-product"],
-    // }),
+    deletePurchaseProduct: builder.mutation({
+      query: (id) => ({
+        url: `/purchase-product/delete?id=${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Purchase-product"],
+    }),
   }),
 });
 

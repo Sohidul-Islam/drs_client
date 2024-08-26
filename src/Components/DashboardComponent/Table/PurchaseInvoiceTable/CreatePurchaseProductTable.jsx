@@ -1,9 +1,18 @@
 import React from "react";
-import { useGetAllPurchaseProductQuery } from "../../../../features/api/seller/purchaseProductApi";
-import { useSelector } from "react-redux";
+import { useDeletePurchaseProductMutation, useGetAllPurchaseProductQuery } from "../../../../features/api/seller/purchaseProductApi";
+import { useDispatch, useSelector } from "react-redux";
+import EditButton from "../../Common/EditButton/EditButton";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import { toast } from "react-toastify";
+import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const CreatePurchaseProductTable = () => {
+  const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth);
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const { data: purchaseProducts, isLoading } = useGetAllPurchaseProductQuery({
     page: 1,
     pageSize: 15,
@@ -12,14 +21,42 @@ const CreatePurchaseProductTable = () => {
     sellerId: user?.id || 1,
   });
 
+  const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-console.log("purchaseProducts", purchaseProducts)
+  // console.log("purchaseProducts", purchaseProducts)
+  
+  // Delete
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deletePurchaseProduct(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
+      {/* Table  */}
       <table className="min-w-full divide-y divide-gray-200 whitespace-nowrap">
         <thead className="bg-gray-50">
           <tr>
@@ -84,6 +121,10 @@ console.log("purchaseProducts", purchaseProducts)
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.MRP}
                 </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                  <EditButton />
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                </td>
               </tr>
             ))
           ) : (
@@ -91,6 +132,13 @@ console.log("purchaseProducts", purchaseProducts)
           )}
         </tbody>
       </table>
+
+       {/* Delete Modal  */}
+       <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
