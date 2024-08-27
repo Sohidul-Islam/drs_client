@@ -26,8 +26,6 @@ const CreatePurchaseProductTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  // console.log("purchaseProducts", purchaseProducts)
   
   // Delete
   // open delete modal
@@ -61,7 +59,7 @@ const CreatePurchaseProductTable = () => {
         <thead className="bg-gray-50">
           <tr>
             {[
-              "Name",
+              "Id",
               "Generic Name",
               "Batch",
               "Manufactured Date",

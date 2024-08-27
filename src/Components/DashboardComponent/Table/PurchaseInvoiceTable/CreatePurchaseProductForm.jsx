@@ -43,14 +43,13 @@ const CreatePurchaseProductForm = () => {
     data.productId = data.productId.value;
     data.supplierId = data.supplierId.value;
     data.status = "inactive";
-    data.sellerId = user.id;
+    data.sellerId = user?.id;
 
     // console.log("Purchase Overview: ", data);
     setLoading(true);
 
     try {
       const { data: res } = await addPurchaseProduct(data);
-      console.log("Purchase Overview: ", res);
       if (res?.status) {
         reset();
         toast.success(res?.message);
