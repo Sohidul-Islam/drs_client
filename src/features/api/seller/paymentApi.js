@@ -5,47 +5,17 @@ const paymentApi = adminBaseApi.injectEndpoints({
   tagTypes: ["Payment"],
   endpoints: (builder) => ({
     // all Payment
-    // getAllProduct: builder.query({
-    //   query: ({ page, pageSize, searchKey }) => ({
-    //     url: "product/all",
-    //     params: { page, pageSize, searchKey },
-    //   }),
-    //   transformResponse: (res) => {
-    //     const data = res.data.map(
-    //       ({
-    //         id,
-    //         productName,
-    //         genericName,
-    //         menufacturer,
-    //         strength,
-    //         dosageForm,
-    //         packBoxSize,
-    //         updatedAt,
-    //       }) => ({
-    //         id,
-    //         productName,
-    //         genericName,
-    //         manufacturer: menufacturer.name,
-    //         strength,
-    //         dosageForm,
-    //         packBoxSize,
-    //         date: updatedAt?.split("T")[0],
-    //       })
-    //     );
-    //     const metadata = {
-    //       totalItems: res.metadata.totalItems,
-    //       totalPages: res.metadata.totalPages,
-    //       currentPage: res.metadata.currentPage,
-    //       pageSize: res.metadata.pageSize,
-    //     };
-
-    //     return {
-    //       data,
-    //       metadata,
-    //     };
-    //   },
-    //   providesTags: ["Payment"],
-    // }),
+    getAllPayment: builder.query({
+      query: ({ page, pageSize, searchKey,type }) => ({
+        url: "payment/all",
+        params: { page, pageSize, searchKey,type },
+      }),
+      transformResponse: (res) => {
+        // console.log(res.data, 'res from payment api')
+        return res.data
+      },
+      providesTags: ["Payment"],
+    }),
 
     // add Payment
     addPayment: builder.mutation({
@@ -58,14 +28,14 @@ const paymentApi = adminBaseApi.injectEndpoints({
     }),
 
     // delete Payment
-    // deletePayment: builder.mutation({
-    //   query: (id) => ({
-    //     url: `payment/delete?id=${id}`,
-    //     method: "POST",
-    //     body: { id },
-    //   }),
-    //   invalidatesTags: ["Payment"],
-    // }),
+    deletePayment: builder.mutation({
+      query: (id) => ({
+        url: `payment/delete?id=${id}`,
+        method: "POST",
+        body: { id },
+      }),
+      invalidatesTags: ["Payment"],
+    }),
   }),
 });
 

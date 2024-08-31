@@ -29,11 +29,10 @@ const CreatePurchasePaymentForm = () => {
     data.paidAmount = Number(data.paidAmount)
     data.sellerId = user?.id;
     data.purchaseId = purchaseId && purchaseId
-    console.log('Payment', data)
+    // console.log('Payment', data)
     // console.log(typeof(Number(data.paidAmount)))
     try {
       const { data: res } = await addPayment(data);
-      console.log('payment response: ', res)
       if (res?.status) {
         reset();
         toast.success(res?.message);
