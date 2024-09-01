@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import SearchableDropdown from "../../Common/SearchableDropdown/SearchableDropdown";
 import { useGetAllManufactureQuery } from "../../../../features/api/admin/adminManufactureApi";
@@ -10,9 +10,21 @@ import { toast } from "react-toastify";
 
 const CreatePurchaseProductForm = () => {
   const { user } = useSelector((state) => state.auth);
-  const { register, handleSubmit, control, reset } = useForm();
+  const { register, handleSubmit, control, reset, watch, setValue } = useForm();
   const [searchInputValue, setSearchInputValue] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const productQuantity = watch("quantity", 0); // default value of 0
+  const productTradePrice = watch("tradePrice", 0); // default value of 0
+  const productVat = watch("VAT", 0); // default value of 0
+
+  useEffect(() => {
+    const quantity = parseFloat(productQuantity) || 0;
+    const tradePrice = parseFloat(productTradePrice) || 0;
+    const vat = parseFloat(productVat) || 0;
+    const total = quantity * tradePrice * (1 + vat / 100);
+    setValue("totalTradePrice", total.toFixed(2));
+  }, [productQuantity, productTradePrice, productVat, setValue]);
 
   const { data: manufactures, isLoading } = useGetAllManufactureQuery({
     page: 1,
@@ -45,7 +57,6 @@ const CreatePurchaseProductForm = () => {
     data.status = "inactive";
     data.sellerId = user?.id;
 
-    // console.log("Purchase Overview: ", data);
     setLoading(true);
 
     try {
@@ -216,6 +227,7 @@ const CreatePurchaseProductForm = () => {
             </label>
             <input
               type="text"
+              readOnly
               {...register("totalTradePrice", { required: true })}
               className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
             />
@@ -242,7 +254,9 @@ const CreatePurchaseProductForm = () => {
               ? "text-gray-400 bg-slate-600 cursor-no-drop"
               : "text-white bg-[#0085FF]"
           } my-4 px-3 py-2 border`}
-        > Add Product
+        >
+          {" "}
+          Add Product
           {loading && (
             <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
           )}

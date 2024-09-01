@@ -10,7 +10,7 @@ const paymentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, type },
       }),
       transformResponse: (res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const data = res?.data?.map(
           ({ id, payment, updatedAt, purchase_product }) => ({
             id,
@@ -25,10 +25,10 @@ const paymentApi = adminBaseApi.injectEndpoints({
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems,
+          totalPages: res?.metadata?.totalPages,
+          currentPage: res?.metadata?.currentPage,
+          pageSize: res?.metadata?.pageSize,
         };
 
         return {

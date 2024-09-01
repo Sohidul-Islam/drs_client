@@ -1,42 +1,84 @@
 import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import { useDispatch, useSelector } from "react-redux";
+import { useDeletePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
+import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import { toast } from "react-toastify";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import Pagination from "../../Common/Pagination/Pagination";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const PurchaseInvoiceTable = () => {
+  const dispatch = useDispatch()
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: payments, isLoading } = useGetAllPaymentQuery({
-    page: 1,
-    pageSize: 20,
-    searchKey: "",
+    page: currentPage,
+    pageSize: pageSize,
+    searchKey: searchQuery,
     type: "purchase",
   });
+
+  const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+  const { totalPages } = payments?.metadata;
+
+  // Delete
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
   };
 
-  const handleDelete = (id) => {
-    console.log(id);
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deletePurchaseProduct(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
   };
 
   return (
     <div className="bg-white px-5">
       {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
-      </div>
+      <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={payments}
+        columns={[
+          "id",
+          "invoiceNumber",
+          "invoiceDate",
+          "manufacturer",
+          "manufacturer",
+          "total",
+          "paidAmount",
+          "due",
+          "date",
+        ]}
+        title="Purchase Report"
+      />
       <div className="overflow-x-auto">
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
@@ -92,17 +134,28 @@ const PurchaseInvoiceTable = () => {
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
-                  <button
-                    onClick={() => handleDelete(row.id)}
-                    className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
-                  >
-                    <RiDeleteBinLine />
-                  </button>
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {/* pagination  */}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+      />
+
+         {/* Delete Modal  */}
+       <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
       </div>
     </div>
   );

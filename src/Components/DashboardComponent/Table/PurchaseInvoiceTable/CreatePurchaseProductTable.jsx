@@ -13,7 +13,7 @@ const CreatePurchaseProductTable = () => {
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
-  const { data: purchaseProducts, isLoading } = useGetAllPurchaseProductQuery({
+  const { data: purchaseProducts } = useGetAllPurchaseProductQuery({
     page: 1,
     pageSize: 15,
     searchKey: "",
