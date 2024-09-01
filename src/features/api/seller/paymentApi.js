@@ -1,18 +1,40 @@
 import { adminBaseApi } from "../admin/adminBaseApi";
 
-
 const paymentApi = adminBaseApi.injectEndpoints({
   tagTypes: ["Payment"],
   endpoints: (builder) => ({
     // all Payment
     getAllPayment: builder.query({
-      query: ({ page, pageSize, searchKey,type }) => ({
+      query: ({ page, pageSize, searchKey, type }) => ({
         url: "payment/all",
-        params: { page, pageSize, searchKey,type },
+        params: { page, pageSize, searchKey, type },
       }),
       transformResponse: (res) => {
-        // console.log(res.data, 'res from payment api')
-        return res.data
+        console.log(res.data);
+        const data = res?.data?.map(
+          ({ id, payment, updatedAt, purchase_product }) => ({
+            id,
+            due: payment?.due,
+            paidAmount: payment?.paidAmount,
+            paymentMethod: payment?.paymentMethod,
+            total: payment?.total,
+            date: updatedAt?.split("T")[0],
+            invoiceNumber: purchase_product?.invoiceNumber,
+            invoiceDate: purchase_product?.invoiceDate?.split("T")[0],
+            manufacturer: "Missing",
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+
+        return {
+          data,
+          metadata,
+        };
       },
       providesTags: ["Payment"],
     }),

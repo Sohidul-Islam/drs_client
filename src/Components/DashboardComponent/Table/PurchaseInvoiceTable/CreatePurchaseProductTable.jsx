@@ -23,9 +23,9 @@ const CreatePurchaseProductTable = () => {
 
   const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
   
   // Delete
   // open delete modal
@@ -83,8 +83,8 @@ const CreatePurchaseProductTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {purchaseProducts.data.length > 0 ? (
-            purchaseProducts.data.map((row, index) => (
+          {purchaseProducts?.data?.length > 0 ? (
+            purchaseProducts?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row?.id}

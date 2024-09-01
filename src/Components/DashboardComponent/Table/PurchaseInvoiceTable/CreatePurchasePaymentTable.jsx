@@ -74,20 +74,20 @@ const CreatePurchasePaymentTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {payments?.length > 0 ? (
-            payments?.map((row, index) => (
+          {payments?.data?.length > 0 ? (
+            payments?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row?.payment?.paidAmount} TK
+                  {row?.paidAmount} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.payment?.paymentMethod}
+                  {row?.paymentMethod}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                {row?.payment?.due} TK
+                {row?.due} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.createdAt.split('T')[0]}
+                  {row?.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />

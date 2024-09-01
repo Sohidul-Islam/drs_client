@@ -1,146 +1,29 @@
 import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
 import { RiDeleteBinLine } from "react-icons/ri";
-
-const data = [
-  {
-    id: "#01",
-    invoiceNumber: "#DRA32-A00P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 10000,
-    paid: 7000,
-    due: 3000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#02",
-    invoiceNumber: "#DRA32-A01P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 15000,
-    paid: 10000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#03",
-    invoiceNumber: "#DRA32-A02P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 20000,
-    paid: 15000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#04",
-    invoiceNumber: "#DRA32-A03P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 25000,
-    paid: 20000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#05",
-    invoiceNumber: "#DRA32-A04P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 30000,
-    paid: 25000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#06",
-    invoiceNumber: "#DRA32-A05P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 35000,
-    paid: 30000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#07",
-    invoiceNumber: "#DRA32-A06P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 40000,
-    paid: 35000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#08",
-    invoiceNumber: "#DRA32-A07P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 45000,
-    paid: 40000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#09",
-    invoiceNumber: "#DRA32-A07P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "IHF Pharmacy",
-    total: 50000,
-    paid: 45000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-  {
-    id: "#10",
-    invoiceNumber: "#DRA32-A07P",
-    invoiceDate: "05/06/2024",
-    manufacturer: "ACI Pharmacy",
-    total: 55000,
-    paid: 50000,
-    due: 5000,
-    approvalStatus: "Approved",
-    updater: "Kazi Nizam Chowdhury",
-    updaterOn: "05/06/2024",
-  },
-];
+import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 
 const PurchaseInvoiceTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: payments, isLoading } = useGetAllPaymentQuery({
+    page: 1,
+    pageSize: 20,
+    searchKey: "",
+    type: "purchase",
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredData = data.filter((row) =>
-    Object.values(row).some((value) =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  );
-
   const handleDelete = (id) => {
-    console.log(id)
-  }
+    console.log(id);
+  };
 
   return (
     <div className="bg-white px-5">
@@ -155,6 +38,7 @@ const PurchaseInvoiceTable = () => {
         />
       </div>
       <div className="overflow-x-auto">
+        {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50 whitespace-nowrap">
             <tr>
@@ -167,7 +51,7 @@ const PurchaseInvoiceTable = () => {
                 "Paid",
                 "Due",
                 "Updater On",
-                "Action"
+                "Action",
               ].map((heading) => (
                 <th
                   key={heading}
@@ -180,31 +64,31 @@ const PurchaseInvoiceTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((row, idx) => (
+            {payments?.data?.map((row, idx) => (
               <tr key={idx}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.id}
+                  {row?.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.invoiceNumber}
+                  {row?.invoiceNumber}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.invoiceDate}
+                  {row?.invoiceDate}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.manufacturer}
+                  {row?.manufacturer}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.total}
+                  {row?.total} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.paid}
+                  {row?.paidAmount} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.due}
+                  {row?.due} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updaterOn}
+                  {row?.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
