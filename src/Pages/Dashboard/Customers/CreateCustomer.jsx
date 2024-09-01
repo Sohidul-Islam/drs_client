@@ -20,8 +20,6 @@ const CreateCustomer = () => {
       address: data.address,
       status: "active",
     };
-
-    // console.log('customer data', customer)
     
     try {
       const { data } = await addCustomer(customer);
@@ -33,8 +31,6 @@ const CreateCustomer = () => {
         toast.error(data?.message);
         reset()
       }
-
-      // console.log("response", data);
     } catch (error) {
       console.log(error);
     }
