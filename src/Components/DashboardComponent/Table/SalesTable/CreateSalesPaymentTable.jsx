@@ -1,7 +1,20 @@
 import React from "react";
+import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 
 const CreateSalesPaymentTable = () => {
-  const data = 0;
+  const { data: payments, isLoading } = useGetAllPaymentQuery({
+    page: 1,
+    pageSize: 20,
+    searchKey: "",
+    type: "sales",
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log("payment data: ", payments.data)
+
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
       <table className="min-w-full divide-y divide-gray-200 whitespace-nowrap">
@@ -24,17 +37,20 @@ const CreateSalesPaymentTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {data.length > 0 ? (
-            data.map((row, index) => (
+          {payments?.data?.length > 0 ? (
+            payments?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.paid_amount}
+                  {row.paidAmount} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.due}
+                  {row.paymentMethod}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updater_at}
+                  {row.due} TK
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row.date}
                 </td>
               </tr>
             ))
