@@ -1,7 +1,19 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useGetAllSaleProductQuery } from "../../../../features/api/seller/saleProductApi";
 
 const CreateSalesProductTable = () => {
-  const data = 0;
+  const { user } = useSelector((state) => state.auth);
+  const { data: saleProducts } = useGetAllSaleProductQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: "",
+    status: "inactive",
+    sellerId: user?.id || 1,
+  });
+
+  console.log("sales data: ",saleProducts)
+  
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
       <table className="min-w-full divide-y divide-gray-200 whitespace-nowrap">
@@ -10,16 +22,10 @@ const CreateSalesProductTable = () => {
             {[
               "Name",
               "Generic Name",
-              "Batch",
-              "Manufacturing Date",
-              "Expiry Date",
-              "Quantity (Pieces)",
-              "Trade Price",
-              "VAT",
-              "Total Trade Price (TP+VAT)",
-              "Unit Price",
-              "MRP (Per Unit)",
-              "Action",
+              "Reg-no",
+              "Doctor Name",
+              "Discount",
+              "Quantity",
             ].map((heading) => (
               <th
                 key={heading}
@@ -32,30 +38,30 @@ const CreateSalesProductTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {data.length > 0 ? (
-            data.map((row, index) => (
+          {saleProducts?.data?.length > 0 ? (
+            saleProducts?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.id}
+                  {row.name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.customer_name}
+                  {row.genericName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.store_name}
+                  {row.regNo}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.mobile_number}
+                  {row.doctorName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updater}
+                  {row.discount}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
+                  {row.quantity}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                {/* <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.status}
-                </td>
+                </td> */}
               </tr>
             ))
           ) : (
