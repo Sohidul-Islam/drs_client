@@ -12,16 +12,21 @@ const paymentApi = adminBaseApi.injectEndpoints({
       transformResponse: (res) => {
         // console.log(res.data);
         const data = res?.data?.map(
-          ({ id, payment, updatedAt, purchase_product }) => ({
+          ({ id, payment, updatedAt, purchase_product, sales_order }) => ({
             id,
-            due: payment?.due,
-            paidAmount: payment?.paidAmount,
+            due: payment?.due?.toFixed(2),
+            paidAmount: payment?.paidAmount?.toFixed(2),
             paymentMethod: payment?.paymentMethod,
-            total: payment?.total,
+            total: payment?.total?.toFixed(2),
             date: updatedAt?.split("T")[0],
             invoiceNumber: purchase_product?.invoiceNumber,
             invoiceDate: purchase_product?.invoiceDate?.split("T")[0],
             manufacturer: "Missing",
+
+            // sales product
+            customerName: sales_order?.customer?.name,
+            phoneNumber: sales_order?.customer?.phoneNumber,
+            orderDate: sales_order?.createdAt?.split("T")[0]
           })
         );
         const metadata = {

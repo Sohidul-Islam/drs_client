@@ -1,140 +1,86 @@
 import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
-import { RiDeleteBinLine } from "react-icons/ri";
-
-const data = [
-  {
-    id: "#01",
-    customerName: "John Doe",
-    mobileNumber: "123-456-7890",
-    orderDate: "05/06/2024",
-    total: 10000,
-    paid: 7000,
-    due: 3000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#02",
-    customerName: "Jane Smith",
-    mobileNumber: "987-654-3210",
-    orderDate: "05/06/2024",
-    total: 15000,
-    paid: 10000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#03",
-    customerName: "Alice Johnson",
-    mobileNumber: "555-123-4567",
-    orderDate: "05/06/2024",
-    total: 20000,
-    paid: 15000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#04",
-    customerName: "Bob Brown",
-    mobileNumber: "444-987-6543",
-    orderDate: "05/06/2024",
-    total: 25000,
-    paid: 20000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#05",
-    customerName: "Charlie Davis",
-    mobileNumber: "333-555-7777",
-    orderDate: "05/06/2024",
-    total: 30000,
-    paid: 25000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#06",
-    customerName: "Diana Evans",
-    mobileNumber: "222-444-6666",
-    orderDate: "05/06/2024",
-    total: 35000,
-    paid: 30000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#07",
-    customerName: "Frank Green",
-    mobileNumber: "111-222-3333",
-    orderDate: "05/06/2024",
-    total: 40000,
-    paid: 35000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#08",
-    customerName: "Grace Harris",
-    mobileNumber: "666-777-8888",
-    orderDate: "05/06/2024",
-    total: 45000,
-    paid: 40000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#09",
-    customerName: "Henry Jackson",
-    mobileNumber: "999-000-1111",
-    orderDate: "05/06/2024",
-    total: 50000,
-    paid: 45000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-  {
-    id: "#10",
-    customerName: "Ivy King",
-    mobileNumber: "888-999-0000",
-    orderDate: "05/06/2024",
-    total: 55000,
-    paid: 50000,
-    due: 5000,
-    updatedOn: "05/06/2024",
-  },
-];
-
+import { useDispatch, useSelector } from "react-redux";
+import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import { useDeleteSaleProductMutation } from "../../../../features/api/seller/saleProductApi";
+import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import { toast } from "react-toastify";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import Pagination from "../../Common/Pagination/Pagination";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const SalesTable = () => {
+  const dispatch = useDispatch()
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+  const { data: payments, isLoading } = useGetAllPaymentQuery({
+    page: currentPage,
+    pageSize: pageSize,
+    searchKey: searchQuery,
+    type: "sales",
+  });
+
+  const [deleteSaleProduct] = useDeleteSaleProductMutation();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const { totalPages } = payments?.metadata;
+  console.log("payments is: ", payments.data)
+
+  // Delete
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
   };
 
-  const filteredData = data.filter((row) =>
-    Object.values(row).some((value) =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  );
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deleteSaleProduct(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
 
-  const handleDelete = (id) => {
-    console.log(id)
-  }
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div className="bg-white px-5">
       {/* search field  */}
-      <div className="py-5">
-        <label className="text-sm mr-2">Search:</label>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-        />
-      </div>
+      <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={payments}
+        columns={[
+          "id",
+          "invoiceNumber",
+          "invoiceDate",
+          "manufacturer",
+          "manufacturer",
+          "total",
+          "paidAmount",
+          "due",
+          "date",
+        ]}
+        title="Sales Report"
+      />
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50 whitespace-nowrap">
@@ -161,7 +107,7 @@ const SalesTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((row, idx) => (
+            {payments?.data?.map((row, idx) => (
               <tr key={idx}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.id}
@@ -170,36 +116,47 @@ const SalesTable = () => {
                   {row.customerName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.mobileNumber}
+                  {row.phoneNumber}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.orderDate}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.total}
+                  {row.total} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.paid}
+                  {row.paidAmount} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.due}
+                  {row.due} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.updatedOn}
+                  {row.orderDate}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
-                  <button
-                    onClick={() => handleDelete(row.id)}
-                    className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
-                  >
-                    <RiDeleteBinLine />
-                  </button>
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+           {/* pagination  */}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+      />
+
+         {/* Delete Modal  */}
+       <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
       </div>
     </div>
   );
