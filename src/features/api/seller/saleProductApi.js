@@ -13,18 +13,21 @@ const saleProductApi = adminBaseApi.injectEndpoints({
         // console.log('res data from sale api:',res)
         const data = res.data.map(
           ({
+            id,
             product,
             BMDCRegistrationNo,
             doctorName,
             discount,
             quantity,
           }) => ({
+            id,
             name: product.productName,
             genericName: product.genericName,
             regNo: BMDCRegistrationNo,
             doctorName,
             discount,
             quantity,
+            product
           })
         );
         const metadata = {

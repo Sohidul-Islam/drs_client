@@ -4,6 +4,7 @@ import { useGetAllSaleProductQuery } from "../../../../features/api/seller/saleP
 
 const CreateSalesProductTable = () => {
   const { user } = useSelector((state) => state.auth);
+
   const { data: saleProducts } = useGetAllSaleProductQuery({
     page: 1,
     pageSize: 15,
@@ -12,7 +13,7 @@ const CreateSalesProductTable = () => {
     sellerId: user?.id || 1,
   });
 
-  console.log("sales data: ",saleProducts)
+  // console.log("sales data: ",saleProducts)
   
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">

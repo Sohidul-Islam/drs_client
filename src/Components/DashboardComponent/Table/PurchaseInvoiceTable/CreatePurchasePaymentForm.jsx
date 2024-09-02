@@ -47,6 +47,7 @@ const CreatePurchasePaymentForm = () => {
       console.log(error);
     }
   };
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className=" bg-white px-5 py-3 mt-4">
