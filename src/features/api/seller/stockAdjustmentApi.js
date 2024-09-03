@@ -1,7 +1,7 @@
 import { adminBaseApi } from "../admin/adminBaseApi";
 
 const stockAdjustmentApi = adminBaseApi.injectEndpoints({
-  tagTypes: ["Adjustments", "Stock-Item"],
+  tagTypes: ["Adjustments", "Stock-Item", "Expiring", "Expired"],
   endpoints: (builder) => ({
     // all adjustment
     getAllAdjustment: builder.query({
@@ -10,8 +10,8 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        console.log(res.data,'stock')
-        const data =  res.data.map(
+        console.log(res.data, "stock");
+        const data = res.data.map(
           ({
             id,
             product,
@@ -22,7 +22,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             adjustedProductQuantity,
             mrpPerUnit,
             productTotalPrice,
-            updatedAt
+            updatedAt,
           }) => ({
             id,
             productName: product.productName,
@@ -70,25 +70,20 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Adjustments"],
     }),
 
-     // all Stock Item
-     getAllStockItem: builder.query({
-      query: ({ page, pageSize, searchKey}) => ({
+    // all Stock Item
+    getAllStockItem: builder.query({
+      query: ({ page, pageSize, searchKey }) => ({
         url: "stock/items",
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
         // console.log(res.data,'stock items')
-        const data =  res.data.map(
-          ({
-            productId,
-            product,
-            mrpPerUnit,
-            stockQuantity
-          }) => ({
+        const data = res.data.map(
+          ({ productId, product, mrpPerUnit, stockQuantity }) => ({
             productId,
             productName: product.productName,
-            mrp:mrpPerUnit.toFixed(2),
-            stockQuantity
+            mrp: mrpPerUnit.toFixed(2),
+            stockQuantity,
           })
         );
         const metadata = {
@@ -105,8 +100,76 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       },
       providesTags: ["Stock-Item"],
     }),
+
+    // all Expiring Product
+    getAllExpiringProduct: builder.query({
+      query: ({ page, pageSize, searchKey, sellerId, showExpired }) => ({
+        url: "stock/items/expired",
+        params: { page, pageSize, searchKey, sellerId, showExpired },
+      }),
+      transformResponse: (res) => {
+        // console.log('Expiring Product',res.data)
+        const data = res.data.map(
+          ({ productId, product, mrpPerUnit, stockQuantity }) => ({
+            productId,
+            productName: product.productName,
+            mrp: mrpPerUnit.toFixed(2),
+            stockQuantity,
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+
+        return {
+          data,
+          metadata,
+        };
+      },
+      providesTags: ["Expiring"],
+    }),
+
+    // all Expired Product
+    getAllExpiredProduct: builder.query({
+      query: ({ page, pageSize, searchKey, sellerId, showExpired }) => ({
+        url: "stock/items/expired",
+        params: { page, pageSize, searchKey, sellerId, showExpired },
+      }),
+      transformResponse: (res) => {
+        // console.log('Expired Product',res.data)
+        const data = res.data.map(
+          ({ productId, product, mrpPerUnit, stockQuantity }) => ({
+            productId,
+            productName: product.productName,
+            mrp: mrpPerUnit.toFixed(2),
+            stockQuantity,
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+
+        return {
+          data,
+          metadata,
+        };
+      },
+      providesTags: ["Expired"],
+    }),
   }),
 });
 
-export const { useGetAllAdjustmentQuery, useAddAdjustmentMutation, useDeleteAdjustmentMutation, useGetAllStockItemQuery } =
-  stockAdjustmentApi;
+export const {
+  useGetAllAdjustmentQuery,
+  useAddAdjustmentMutation,
+  useDeleteAdjustmentMutation,
+  useGetAllStockItemQuery,
+  useGetAllExpiringProductQuery,
+  useGetAllExpiredProductQuery,
+} = stockAdjustmentApi;
