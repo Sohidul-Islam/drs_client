@@ -1,7 +1,7 @@
 import { adminBaseApi } from "../admin/adminBaseApi";
 
 const stockAdjustmentApi = adminBaseApi.injectEndpoints({
-  tagTypes: ["Adjustments"],
+  tagTypes: ["Adjustments", "Stock-Item"],
   endpoints: (builder) => ({
     // all adjustment
     getAllAdjustment: builder.query({
@@ -69,8 +69,44 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Adjustments"],
     }),
+
+     // all Stock Item
+     getAllStockItem: builder.query({
+      query: ({ page, pageSize, searchKey}) => ({
+        url: "stock/items",
+        params: { page, pageSize, searchKey },
+      }),
+      transformResponse: (res) => {
+        // console.log(res.data,'stock items')
+        const data =  res.data.map(
+          ({
+            productId,
+            product,
+            mrpPerUnit,
+            stockQuantity
+          }) => ({
+            productId,
+            productName: product.productName,
+            mrp:mrpPerUnit.toFixed(2),
+            stockQuantity
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+
+        return {
+          data,
+          metadata,
+        };
+      },
+      providesTags: ["Stock-Item"],
+    }),
   }),
 });
 
-export const { useGetAllAdjustmentQuery, useAddAdjustmentMutation, useDeleteAdjustmentMutation } =
+export const { useGetAllAdjustmentQuery, useAddAdjustmentMutation, useDeleteAdjustmentMutation, useGetAllStockItemQuery } =
   stockAdjustmentApi;

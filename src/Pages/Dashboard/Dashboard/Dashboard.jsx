@@ -49,13 +49,17 @@ const Dashboard = () => {
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
-        <ShopCard title="Sale Order" color="#006E9E" path="sales/create-sales" />
+        <ShopCard
+          title="Sale Order"
+          color="#006E9E"
+          path="sales/create-sales"
+        />
         <ShopCard
           title="Purchase Order"
           color="#955176"
           path="purchase-overview/create-purchase"
         />
-        <ShopCard title="Total Products" color="#E79C25" />
+        <ShopCard title="Total Products" color="#E79C25" path="products/create-product"/>
         <ShopCard title="Stock Items" color="#AE463B" />
         <ShopCard
           title="Stock Adjustment"
