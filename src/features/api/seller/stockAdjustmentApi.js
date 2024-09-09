@@ -108,13 +108,14 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, sellerId, showExpired },
       }),
       transformResponse: (res) => {
-        // console.log('Expiring Product',res.data)
+        console.log("Expiring Product", res.data);
         const data = res.data.map(
-          ({ productId, product, mrpPerUnit, stockQuantity }) => ({
+          ({ productId, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
             productId,
-            productName: product.productName,
-            mrp: mrpPerUnit.toFixed(2),
+            batchNo,
+            expiryDate: expiryDate.split("T")[0],
             stockQuantity,
+            mrp: mrpPerUnit.toFixed(2),
           })
         );
         const metadata = {
@@ -139,13 +140,14 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, sellerId, showExpired },
       }),
       transformResponse: (res) => {
-        // console.log('Expired Product',res.data)
+        console.log("Expired Product", res.data);
         const data = res.data.map(
-          ({ productId, product, mrpPerUnit, stockQuantity }) => ({
+          ({ productId, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
             productId,
-            productName: product.productName,
-            mrp: mrpPerUnit.toFixed(2),
+            batchNo,
+            expiryDate: expiryDate?.split("T")[0],
             stockQuantity,
+            mrp: mrpPerUnit?.toFixed(2),
           })
         );
         const metadata = {

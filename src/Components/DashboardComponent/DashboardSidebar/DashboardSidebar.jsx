@@ -63,7 +63,7 @@ const navList = [
     name: "Products",
     path: "/dashboard/products",
     icon: <AiFillProduct />,
-    roles: ["user", "admin"],
+    roles: ["user"],
   },
   {
     id: 8,
@@ -77,7 +77,7 @@ const navList = [
     name: "Customers",
     path: "/dashboard/customers",
     icon: <GiDiscussion />,
-    roles: ["user", "admin"],
+    roles: ["user"],
   },
   {
     id: 10,
@@ -109,8 +109,8 @@ const navList = [
   },
   {
     id: 14,
-    name: "Manage Plan",
-    path: "/dashboard/manage-plan",
+    name: "Subscription Details",
+    path: "/dashboard/subscription-details",
     icon: <AiOutlineAudit />,
     roles: ["admin"],
   },

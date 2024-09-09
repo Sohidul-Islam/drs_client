@@ -13,7 +13,7 @@ const UserInformation = () => {
       phone_number: "01828632233",
       image: "https://i.ibb.co/PC3rxMG/sabaria.png",
       nidImage: "https://i.ibb.co/KrT7qK8/nid.png",
-      signatureImage: "https://i.ibb.co/zFt3338/signature.png"
+      signatureImage: "https://i.ibb.co/zFt3338/signature.png",
     },
   });
   const [imageSrc, setImageSrc] = useState(
@@ -321,7 +321,7 @@ const UserInformation = () => {
                   <p className="text-red-500 text-[10px]">
                     {errors.confirm_password.message}
                   </p>
-                ) }
+                )}
               </div>
             </div>
           </div>

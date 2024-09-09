@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {useGetAllExpiredProductQuery, useGetAllStockItemQuery,} from "../../../../features/api/seller/stockAdjustmentApi";
+import { useGetAllExpiredProductQuery } from "../../../../features/api/seller/stockAdjustmentApi";
 import Pagination from "../../Common/Pagination/Pagination";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import { useSelector } from "react-redux";
@@ -14,8 +14,8 @@ const ExpiredTable = () => {
     page: currentPage,
     pageSize: pageSize,
     searchKey: searchQuery,
-    sellerId:user?.id,
-    showExpired:true
+    sellerId: user?.id,
+    showExpired: true,
   });
 
   if (isLoading) {
@@ -23,8 +23,7 @@ const ExpiredTable = () => {
   }
 
   const { totalPages } = data.metadata;
-  console.log('expired data',data)
-
+  console.log("expired data", data);
 
   return (
     <div className="bg-white px-5">
@@ -33,12 +32,7 @@ const ExpiredTable = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         data={data}
-        columns={[
-          "productId",
-          "productName",
-          "stockQuantity",
-          "mrp",
-        ]}
+        columns={["productId", "batchNo", "expiryDate", "stockQuantity", "mrp"]}
         title="Expired Product Report"
       />
       {/* Table and Pagination  */}
@@ -49,8 +43,9 @@ const ExpiredTable = () => {
             <tr>
               {[
                 "ID",
-                "Product Name",
-                "Available Stock",
+                "Batch",
+                "Expired Date",
+                "Quantity",
                 "MRP (Per unit)",
               ].map((heading) => (
                 <th
@@ -70,7 +65,12 @@ const ExpiredTable = () => {
                   {row.productId}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.productName}
+                  {row?.batchNo}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  <span className="px-5 py-2 text-white bg-[#B60000] border rounded-full">
+                    {row?.expiryDate}
+                  </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.stockQuantity}

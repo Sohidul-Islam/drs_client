@@ -29,6 +29,8 @@ import CreatePurchaseOverview from "../Pages/Dashboard/PurchaseOverview/CreatePu
 import CreateSales from "../Pages/Dashboard/Sales/CreateSales";
 import ManageContent from "../Pages/AdminDashboard/ManageContent/ManageContent";
 import ManageStore from "../Pages/AdminDashboard/ManageStore/ManageStore";
+import CreateStore from "../Pages/AdminDashboard/ManageStore/CreateStore";
+import SubscriptionDetails from "../Pages/AdminDashboard/SubscriptionDetails/SubscriptionDetails";
 
 export const router = createBrowserRouter([
   {
@@ -156,6 +158,14 @@ export const router = createBrowserRouter([
       {
         path: "manage-store",
         element: <ManageStore />,
+      },
+      {
+        path: "manage-store/create-store",
+        element: <CreateStore />,
+      },
+      {
+        path: "subscription-details",
+        element: <SubscriptionDetails />,
       },
     ],
   },
