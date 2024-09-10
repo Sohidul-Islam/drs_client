@@ -4,7 +4,7 @@ import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
 const ManageContentTable = () => {
   return (
-    <table className="min-w-full divide-y divide-gray-200">
+    <table className="min-w-full divide-y divide-gray-200 mb-4">
       <thead className="bg-gray-50">
         <tr>
           {[

@@ -31,6 +31,7 @@ import ManageContent from "../Pages/AdminDashboard/ManageContent/ManageContent";
 import ManageStore from "../Pages/AdminDashboard/ManageStore/ManageStore";
 import CreateStore from "../Pages/AdminDashboard/ManageStore/CreateStore";
 import SubscriptionDetails from "../Pages/AdminDashboard/SubscriptionDetails/SubscriptionDetails";
+import CreateContent from "../Pages/AdminDashboard/ManageContent/CreateContent";
 
 export const router = createBrowserRouter([
   {
@@ -154,6 +155,10 @@ export const router = createBrowserRouter([
       {
         path: "manage-content",
         element: <ManageContent />,
+      },
+      {
+        path: "manage-content/create-content",
+        element: <CreateContent />,
       },
       {
         path: "manage-store",

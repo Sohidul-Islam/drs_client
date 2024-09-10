@@ -1,6 +1,7 @@
 import React from "react";
 import { AiOutlineCopy } from "react-icons/ai";
 import ManageContentTable from "../../../Components/DashboardComponent/Table/ManageContentTable/ManageContentTable";
+import { Link } from "react-router-dom";
 
 const ManageContent = () => {
   return (
@@ -60,14 +61,16 @@ const ManageContent = () => {
         </p>
         {/* table  */}
         <ManageContentTable />
-        
+
         {/* button  */}
-        <button className="mt-4 text-[#066BC9]">
+        <Link
+          to="create-content"
+          className=" text-[#066BC9]">
           <span className="text-white bg-[#066BC9] text-md px-[7px] py-[2px] rounded-full">
             +
-          </span>{" "}
-          <span className="underline">Add more package</span>
-        </button>
+          </span>
+          <span className="ml-1 underline">Add more package</span>
+        </Link>
       </div>
     </div>
   );
