@@ -23,7 +23,6 @@ const ExpiredTable = () => {
   }
 
   const { totalPages } = data.metadata;
-  console.log("expired data", data);
 
   return (
     <div className="bg-white px-5">

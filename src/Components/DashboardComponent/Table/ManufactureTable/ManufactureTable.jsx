@@ -107,10 +107,10 @@ const ManufactureTable = () => {
             {data?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.id}
+                  {row?.id}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.manufacture_name}
+                  {row?.manufacture_name}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
@@ -123,10 +123,10 @@ const ManufactureTable = () => {
                   {row?.contactPerson}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.phone}
+                  {row?.phoneNumber}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
+                  {row?.date}
                 </td>
                 {/* update and delete button  */}
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">

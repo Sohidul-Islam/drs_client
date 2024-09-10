@@ -11,13 +11,13 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
       }),
       transformResponse: (res) => {
         const data = res.data?.map(
-          ({ id, name, Seller, contactPerson, phone, updatedAt }) => ({
+          ({ id, name, Seller, contactPerson, phoneNumber, updatedAt }) => ({
             id,
             manufacture_name: name,
             accountType: Seller.accountType,
             contactPerson,
             shop_owner_nam: Seller.shop_owner_nam,
-            phone,
+            phoneNumber,
             date: updatedAt.split("T")[0],
           })
         );
