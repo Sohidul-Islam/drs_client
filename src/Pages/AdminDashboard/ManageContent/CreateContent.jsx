@@ -4,27 +4,25 @@ import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { AiOutlineCopy } from "react-icons/ai";
 
 const CreateContent = () => {
-  const { register, handleSubmit, reset, control } = useForm();
+  const { register, handleSubmit, reset, control, unregister  } = useForm();
   const [loading, setLoading] = useState(false);
+
   const [features, setFeatures] = useState([""]);
 
-  const onSubmit = async (data) => {
-    const { offers, ...otherData } = data;
-    console.log({
-      ...otherData,
-      features: offers, // Array of features
-    });
+  const onSubmit = (data) => {
+    console.log("Submitted data:", data);
   };
 
   const addMoreFeatures = () => {
-    setFeatures([...features, ""]); // Add an empty string to the features array
+    setFeatures([...features, ""]);
   };
 
   // Function to remove a feature input
   const removeFeature = (index) => {
     const updatedFeatures = [...features];
-    updatedFeatures.splice(index, 1); // Remove the feature at the specified index
+    updatedFeatures.splice(index, 1);
     setFeatures(updatedFeatures);
+    unregister(`offers.${index}`);
   };
 
   return (
@@ -89,26 +87,8 @@ const CreateContent = () => {
               />
             </div>
 
-            {/* Feature */}
-            {/* <div className="flex items-center gap-5 col-span-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Feature 01 <span className="text-[#FF0027]">*</span>
-                </label>
-                <input
-                  type="text"
-                  {...register("offers", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-                />
-              </div>
-              <button className="text-[#066BC9]">
-                <span className="text-white bg-[#066BC9] text-sm px-[6px] py-[1px] rounded-full">
-                  +
-                </span>
-                <span className="ml-1 underline text-sm">Add more package</span>
-              </button>
-            </div> */}
-            {features.map((_, index) => (
+           {/* Features */}
+           {features.map((_, index) => (
               <div key={index} className="col-span-3 flex items-center gap-4">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700">
@@ -117,7 +97,7 @@ const CreateContent = () => {
                   </label>
                   <input
                     type="text"
-                    {...register(`offers[${index}]`, { required: true })}
+                    {...register(`offers.${index}`, { required: true })}
                     className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
                   />
                 </div>
@@ -133,7 +113,7 @@ const CreateContent = () => {
               </div>
             ))}
 
-            {/* Add More Package Button */}
+            {/* Add More Features Button */}
             <div className="flex items-center gap-5 col-span-3">
               <button
                 type="button"
