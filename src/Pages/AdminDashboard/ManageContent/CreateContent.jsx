@@ -4,13 +4,19 @@ import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { AiOutlineCopy } from "react-icons/ai";
 
 const CreateContent = () => {
-  const { register, handleSubmit, reset, control, unregister  } = useForm();
+  const { register, handleSubmit, reset, control, unregister } = useForm();
   const [loading, setLoading] = useState(false);
 
   const [features, setFeatures] = useState([""]);
 
   const onSubmit = (data) => {
+    const durationInDays = parseInt(data.duration_in_days) * 30;
+    const finalData = {
+      ...data,
+      duration_in_days: durationInDays,
+    };
     console.log("Submitted data:", data);
+    console.log("Submitted finalData:", finalData);
   };
 
   const addMoreFeatures = () => {
@@ -87,8 +93,8 @@ const CreateContent = () => {
               />
             </div>
 
-           {/* Features */}
-           {features.map((_, index) => (
+            {/* Features */}
+            {features.map((_, index) => (
               <div key={index} className="col-span-3 flex items-center gap-4">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700">
@@ -97,7 +103,7 @@ const CreateContent = () => {
                   </label>
                   <input
                     type="text"
-                    {...register(`offers.${index}`, { required: true })}
+                    {...register(`offers.${index}.name`, { required: true })}
                     className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
                   />
                 </div>
