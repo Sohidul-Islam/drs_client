@@ -2,33 +2,44 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { AiOutlineCopy } from "react-icons/ai";
+import { toast } from "react-toastify";
+import { useAddSubscriptionMutation } from "../../../features/api/admin/adminSubscriptionApi";
 
 const CreateContent = () => {
-  const { register, handleSubmit, reset, control, unregister } = useForm();
+  const { register, handleSubmit, reset, unregister } = useForm();
   const [loading, setLoading] = useState(false);
-
   const [features, setFeatures] = useState([""]);
-
-  const onSubmit = (data) => {
-    const durationInDays = parseInt(data.duration_in_days) * 30;
-    const finalData = {
-      ...data,
-      duration_in_days: durationInDays,
-    };
-    console.log("Submitted data:", data);
-    console.log("Submitted finalData:", finalData);
-  };
 
   const addMoreFeatures = () => {
     setFeatures([...features, ""]);
   };
-
-  // Function to remove a feature input
   const removeFeature = (index) => {
     const updatedFeatures = [...features];
     updatedFeatures.splice(index, 1);
     setFeatures(updatedFeatures);
     unregister(`offers.${index}`);
+  };
+
+  const [addSubscription] = useAddSubscriptionMutation();
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    const durationInDays = parseInt(data.duration_in_days) * 30;
+    const subscriptionData = { ...data, duration_in_days: durationInDays };
+    try {
+      const response = await addSubscription(subscriptionData);
+      if (response?.data?.status) {
+        reset();
+        toast.success(response?.data?.message);
+      } else {
+        toast.error(response?.data?.message);
+        reset();
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
   };
 
   return (
