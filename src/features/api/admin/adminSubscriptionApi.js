@@ -25,6 +25,16 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
+    // update Subscription
+    updateSubscription: builder.mutation({
+      query: (subscription) => ({
+        url: "subscription/update",
+        method: "UPDATE",
+        body: subscription,
+      }),
+      invalidatesTags: ["Subscription"],
+    }),
+
     // delete Subscription
     deleteSubscription: builder.mutation({
       query: (id) => ({
@@ -39,5 +49,6 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
 export const {
   useGetAllSubscriptionQuery,
   useAddSubscriptionMutation,
+  useUpdateSubscriptionMutation,
   useDeleteSubscriptionMutation,
 } = subscriptionApi;
