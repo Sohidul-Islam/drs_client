@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../../../../features/deleteModal/deleteModalSlice";
 import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import EditSubscriptionModal from "./EditSubscriptionModal";
 
 const ManageContentTable = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,9 @@ const ManageContentTable = () => {
   );
   const { data: subscriptions, isLoading } = useGetAllSubscriptionQuery();
   const [deleteSubscription] = useDeleteSubscriptionMutation();
+  const [editItem, setEditItem] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State to handle edit modal
+
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -55,7 +59,18 @@ const ManageContentTable = () => {
     dispatch(closeModal());
   };
 
-  console.log("Subscription data:", subscriptions);
+    // Handle edit
+  const handleEditClick = (item) => {
+      setEditItem(item);
+      setIsEditModalOpen(true);
+    };
+  
+    // Close edit modal
+    const handleEditModalClose = () => {
+      setIsEditModalOpen(false);
+      setEditItem(null);
+    };
+
   return (
     <div>
       <table className="min-w-full divide-y divide-gray-200 mb-4">
@@ -118,7 +133,7 @@ const ManageContentTable = () => {
               </td>
               <td className="border border-gray-300 px-4 py-2 text-left align-top">
                 <div className="flex gap-3">
-                  <EditButton />
+                  <EditButton handleEditClick={handleEditClick} item={item} />
                   <DeleteButton id={item?.id} onDelete={handleDeleteClick} />
                 </div>
               </td>
@@ -126,6 +141,15 @@ const ManageContentTable = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <EditSubscriptionModal
+          editItem={editItem}
+          onClose={handleEditModalClose}
+        />
+      )}
+
       {/* Delete Modal  */}
       <DeleteConfirmationModal
         isOpen={isModalOpen}

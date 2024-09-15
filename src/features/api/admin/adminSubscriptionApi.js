@@ -29,7 +29,7 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
     updateSubscription: builder.mutation({
       query: (subscription) => ({
         url: "subscription/update",
-        method: "UPDATE",
+        method: "POST",
         body: subscription,
       }),
       invalidatesTags: ["Subscription"],
