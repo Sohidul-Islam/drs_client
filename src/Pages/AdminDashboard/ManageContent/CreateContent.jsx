@@ -31,6 +31,7 @@ const CreateContent = () => {
       if (response?.data?.status) {
         reset();
         toast.success(response?.data?.message);
+        setLoading(false);
       } else {
         toast.error(response?.data?.message);
         reset();
