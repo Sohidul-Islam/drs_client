@@ -36,7 +36,6 @@ const ProductsTable = () => {
     return <div>Loading...</div>;
   }
   const { totalPages } = data.metadata;
-  // console.log(data, "data");
 
   // Delete
   // open delete modal

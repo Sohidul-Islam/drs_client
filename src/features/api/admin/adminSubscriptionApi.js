@@ -9,36 +9,8 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
         url: "subscription/all",
       }),
       transformResponse: (res) => {
-        // console.log('res data from sale api:',res)
-        const data = res.data.map(
-          ({
-            id,
-            product,
-            BMDCRegistrationNo,
-            doctorName,
-            discount,
-            quantity,
-          }) => ({
-            id,
-            name: product.productName,
-            genericName: product.genericName,
-            regNo: BMDCRegistrationNo,
-            doctorName,
-            discount,
-            quantity,
-            product
-          })
-        );
-        const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
-        };
-        return {
-          data,
-          metadata,
-        };
+        // console.log("res data from subscription api:", res.data);
+        return res.data;
       },
       providesTags: ["Subscription"],
     }),
