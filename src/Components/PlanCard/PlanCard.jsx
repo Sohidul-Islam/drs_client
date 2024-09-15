@@ -1,48 +1,32 @@
 import React from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 
-const PlanCard = ({planeType, price, month, backgroundColor}) => {
+const PlanCard = ({ subscription, index, month }) => {
+  const isOdd = index % 2 !== 0;
+  const backgroundColor = isOdd ? "bg-[#F0F8FF]" : "";
   return (
-    <div className={`relative w-full md:max-w-[302px] max-h-[516px] bg-white border border-[#E2E2E2] rounded-lg shadow-lg p-5 ${backgroundColor}`}>
+    <div
+      className={`relative w-full md:max-w-[302px] md:h-[516px] bg-white border border-[#E2E2E2] rounded-lg shadow-lg p-5 ${backgroundColor}`}
+    >
       <span className=" bg-[#006E9E] text-white text-xs font-bold px-2 py-1 rounded">
-        {planeType}
+        {subscription?.package}
       </span>
       <div className="mt-6">
-        <p className="text-gray-600 text-sm">
-          Get access to all premium features.Sign up now and start your journey
-          with us.
-        </p>
+        <p className="text-gray-600 text-sm">{subscription?.description}</p>
       </div>
       <div className="text-2xl font-semibold my-4">
-        {price} BDT <span className="text-xs font-normal">/{month} month</span>
+        {subscription?.price}.00 BDT
+        <span className="text-xs font-normal">/{month} month</span>
       </div>
       <ul className="space-y-2 text-xs">
-        <li className="flex items-center gap-2">
-          <FaCircleCheck fill="#006E9E" size={15} />
-          All In One Dashboard
-        </li>
-        <li className="flex items-center gap-2">
-          <FaCircleCheck fill="#006E9E" size={15} />
-          Create 30 invoices & bills
-        </li>
-        <li className="flex items-center gap-2">
-          <FaCircleCheck fill="#006E9E" size={15} />
-          Auto bank reconciliation
-        </li>
-        <li className="flex items-center gap-2">
-          <FaCircleCheck fill="#006E9E" size={15} />
-          Run Payroll for 5 employees
-        </li>
-        <li className="flex items-center gap-2">
-          <FaCircleCheck fill="#006E9E" size={15} />
-          Create your own sales pipelines
-        </li>
-        <li className="flex items-center gap-2">
-          <FaCircleCheck fill="#006E9E" size={15} />
-          Run Email Marketing campaigns
-        </li>
+        {subscription?.offers?.map((offer, index) => (
+          <li key={index} className="flex items-center gap-2">
+            <FaCircleCheck fill="#006E9E" size={15} />
+            {offer?.name}
+          </li>
+        ))}
       </ul>
-      <button className="w-full mt-8 border border-[#858585] rounded-md py-2  text-center hover:text-white hover:bg-[#006E9E]">
+      <button className="w-[90%] mt-8 border border-[#858585] rounded-md py-2 text-center hover:text-white hover:bg-[#006E9E] absolute bottom-2 left-1/2 transform -translate-x-1/2">
         Choose Plan
       </button>
     </div>
