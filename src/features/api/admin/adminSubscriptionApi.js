@@ -1,21 +1,20 @@
 import { adminBaseApi } from "../admin/adminBaseApi";
 
 const subscriptionApi = adminBaseApi.injectEndpoints({
-  tagTypes: ["Subscription"],
+  tagTypes: ["Subscription", "User-Subscription"],
   endpoints: (builder) => ({
-    // all subscription
+    // all subscription plan
     getAllSubscription: builder.query({
       query: () => ({
         url: "subscription/all",
       }),
       transformResponse: (res) => {
-        // console.log("res data from subscription api:", res.data);
         return res.data;
       },
       providesTags: ["Subscription"],
     }),
 
-    // add Subscription
+    // add Subscription plan
     addSubscription: builder.mutation({
       query: (subscription) => ({
         url: "subscription/create",
@@ -25,7 +24,7 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
-    // update Subscription
+    // update Subscription plan
     updateSubscription: builder.mutation({
       query: (subscription) => ({
         url: "subscription/update",
@@ -35,13 +34,36 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
-    // delete Subscription
+    // delete Subscription plan
     deleteSubscription: builder.mutation({
       query: (id) => ({
         url: `subscription/delete?id=${id}`,
         method: "POST",
       }),
       invalidatesTags: ["Subscription"],
+    }),
+
+    // ______USER SUBSCRIPTION______
+
+    // All USER Subscription
+    getAllUserSubscription: builder.query({
+      query: () => ({
+        url: "subscription/user/all",
+      }),
+      transformResponse: (res) => {
+        return res.data;
+      },
+      providesTags: ["User-Subscription"],
+    }),
+
+    // add USER Subscription
+    addUserSubscription: builder.mutation({
+      query: (userSubscription) => ({
+        url: "subscription/user",
+        method: "POST",
+        body: userSubscription,
+      }),
+      invalidatesTags: ["User-Subscription"],
     }),
   }),
 });
@@ -51,4 +73,6 @@ export const {
   useAddSubscriptionMutation,
   useUpdateSubscriptionMutation,
   useDeleteSubscriptionMutation,
+  useGetAllUserSubscriptionQuery,
+  useAddUserSubscriptionMutation,
 } = subscriptionApi;
