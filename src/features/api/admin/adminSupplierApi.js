@@ -11,9 +11,9 @@ const adminSupplierApi = adminBaseApi.injectEndpoints({
       }),
       transformResponse: (res) => {
         const data = res.data?.map(
-          ({ id, name, Seller, contactPerson, phone, updatedAt}) => ({
+          ({ id, name, Seller, contactPerson, phone, updatedAt }) => ({
             id,
-            supplier_name: name,   
+            supplier_name: name,
             Seller,
             contactPerson,
             phone,
@@ -44,8 +44,18 @@ const adminSupplierApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Supplier"],
     }),
 
-     // delete a supplier
-     deleteSupplier: builder.mutation({
+    // update supplier
+    updateSupplier: builder.mutation({
+      query: (supplierData) => ({
+        url: "suppliers/update",
+        method: "POST",
+        body: supplierData,
+      }),
+      invalidatesTags: ["Supplier"],
+    }),
+
+    // delete a supplier
+    deleteSupplier: builder.mutation({
       query: (id) => ({
         url: `suppliers/delete?id=${id}`,
         method: "POST",
@@ -56,5 +66,9 @@ const adminSupplierApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllSupplierQuery, useAddSupplierMutation, useDeleteSupplierMutation } =
-  adminSupplierApi;
+export const {
+  useGetAllSupplierQuery,
+  useAddSupplierMutation,
+  useUpdateSupplierMutation,
+  useDeleteSupplierMutation,
+} = adminSupplierApi;

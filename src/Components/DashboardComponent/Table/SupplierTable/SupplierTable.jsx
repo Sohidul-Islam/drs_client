@@ -18,6 +18,7 @@ import {
 } from "../../../../features/deleteModal/deleteModalSlice";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import { toast } from "react-toastify";
+import UpdateSupplierModal from "./UpdateSupplierModal";
 
 const tableHead = [
   "ID",
@@ -38,6 +39,8 @@ const SupplierTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("all");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
   const { data, isLoading } = useGetAllSupplierQuery({
     page: currentPage,
@@ -130,6 +133,13 @@ const SupplierTable = () => {
   };
 
 
+
+  const handleEditClick = (supplier) => {
+    setSelectedSupplier(supplier); // Pass the supplier data
+    setIsUpdateModalOpen(true); // Open the modal
+  };
+
+
   return (
     <div className="bg-white px-5">
       {/* Search and Export */}
@@ -188,7 +198,7 @@ const SupplierTable = () => {
       </div>
 
       {/* supplier table and pagination  */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto">   
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           {/* table head  */}
@@ -231,7 +241,7 @@ const SupplierTable = () => {
                 </td>
                 {/* update and delete button  */}
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
+                  <EditButton handleEditClick={handleEditClick} item={row} />
                   <button
                     onClick={() => handleDeleteClick(row?.id)}
                     className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
@@ -243,6 +253,15 @@ const SupplierTable = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Update Modal */}
+      {isUpdateModalOpen && (
+        <UpdateSupplierModal
+          isOpen={isUpdateModalOpen}
+          onClose={() => setIsUpdateModalOpen(false)}
+          supplier={selectedSupplier}
+        />
+      )}
 
         {/* pagination  */}
         <div className="border-t">

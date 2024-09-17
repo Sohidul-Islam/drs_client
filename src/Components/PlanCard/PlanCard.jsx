@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useAddUserSubscriptionMutation } from "../../features/api/admin/adminSubscriptionApi";
-import { useNavigate } from "react-router-dom";
 
 const PlanCard = ({ subscription, index, month }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const [addUserSubscription] = useAddUserSubscriptionMutation();
-  const navigate = useNavigate();
 
   const isOdd = index % 2 !== 0;
   const backgroundColor = isOdd ? "bg-[#F0F8FF]" : "";
