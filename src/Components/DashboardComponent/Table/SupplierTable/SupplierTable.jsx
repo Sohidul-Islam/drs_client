@@ -4,12 +4,7 @@ import {
   useDeleteSupplierMutation,
   useGetAllSupplierQuery,
 } from "../../../../features/api/admin/adminSupplierApi";
-import { PiExportLight } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  exportExcel,
-  exportPDF,
-} from "../../../../features/export/exportSlice";
 import EditButton from "../../Common/EditButton/EditButton";
 import { RiDeleteBinLine } from "react-icons/ri";
 import {
@@ -19,6 +14,7 @@ import {
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import { toast } from "react-toastify";
 import UpdateSupplierModal from "./UpdateSupplierModal";
+import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 
 const tableHead = [
   "ID",
@@ -37,8 +33,6 @@ const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
 
@@ -59,12 +53,6 @@ const SupplierTable = () => {
   }
   const { totalPages } = data.metadata;
 
-  const handleSearchChange = (event) => {
-    const { value } = event.target;
-    setSearchQuery(value);
-    setCurrentPage(1);
-  };
-
   const handlePageSizeChange = (event) => {
     setPageSize(Number(event.target.value));
   };
@@ -81,31 +69,6 @@ const SupplierTable = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
-  };
-
-  const handleStatusFilterChange = (event) => {
-    setStatusFilter(event.target.value);
-    setCurrentPage(1);
-  };
-
-  // Export PDF and Excel File
-  const handleExport = (type) => {
-    const columns = [
-      "id",
-      "supplier_name",
-      "updater",
-      "contactPerson",
-      "phone",
-      "date",
-    ];
-    const title = "Supplier Report";
-
-    if (type === "pdf") {
-      dispatch(exportPDF({ columns, data: data?.data, title }));
-    } else if (type === "excel") {
-      dispatch(exportExcel({ columns, data: data?.data, title }));
-    }
-    setIsDropdownOpen(false);
   };
 
   // Delete supplier - open modal
@@ -143,59 +106,19 @@ const SupplierTable = () => {
   return (
     <div className="bg-white px-5">
       {/* Search and Export */}
-      <div className="flex justify-between py-5">
-        <div>
-          <label className="text-sm mr-2">Search:</label>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="border outline-gray-300 text-gray-700 py-[5px] px-2"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <div>
-            <label className="text-sm font-medium text-[#1F1F1F] mr-2">
-              Filter:
-            </label>
-            <select
-              className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
-              value={statusFilter}
-              onChange={handleStatusFilterChange}
-            >
-              <option value="all">Active Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="p-2 border rounded-md bg-[#F5F5F5] flex gap-1"
-            >
-              <span className="text-sm">Export</span>{" "}
-              <PiExportLight size={17} />
-            </button>
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
-                <button
-                  onClick={() => handleExport("pdf")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Export PDF
-                </button>
-                <button
-                  onClick={() => handleExport("excel")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Export Excel
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <SearchAndExport
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        data={data}
+        columns={[
+          "id",
+          "supplier_name",
+          "contactPerson",
+          "phone",
+          "date",
+        ]}
+        title="Supplier Report"
+      />
 
       {/* supplier table and pagination  */}
       <div className="overflow-x-auto">   

@@ -6,7 +6,14 @@ import {
   exportPDF,
 } from "../../../../features/export/exportSlice";
 
-const SearchAndExport = ({ searchQuery, onSearchChange, data, columns, title }) => {
+const SearchAndExport = ({
+  searchQuery,
+  onSearchChange,
+  data,
+  columns,
+  title,
+  advanceFilter
+}) => {
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -33,18 +40,22 @@ const SearchAndExport = ({ searchQuery, onSearchChange, data, columns, title }) 
       </div>
       <div className="flex items-center gap-2">
         <div>
-          <label className="text-sm font-medium text-[#1F1F1F] mr-2">
-            Filter:
-          </label>
-          <select
-            className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
-            // value={statusFilter}
-            // onChange={handleStatusFilterChange}
-          >
-            <option value="all">Active Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+          {advanceFilter && (
+            <div>
+              <label className="text-sm font-medium text-[#1F1F1F] mr-2">
+                Filter:
+              </label>
+              <select
+                className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
+                // value={statusFilter}
+                // onChange={handleStatusFilterChange}
+              >
+                <option value="all">Active Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          )}
         </div>
 
         <div className="relative">

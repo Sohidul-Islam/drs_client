@@ -79,6 +79,7 @@ const SalesTable = () => {
           "date",
         ]}
         title="Sales Report"
+        advanceFilter={true}
       />
 
       <div className="overflow-x-auto">

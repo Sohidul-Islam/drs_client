@@ -7,7 +7,7 @@ const ExpiringStock = () => {
     <div>
       <div className="flex items-center gap-x-[10px]">
         <AiFillCreditCard className="text-lg" />
-        <p>Expired Stock</p>
+        <p>Expiring Stock</p>
       </div>
 
       {/*Stock Item Table  */}

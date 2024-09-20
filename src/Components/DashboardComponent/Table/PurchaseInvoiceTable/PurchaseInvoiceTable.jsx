@@ -78,6 +78,7 @@ const PurchaseInvoiceTable = () => {
           "date",
         ]}
         title="Purchase Report"
+        advanceFilter={true}
       />
       <div className="overflow-x-auto">
         {/* Table  */}

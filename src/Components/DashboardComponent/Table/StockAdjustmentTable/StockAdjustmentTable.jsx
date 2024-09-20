@@ -85,6 +85,7 @@ const StockAdjustmentTable = () => {
           "date",
         ]}
         title="Stock Adjustment Report"
+        advanceFilter={true}
       />
       {/* Table and Pagination  */}
       <div className="overflow-x-auto">

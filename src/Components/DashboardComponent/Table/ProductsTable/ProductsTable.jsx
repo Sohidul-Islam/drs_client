@@ -80,6 +80,7 @@ const ProductsTable = () => {
           "date",
         ]}
         title="Product Report"
+        advanceFilter={true}
       />
 
       {/* Table and Pagination */}
