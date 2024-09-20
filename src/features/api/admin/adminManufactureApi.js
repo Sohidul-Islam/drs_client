@@ -16,7 +16,7 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
             manufacture_name: name,
             accountType: Seller.accountType,
             contactPerson,
-            shop_owner_nam: Seller.shop_owner_nam,
+            shop_owner_name: Seller.shop_owner_nam,
             phoneNumber,
             date: updatedAt.split("T")[0],
           })
@@ -48,7 +48,17 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
     // add manufacturer
     addManufacturer: builder.mutation({
       query: (manufacturerData) => ({
-        url: "/manufacturer/create",
+        url: "manufacturer/create",
+        method: "POST",
+        body: manufacturerData,
+      }),
+      invalidatesTags: ["Manufactures"],
+    }),
+    
+    // update manufacturer
+    updateManufacturer: builder.mutation({
+      query: (manufacturerData) => ({
+        url: "manufacturer/update",
         method: "POST",
         body: manufacturerData,
       }),
@@ -73,4 +83,5 @@ export const {
   useGetSingleManufacturerQuery,
   useAddManufacturerMutation,
   useDeleteManufacturerMutation,
+  useUpdateManufacturerMutation,
 } = adminManufactureApi;

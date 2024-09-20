@@ -2,11 +2,10 @@ import React from "react";
 import { GoCpu } from "react-icons/go";
 import ManufactureTable from "../../../Components/DashboardComponent/Table/ManufactureTable/ManufactureTable";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Manufacturer = () => {
-    // const { role } = useSelector((state) => state.auth);
-  // console.log(role)
-  const role = "admin"; //this is temporary, i have to remove it later and uncomment line no 7
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <div>
@@ -17,7 +16,7 @@ const Manufacturer = () => {
 
       {/*Manufacture Table  */}
       <div className="mt-3">
-        {role === "admin" && (
+        {user?.accountType === "admin" && (
           <div className="flex justify-end mr-5 mb-3">
             <Link
               to="create-manufacturer"

@@ -14,6 +14,7 @@ import {
 import { GiDiscussion } from "react-icons/gi";
 import { RiStore3Line } from "react-icons/ri";
 import { PiRowsPlusTop } from "react-icons/pi";
+import { useSelector } from "react-redux";
 
 const navList = [
   {
@@ -21,7 +22,7 @@ const navList = [
     name: "Shop Dashboard",
     path: "/dashboard",
     icon: <GoHome />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 2,
@@ -49,63 +50,63 @@ const navList = [
     name: "Purchase Overview",
     path: "/dashboard/purchase-overview",
     icon: <GoTag />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 6,
     name: "Sales",
     path: "/dashboard/sales",
     icon: <AiOutlineDollarCircle />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 7,
     name: "Products",
     path: "/dashboard/products",
     icon: <AiFillProduct />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 8,
     name: "Product Categories",
     path: "/dashboard/product-categories",
     icon: <AiOutlineDatabase />,
-    roles: ["user", "admin"],
+    roles: ["seller", "admin"],
   },
   {
     id: 9,
     name: "Customers",
     path: "/dashboard/customers",
     icon: <GiDiscussion />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 10,
     name: "Manufacturer",
     path: "/dashboard/manufacturer",
     icon: <GoCpu />,
-    roles: ["user", "admin"],
+    roles: ["seller", "admin"],
   },
   {
     id: 11,
     name: "Supplier",
     path: "/dashboard/supplier",
     icon: <GoGitCompare />,
-    roles: ["user", "admin"],
+    roles: ["seller", "admin"],
   },
   {
     id: 12,
     name: "Stock Adjustment",
     path: "/dashboard/stock-adjustment",
     icon: <RiStore3Line />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 13,
     name: "Stock Item",
     path: "/dashboard/stock-item",
     icon: <PiRowsPlusTop />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 14,
@@ -119,24 +120,24 @@ const navList = [
     name: "Expiring Stock",
     path: "/dashboard/expiring-stock",
     icon: <AiFillCreditCard />,
-    roles: ["user"],
+    roles: ["seller"],
   },
   {
     id: 16,
     name: "Expired Stock",
     path: "/dashboard/expired-stock",
     icon: <AiOutlineGroup />,
-    roles: ["user"],
+    roles: ["seller"],
   },
 ];
 
 const DashboardSidebar = () => {
-  const [role, setRole] = useState("user");
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <nav>
       {navList
-        .filter((item) => item.roles.includes(role))
+        .filter((item) => item.roles.includes(user.accountType))
         .map((nav, index) => (
           <NavLink
             key={index}
@@ -148,27 +149,10 @@ const DashboardSidebar = () => {
               } w-full text-nowrap px-5 py-3 flex gap-x-2 items-center`
             }
           >
-            <span className="text-xl">{nav?.icon}</span>{" "}
+            <span className="text-xl">{nav?.icon}</span>
             <span className="text-sm">{nav?.name}</span>
           </NavLink>
         ))}
-
-      {/* temporary test user and admin, when you will remove this portion, also remove useState hook  */}
-      <div className="ml-5 mt-5">
-        <p className="text-xs">Temporary Button - {role}</p>
-        <button
-          onClick={() => setRole("user")}
-          className="mr-3 bg-red-700 text-white text-sm px-2 py-1 rounded"
-        >
-          Seller
-        </button>
-        <button
-          onClick={() => setRole("admin")}
-          className=" bg-green-700 text-white text-sm px-2 py-1 rounded"
-        >
-          Admin
-        </button>
-      </div>
     </nav>
   );
 };
