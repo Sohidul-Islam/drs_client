@@ -4,9 +4,9 @@ import { FaFileMedical } from "react-icons/fa6";
 import { GiDiscussion } from "react-icons/gi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useUpdateCustomerMutation } from "../../../../features/api/admin/adminCustomerApi";
+import { useUpdateProductCategoryMutation } from "../../../../features/api/admin/adminProductCategoryApi";
 
-const CustomerModal = ({ isOpen, onClose, customerData }) => {
+const ProductCategoryModal = ({ isOpen, onClose, categoryData }) => {
   const {
     register,
     handleSubmit,
@@ -15,30 +15,26 @@ const CustomerModal = ({ isOpen, onClose, customerData }) => {
   } = useForm();
   const { user } = useSelector((state) => state.auth);
 
-  const [updateCustomer] = useUpdateCustomerMutation();
+  const [updateProductCategory] = useUpdateProductCategoryMutation();
 
   useEffect(() => {
-    if (customerData) {
-      setValue("name", customerData.name);
-      setValue("phoneNumber", customerData.phoneNumber);
-      setValue("address", customerData.address);
+    if (categoryData) {
+      setValue("name", categoryData.category_name);
     }
-  }, [customerData, setValue]);
+  }, [categoryData, setValue]);
 
   const onSubmit = async (data) => {
-    const customer = {
+    const category = {
       name: data?.name,
-      phoneNumber: data?.phoneNumber,
-      userId: user?.id,
-      address: data.address,
+      sellerId: user?.id,
       status: "active",
     };
 
     try {
       // Update customer logic
-      const response = await updateCustomer({
-        id: customerData.id,
-        ...customer,
+      const response = await updateProductCategory({
+        id: categoryData.id,
+        ...category,
       });
       if (response?.data?.status) {
         toast.success(response?.data?.message);
@@ -59,13 +55,13 @@ const CustomerModal = ({ isOpen, onClose, customerData }) => {
         <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
           <div className="flex items-center gap-x-[10px] mb-5">
             <GiDiscussion className="text-lg" />
-            <p>{customerData ? "Update Customer" : "Create New Customer"}</p>
+            <p>Update Product Category</p>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Customer Name */}
+            {/* Category Name */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
-                Customer Name
+                Category Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
@@ -78,39 +74,6 @@ const CustomerModal = ({ isOpen, onClose, customerData }) => {
                 </span>
               )}
             </div>
-            {/* Phone Number */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Phone number <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="tel"
-                {...register("phoneNumber", {
-                  required: true,
-                  pattern: {
-                    value: /^[0-9]{11}$/,
-                    message: "Invalid phone number format",
-                  },
-                })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-              {errors?.phoneNumber && (
-                <span className="absolute text-red-500 text-sm">
-                  {errors?.phoneNumber?.message}
-                </span>
-              )}
-            </div>
-            {/* Address */}
-            <div className="mb-4">
-              <label className="text-sm font-medium text-gray-700">
-                Address
-              </label>
-              <textarea
-                {...register("address")}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
-                rows="3"
-              ></textarea>
-            </div>
 
             {/* Button Section */}
             <div className="mt-4">
@@ -122,7 +85,7 @@ const CustomerModal = ({ isOpen, onClose, customerData }) => {
                   <span className="mr-2">
                     <FaFileMedical />
                   </span>
-                  {customerData ? "Update Customer" : "Add Customer"}
+                  Update Category
                 </button>
                 <button
                   onClick={onClose}
@@ -140,4 +103,4 @@ const CustomerModal = ({ isOpen, onClose, customerData }) => {
   );
 };
 
-export default CustomerModal;
+export default ProductCategoryModal;

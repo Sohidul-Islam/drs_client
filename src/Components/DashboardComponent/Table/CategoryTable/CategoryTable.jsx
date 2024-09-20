@@ -14,15 +14,19 @@ import { useDispatch, useSelector } from "react-redux";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import Pagination from "../../Common/Pagination/Pagination";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
+import ProductCategoryModal from "./ProductCategoryModal";
 
 const CategoryTable = () => {
   const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
+  const { user } = useSelector((state) => state.auth);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState(null);
 
   const { data, isLoading } = useGetAllProductCategoryQuery({
     page: currentPage,
@@ -63,10 +67,22 @@ const CategoryTable = () => {
     dispatch(closeModal());
   };
 
+    // Edit logic
+    const handleEditClick = (category) => {
+      setCategoryToEdit(category); 
+      setIsEditModalOpen(true);
+    };
+  
+    const handleCloseEditModal = () => {
+      setIsEditModalOpen(false);
+      setCategoryToEdit(null);
+    };
+  
+
   return (
     <div className="bg-white px-5">
-     {/* Search and Export */}
-     <SearchAndExport
+      {/* Search and Export */}
+      <SearchAndExport
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         data={data}
@@ -80,21 +96,32 @@ const CategoryTable = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {[
-                "ID",
-                "Categories Name",
-                "Added By",
-                "Updater On",
-                "Action",
-              ].map((heading) => (
-                <th
-                  key={heading}
-                  scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-medium tracking-wider"
-                >
-                  {heading}
+              <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
+                ID
+              </th>
+              <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
+                Categories Name
+              </th>
+              {user?.accountType === "seller" && (
+                <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
+                  Added By
                 </th>
-              ))}
+              )}
+              {user?.accountType === "admin" && (
+                <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
+                  Updater On
+                </th>
+              )}
+              {user?.accountType === "seller" && (
+                <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
+                  Update On
+                </th>
+              )}
+              {user?.accountType === "admin" && (
+                <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
+                  Action
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -106,20 +133,22 @@ const CategoryTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.category_name}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                {user?.accountType === "seller" && <td className="px-4 py-4 whitespace-nowrap text-xs">
                   <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
                     {row?.Seller?.accountType === "admin"
                       ? "Global"
                       : row.addedBy}
                   </span>
-                </td>
+                </td>}
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
-                </td>
+                {user?.accountType === "admin" && (
+                  <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                    <EditButton item={row} handleEditClick={handleEditClick} />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -140,6 +169,13 @@ const CategoryTable = () => {
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
+      />
+
+       {/* Update Modal */}
+       <ProductCategoryModal
+       isOpen={isEditModalOpen}
+       onClose={handleCloseEditModal}
+       categoryData={categoryToEdit}
       />
     </div>
   );
