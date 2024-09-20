@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileMedical } from "react-icons/fa6";
 import { GiDiscussion } from "react-icons/gi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useAddCustomerMutation } from "../../../../features/api/admin/adminCustomerApi";
+import {
+  useAddCustomerMutation,
+  useUpdateCustomerMutation,
+} from "../../../../features/api/admin/adminCustomerApi";
 
-const CreateCustomer = ({ isOpen, onClose }) => {
+const CustomerModal = ({ isOpen, onClose, customerData }) => {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
   const { user } = useSelector((state) => state.auth);
 
   const [addCustomer] = useAddCustomerMutation();
+  const [updateCustomer] = useUpdateCustomerMutation();
+
+  useEffect(() => {
+    if (customerData) {
+      setValue("name", customerData.name);
+      setValue("phoneNumber", customerData.phoneNumber);
+      setValue("address", customerData.address);
+    }
+  }, [customerData, setValue]);
 
   const onSubmit = async (data) => {
     const customer = {
@@ -27,14 +40,26 @@ const CreateCustomer = ({ isOpen, onClose }) => {
     };
 
     try {
-      const response = await addCustomer(customer);
-      if (response?.data?.status) {
-        reset();
-        toast.success(response?.data?.message);
-        onClose()
+      if (customerData) {
+        // Update customer logic
+        const response = await updateCustomer({ id: customerData.id, ...customer });
+        if (response?.data?.status) {
+          toast.success(response?.data?.message);
+          onClose();
+        } else {
+          toast.error(response?.data?.message);
+        }
       } else {
-        toast.error(response?.data?.message);
-        reset();
+        // Add customer logic
+        const response = await addCustomer(customer);
+        if (response?.data?.status) {
+          reset();
+          toast.success(response?.data?.message);
+          onClose();
+        } else {
+          toast.error(response?.data?.message);
+          reset();
+        }
       }
     } catch (error) {
       console.error(error);
@@ -49,7 +74,7 @@ const CreateCustomer = ({ isOpen, onClose }) => {
         <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
           <div className="flex items-center gap-x-[10px] mb-5">
             <GiDiscussion className="text-lg" />
-            <p>Create New Customer</p>
+            <p>{customerData ? "Update Customer" : "Create New Customer"}</p>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Customer Name */}
@@ -92,9 +117,7 @@ const CreateCustomer = ({ isOpen, onClose }) => {
             </div>
             {/* Address */}
             <div className="mb-4">
-              <label className="text-sm font-medium text-gray-700">
-                Address
-              </label>
+              <label className="text-sm font-medium text-gray-700">Address</label>
               <textarea
                 {...register("address")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
@@ -112,9 +135,13 @@ const CreateCustomer = ({ isOpen, onClose }) => {
                   <span className="mr-2">
                     <FaFileMedical />
                   </span>
-                  Add Product
+                  {customerData ? "Update Customer" : "Add Customer"}
                 </button>
-                <button onClick={onClose} type="button" className="border">
+                <button
+                  onClick={onClose}
+                  type="button"
+                  className="hover:bg-[#139238] hover:text-white border border-[#139238] rounded-md px-3 py-1"
+                >
                   Close
                 </button>
               </div>
@@ -126,4 +153,4 @@ const CreateCustomer = ({ isOpen, onClose }) => {
   );
 };
 
-export default CreateCustomer;
+export default CustomerModal;
