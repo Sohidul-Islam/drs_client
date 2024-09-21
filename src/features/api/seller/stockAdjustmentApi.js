@@ -10,7 +10,6 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        console.log(res.data, "stock");
         const data = res.data.map(
           ({
             id,
@@ -23,8 +22,12 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             mrpPerUnit,
             productTotalPrice,
             updatedAt,
+            eventDate,
+            expiryDate
+
           }) => ({
             id,
+            product,
             productName: product.productName,
             batchNo,
             adjustmentType,
@@ -34,6 +37,8 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             mrpPerUnit,
             productTotalPrice,
             date: updatedAt?.split("T")[0],
+            eventDate,
+            expiryDate
           })
         );
         const metadata = {
@@ -57,6 +62,15 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         url: "/stock/create",
         method: "POST",
         body: adjustments,
+      }),
+      invalidatesTags: ["Adjustments"],
+    }),
+
+    updateAdjustment: builder.mutation({
+      query: ({ updatedData }) => ({
+        url: "stock/update",
+        method: 'PUT',
+        body: updatedData,
       }),
       invalidatesTags: ["Adjustments"],
     }),
@@ -170,6 +184,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
 export const {
   useGetAllAdjustmentQuery,
   useAddAdjustmentMutation,
+  useUpdateAdjustmentMutation,
   useDeleteAdjustmentMutation,
   useGetAllStockItemQuery,
   useGetAllExpiringProductQuery,

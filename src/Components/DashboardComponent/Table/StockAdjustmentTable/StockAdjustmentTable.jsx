@@ -14,6 +14,7 @@ import {
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import Pagination from "../../Common/Pagination/Pagination";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
+import UpdateAdjustmentModal from "./UpdateAdjustmentModal ";
 // import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
 const StockAdjustmentTable = () => {
@@ -24,6 +25,8 @@ const StockAdjustmentTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedAdjustment, setSelectedAdjustment] = useState(null);
 
   const { data, isLoading } = useGetAllAdjustmentQuery({
     page: currentPage,
@@ -37,8 +40,8 @@ const StockAdjustmentTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = data.metadata;
-  console.log('stock data',data)
+  const { totalPages } = data?.metadata;
+  // console.log("stock data", data);
 
   // Delete
   // open delete modal
@@ -63,6 +66,17 @@ const StockAdjustmentTable = () => {
   // close delete modal
   const handleCancelDelete = () => {
     dispatch(closeModal());
+  };
+
+  // Update Handlers
+  const handleEditClick = (adjustment) => {
+    setSelectedAdjustment(adjustment);
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedAdjustment(null);
   };
 
   return (
@@ -150,7 +164,7 @@ const StockAdjustmentTable = () => {
                   {row.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
+                  <EditButton handleEditClick={handleEditClick} item={row} />
                   <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
@@ -174,6 +188,15 @@ const StockAdjustmentTable = () => {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+
+      {/* Update Modal */}
+      {selectedAdjustment && (
+        <UpdateAdjustmentModal
+          isOpen={isUpdateModalOpen}
+          onClose={handleCloseUpdateModal}
+          adjustmentData={selectedAdjustment}
+        />
+      )}
     </div>
   );
 };

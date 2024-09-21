@@ -11,7 +11,6 @@ const DashboardNavbar = () => {
   const navigate = useNavigate();
   // const { data } = useSelector((state) => state?.auth || { user: undefined });
   const { user } = useSelector((state) => state?.auth || { user: undefined });
-  // console.log(user, 'user from dashboard navbar')
 
   const handleLogout = () => {
     dispatch(logout());
