@@ -131,12 +131,12 @@ const SupplierTable = () => {
                     {row.supplier_name}
                   </td>
                   {user?.accountType === "seller" && (
-                    <td className="px-4 py-4 whitespace-nowrap text-xs">
-                      <span className="px-5 py-2 text-white bg-[#8C8C8C] border rounded-full">
+                    <td className="px-4 whitespace-nowrap text-xs">
+                      <div className="py-2 text-white bg-[#8C8C8C] border rounded-full text-center">
                         {row?.Seller?.accountType === "admin"
                           ? "Global"
                           : "Store"}
-                      </span>
+                      </div>
                     </td>
                   )}
 
