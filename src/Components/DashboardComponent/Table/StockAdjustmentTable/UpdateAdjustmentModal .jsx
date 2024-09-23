@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { FaFileMedical } from 'react-icons/fa6';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { RiStore3Line } from 'react-icons/ri';
-import { useUpdateAdjustmentMutation } from '../../../../features/api/seller/stockAdjustmentApi';
-import { useGetAllProductQuery } from '../../../../features/api/admin/adminProductApi';
-import SearchableDropdown from '../../Common/SearchableDropdown/SearchableDropdown';
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { FaFileMedical } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { RiStore3Line } from "react-icons/ri";
+import { useUpdateAdjustmentMutation } from "../../../../features/api/seller/stockAdjustmentApi";
+import { useGetAllProductQuery } from "../../../../features/api/admin/adminProductApi";
+import SearchableDropdown from "../../Common/SearchableDropdown/SearchableDropdown";
 
 const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
   const { register, handleSubmit, reset, watch, control, setValue } = useForm();
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = React.useState(false);
-  const [searchInputValue, setSearchInputValue] = React.useState('');
+  const [searchInputValue, setSearchInputValue] = React.useState("");
 
-  const productQuantity = watch('adjustedProductQuantity', 0);
-  const productUnitPrice = watch('mrpPerUnit', 0);
+  const productQuantity = watch("adjustedProductQuantity", 0);
+  const productUnitPrice = watch("mrpPerUnit", 0);
 
   // console.log(adjustmentData, 'adjustmentData')
 
@@ -30,12 +30,16 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
         },
         batchNo: adjustmentData.batchNo,
         adjustedProductQuantity: adjustmentData.quantity,
-        productUnitPrice: adjustmentData.productUnitPrice,
+        productUnitPrice: adjustmentData.mrpPerUnit,
         productTotalPrice: adjustmentData.quantity * adjustmentData.unitPrice,
         mrpPerUnit: adjustmentData.mrpPerUnit,
         transactionType: adjustmentData.transactionType,
-        expiryDate: adjustmentData.expiryDate ? adjustmentData.expiryDate.split('T')[0] : '',
-        eventDate: adjustmentData.eventDate ? adjustmentData.eventDate.split('T')[0] : '',
+        expiryDate: adjustmentData.expiryDate
+          ? adjustmentData.expiryDate.split("T")[0]
+          : "",
+        eventDate: adjustmentData.eventDate
+          ? adjustmentData.eventDate.split("T")[0]
+          : "",
       });
     }
   }, [adjustmentData, reset]);
@@ -44,7 +48,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
     const quantity = parseFloat(productQuantity) || 0;
     const unitPrice = parseFloat(productUnitPrice) || 0;
     const total = quantity * unitPrice;
-    setValue('productTotalPrice', total.toFixed(2));
+    setValue("productTotalPrice", total.toFixed(2));
   }, [productQuantity, productUnitPrice, setValue]);
 
   const { data: products, isLoading } = useGetAllProductQuery({
@@ -64,29 +68,29 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
       ...data,
       productId: data.product.value,
       sellerId: user.id,
-      id: adjustmentData.id
+      id: adjustmentData.id,
     };
 
     delete adjustment.product;
-    // setLoading(true);
+    setLoading(true);
 
     // console.log("data",data)
     // console.log("adjustment",adjustment)
 
-    // try {
-    //   const res = await updateAdjustment(adjustment).unwrap();
-    //   if (res.status) {
-    //     toast.success(res.message || 'Adjustment updated successfully');
-    //     onClose();
-    //   } else {
-    //     toast.error(res.message || 'Failed to update adjustment');
-    //   }
-    // } catch (error) {
-    //   console.error('Failed to update adjustment:', error);
-    //   toast.error('An error occurred while updating.');
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const res = await updateAdjustment(adjustment).unwrap();
+      if (res.status) {
+        toast.success(res.message || "updated successfully");
+        onClose();
+      } else {
+        toast.error(res.message || "Failed to update");
+      }
+    } catch (error) {
+      console.error("Failed to update adjustment:", error);
+      toast.error("An error occurred while updating.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -107,7 +111,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
                 Stock Adjustment Type <span className="text-[#FF0027]">*</span>
               </label>
               <select
-                {...register('adjustmentType', { required: true })}
+                {...register("adjustmentType", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
@@ -122,7 +126,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
                 Stock Adjustment Event <span className="text-[#FF0027]">*</span>
               </label>
               <select
-                {...register('eventType', { required: true })}
+                {...register("eventType", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
@@ -156,7 +160,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               </label>
               <input
                 type="text"
-                {...register('batchNo', { required: true })}
+                {...register("batchNo", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -168,7 +172,10 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               </label>
               <input
                 type="number"
-                {...register('adjustedProductQuantity', { required: true, min: 0 })}
+                {...register("adjustedProductQuantity", {
+                  required: true,
+                  min: 0,
+                })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -180,8 +187,8 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               </label>
               <input
                 type="number"
-                // step="0.01"
-                {...register('mrpPerUnit', { required: true, min: 0 })}
+                step="0.01"
+                {...register("mrpPerUnit", { required: true, min: 0 })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -194,7 +201,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               <input
                 type="text"
                 readOnly
-                {...register('productTotalPrice', { required: true })}
+                {...register("productTotalPrice", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md bg-gray-100"
               />
             </div>
@@ -207,7 +214,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               <input
                 type="number"
                 step="0.01"
-                {...register('mrpPerUnit', { required: true, min: 0 })}
+                {...register("mrpPerUnit", { required: true, min: 0 })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -218,7 +225,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
                 Transaction Type
               </label>
               <select
-                {...register('transactionType', { required: false })}
+                {...register("transactionType", { required: false })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
@@ -235,7 +242,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               </label>
               <input
                 type="date"
-                {...register('expiryDate')}
+                {...register("expiryDate")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -247,7 +254,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               </label>
               <input
                 type="date"
-                {...register('eventDate')}
+                {...register("eventDate")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -267,8 +274,8 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               disabled={loading}
               className={`${
                 loading
-                  ? 'text-gray-400 border-gray-400 cursor-no-drop'
-                  : 'text-[#139238] border-[#139238]'
+                  ? "text-gray-400 border-gray-400 cursor-no-drop"
+                  : "text-[#139238] border-[#139238]"
               } border rounded-md px-3 py-2 flex items-center font-medium`}
             >
               <span className="mr-2">

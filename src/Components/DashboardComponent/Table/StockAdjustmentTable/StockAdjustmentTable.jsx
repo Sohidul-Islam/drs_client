@@ -25,13 +25,14 @@ const StockAdjustmentTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterQuery, setFilterQuery] = useState("");
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedAdjustment, setSelectedAdjustment] = useState(null);
 
   const { data, isLoading } = useGetAllAdjustmentQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery,
+    searchKey: searchQuery || filterQuery,
   });
 
   const [deleteAdjustment] = useDeleteAdjustmentMutation();
@@ -85,6 +86,7 @@ const StockAdjustmentTable = () => {
       <SearchAndExport
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onFilterChange={setFilterQuery}
         data={data}
         columns={[
           "id",
@@ -100,6 +102,7 @@ const StockAdjustmentTable = () => {
         ]}
         title="Stock Adjustment Report"
         advanceFilter={true}
+        name="stock-adjustment"
       />
       {/* Table and Pagination  */}
       <div className="overflow-x-auto">
@@ -130,46 +133,59 @@ const StockAdjustmentTable = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {data?.data?.map((row, index) => (
-              <tr key={index}>
-                <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.id}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.productName}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.batchNo}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.adjustmentType}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.eventType}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.transactionType}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.quantity}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.mrpPerUnit} TK
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.productTotalPrice} TK
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton handleEditClick={handleEditClick} item={row} />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+
+          {data?.data && data?.data.length > 0 ? (
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data?.data?.map((row, index) => (
+                <tr key={index}>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
+                    {row.id}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.productName}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.batchNo}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.adjustmentType}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.eventType}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.transactionType}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.quantity}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.mrpPerUnit} TK
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.productTotalPrice} TK
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.date}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                    <EditButton handleEditClick={handleEditClick} item={row} />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan="12">
+                  <div className="flex justify-center items-center py-5">
+                    <p className="text-gray-500 text-lg">No data found</p>
+                  </div>
                 </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          )}
         </table>
       </div>
 
