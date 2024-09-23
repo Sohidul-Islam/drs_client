@@ -7,9 +7,7 @@ const Pagination = ({
   setPageSize,
   totalPages,
 }) => {
-  
-
-  // Page size button/selection 
+  // Page size button/selection
   const handlePageSizeChange = (event) => {
     setPageSize(Number(event.target.value));
   };
@@ -28,13 +26,14 @@ const Pagination = ({
     }
   };
 
-
   return (
     <div className="border-t">
       <div className="my-4 flex justify-between">
         {/* Show selection */}
         <div>
-          <label className="text-sm font-medium text-[#1F1F1F] mr-2">Show</label>
+          <label className="text-sm font-medium text-[#1F1F1F] mr-2">
+            Show
+          </label>
           <select
             className="text-sm border outline-gray-300 text-gray-700 py-1 px-1 rounded-md"
             value={pageSize}
@@ -61,11 +60,11 @@ const Pagination = ({
           <button
             onClick={handleNext}
             className={`border px-3 py-1 text-base ${
-              currentPage === totalPages
+              currentPage === totalPages || totalPages === 0
                 ? "cursor-not-allowed opacity-50"
                 : "cursor-pointer hover:bg-gray-300"
             }`}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages || totalPages === 0}
           >
             Next
           </button>
