@@ -24,7 +24,7 @@ const ProductsTable = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filterQuery = useSelector(state => state.advanceFilter.filterQuery);
+  const filterQuery = useSelector((state) => state.advanceFilter.filterQuery);
 
   const { data, isLoading } = useGetAllProductQuery({
     page: currentPage,
@@ -114,45 +114,58 @@ const ProductsTable = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {data?.data?.map((row, index) => (
-              <tr key={index}>
-                <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row?.id}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.productName}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.genericName}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.manufacturer}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.strength}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.dosageForm}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.packBoxSize} Pack's
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.id} temp-data
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.date}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+          {data?.data && data?.data.length > 0 ? (
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data?.data?.map((row, index) => (
+                <tr key={index}>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
+                    {row?.id}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.productName}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.genericName}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.manufacturer}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.strength}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.dosageForm}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.packBoxSize} Pack's
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.id} temp-data
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.date}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                    <EditButton />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan="12">
+                  <div className="flex justify-center items-center py-5">
+                    <p className="text-gray-500 text-lg">No data found</p>
+                  </div>
                 </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          )}
         </table>
       </div>
+
       {/* pagination  */}
       <Pagination
         currentPage={currentPage}
