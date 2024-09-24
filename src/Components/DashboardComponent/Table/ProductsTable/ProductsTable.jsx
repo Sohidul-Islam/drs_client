@@ -24,10 +24,12 @@ const ProductsTable = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const filterQuery = useSelector(state => state.advanceFilter.filterQuery);
+
   const { data, isLoading } = useGetAllProductQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery,
+    searchKey: searchQuery || filterQuery,
   });
 
   const [deleteProduct] = useDeleteProductMutation();
@@ -81,6 +83,7 @@ const ProductsTable = () => {
         ]}
         title="Product Report"
         advanceFilter={true}
+        name="product"
       />
 
       {/* Table and Pagination */}

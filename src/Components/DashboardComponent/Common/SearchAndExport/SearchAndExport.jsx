@@ -27,10 +27,19 @@ const events = [
   { name: "Opening", value: "Opening" },
 ];
 
+const dosagesForm = [
+  { name: "Purchase", value: "Purchase" },
+  { name: "Sale Returned", value: "Sale Returned" },
+  { name: "Sale Order", value: "Sale Order" },
+  { name: "Purchase Returned", value: "Purchase Returned" },
+  { name: "Damage", value: "Damage" },
+  { name: "Correction", value: "Correction" },
+  { name: "Opening", value: "Opening" },
+];
+
 const SearchAndExport = ({
   searchQuery,
   onSearchChange,
-  onFilterChange,
   data,
   columns,
   title,
@@ -71,9 +80,30 @@ const SearchAndExport = ({
               {/* For stock adjustment  */}
               {name === "stock-adjustment" && (
                 <div className="flex items-center gap-2">
-                  <CommonDropdown dropdownData={adjustments} itemName="Transaction" level="true" onFilterChange={onFilterChange}/> 
-                  <CommonDropdown dropdownData={stockInOut} itemName="Stock In/Out" onFilterChange={onFilterChange}/>
-                  <CommonDropdown dropdownData={events} itemName="Event" onFilterChange={onFilterChange}/>
+                  <CommonDropdown
+                    dropdownData={adjustments}
+                    itemName="Transaction"
+                    level="true"
+                  />
+                  <CommonDropdown
+                    dropdownData={stockInOut}
+                    itemName="Stock In/Out"
+                  />
+                  <CommonDropdown
+                    dropdownData={events}
+                    itemName="Event"
+                  />
+                </div>
+              )}
+
+              {/* For Product  */}
+              {name === "product" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={dosagesForm}
+                    itemName="Dosage Form"
+                    level="true"
+                  />
                 </div>
               )}
             </div>

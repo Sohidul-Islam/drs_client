@@ -22,12 +22,14 @@ const StockAdjustmentTable = () => {
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
+ 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterQuery, setFilterQuery] = useState("");
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedAdjustment, setSelectedAdjustment] = useState(null);
+
+  const filterQuery = useSelector(state => state.advanceFilter.filterQuery);
 
   const { data, isLoading } = useGetAllAdjustmentQuery({
     page: currentPage,
@@ -86,7 +88,6 @@ const StockAdjustmentTable = () => {
       <SearchAndExport
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        onFilterChange={setFilterQuery}
         data={data}
         columns={[
           "id",

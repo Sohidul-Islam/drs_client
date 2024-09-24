@@ -1,6 +1,13 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setFilterQuery , clearFilterQuery } from '../../../../features/advanceFilter/advanceFilterSlice';
 
-const CommonDropdown = ({ dropdownData, itemName, level, onFilterChange }) => {
+const CommonDropdown = ({ dropdownData, itemName, level }) => {
+  const dispatch = useDispatch();
+  const handleFilterChange = (e) => {
+    dispatch(clearFilterQuery()); 
+    dispatch(setFilterQuery(e.target.value));
+  }
   return (
     <div>
       {level && (
@@ -9,7 +16,7 @@ const CommonDropdown = ({ dropdownData, itemName, level, onFilterChange }) => {
         </label>
       )}
       <select
-        onChange={(e) => onFilterChange(e.target.value)}
+        onChange={handleFilterChange}
         className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
       >
         <option value="">{itemName}</option>
