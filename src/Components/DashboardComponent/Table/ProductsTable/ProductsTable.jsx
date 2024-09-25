@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../Common/Pagination/Pagination";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
+import UpdateProductModal from "./UpdateProductModal";
 
 const ProductsTable = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ const ProductsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const filterQuery = useSelector((state) => state.advanceFilter.filterQuery);
 
@@ -62,6 +65,18 @@ const ProductsTable = () => {
   // close delete modal
   const handleCancelDelete = () => {
     dispatch(closeModal());
+  };
+
+  // Open update modal and set selected product
+  const handleEditClick = (product) => {
+    setSelectedProduct(product); // Set the product to be edited
+    setUpdateModalOpen(true); // Open the update modal
+  };
+
+  // Close update modal
+  const handleCloseUpdateModal = () => {
+    setUpdateModalOpen(false);
+    setSelectedProduct(null); // Clear the selected product
   };
 
   return (
@@ -128,7 +143,7 @@ const ProductsTable = () => {
                     {row?.genericName}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row?.manufacturer}
+                    {row?.menufacturer?.name}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row?.strength}
@@ -146,7 +161,7 @@ const ProductsTable = () => {
                     {row?.date}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <EditButton />
+                    <EditButton handleEditClick={handleEditClick} item={row} />
                     <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
@@ -181,6 +196,15 @@ const ProductsTable = () => {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+
+      {/* Update Modal  */}
+      {selectedProduct && (
+        <UpdateProductModal
+          isOpen={isUpdateModalOpen}
+          onClose={handleCloseUpdateModal}
+          productData={selectedProduct}
+        />
+      )}
     </div>
   );
 };

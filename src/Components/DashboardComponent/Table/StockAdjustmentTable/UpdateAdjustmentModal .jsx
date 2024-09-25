@@ -15,9 +15,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
   const [searchInputValue, setSearchInputValue] = React.useState("");
 
   const productQuantity = watch("adjustedProductQuantity", 0);
-  const productUnitPrice = watch("mrpPerUnit", 0);
-
-  // console.log(adjustmentData, 'adjustmentData')
+  const productUnitPrice = watch("productUnitPrice", 0);
 
   useEffect(() => {
     if (adjustmentData) {
@@ -30,16 +28,12 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
         },
         batchNo: adjustmentData.batchNo,
         adjustedProductQuantity: adjustmentData.quantity,
-        productUnitPrice: adjustmentData.mrpPerUnit,
+        productUnitPrice: adjustmentData?.productUnitPrice,
         productTotalPrice: adjustmentData.quantity * adjustmentData.unitPrice,
         mrpPerUnit: adjustmentData.mrpPerUnit,
         transactionType: adjustmentData.transactionType,
-        expiryDate: adjustmentData.expiryDate
-          ? adjustmentData.expiryDate.split("T")[0]
-          : "",
-        eventDate: adjustmentData.eventDate
-          ? adjustmentData.eventDate.split("T")[0]
-          : "",
+        expiryDate: adjustmentData.expiryDate,
+        eventDate: adjustmentData.eventDate,
       });
     }
   }, [adjustmentData, reset]);
@@ -75,7 +69,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
     setLoading(true);
 
     // console.log("data",data)
-    // console.log("adjustment",adjustment)
+    // console.log("adjustment",adjustment?.id)
 
     try {
       const res = await updateAdjustment(adjustment).unwrap();
@@ -188,7 +182,7 @@ const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
               <input
                 type="number"
                 step="0.01"
-                {...register("mrpPerUnit", { required: true, min: 0 })}
+                {...register("productUnitPrice", { required: true, min: 0 })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>

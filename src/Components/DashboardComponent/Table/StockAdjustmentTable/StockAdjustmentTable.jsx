@@ -97,7 +97,7 @@ const StockAdjustmentTable = () => {
           "eventType",
           "transactionType",
           "quantity",
-          "unitPrice",
+          "productUnitPrice",
           "productTotalPrice",
           "date",
         ]}
@@ -161,7 +161,7 @@ const StockAdjustmentTable = () => {
                     {row.quantity}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.mrpPerUnit} TK
+                    {row.productUnitPrice} TK
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row.productTotalPrice} TK

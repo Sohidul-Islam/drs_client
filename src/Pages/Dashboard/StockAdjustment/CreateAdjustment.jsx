@@ -48,9 +48,10 @@ const CreateAdjustment = () => {
     delete adjustment.product;
     setLoading(true);
 
+    console.log("Sending data:", adjustment);
+
     try {
       const { data: res } = await addAdjustment(adjustment);
-      console.log(res, "res");
       if (res?.status) {
         reset();
         toast.success(res?.message);
@@ -204,7 +205,7 @@ const CreateAdjustment = () => {
               </label>
               <input
                 type="date"
-                {...register("expiredAt", { required: true })}
+                {...register("expiryDate", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>

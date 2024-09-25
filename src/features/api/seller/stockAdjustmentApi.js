@@ -21,10 +21,10 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             adjustedProductQuantity,
             mrpPerUnit,
             productTotalPrice,
+            productUnitPrice,
             updatedAt,
             eventDate,
-            expiryDate
-
+            expiryDate,
           }) => ({
             id,
             product,
@@ -34,11 +34,12 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
             eventType,
             transactionType,
             quantity: adjustedProductQuantity,
-            mrpPerUnit,
+            productUnitPrice,
             productTotalPrice,
+            mrpPerUnit,
             date: updatedAt?.split("T")[0],
-            eventDate,
-            expiryDate
+            eventDate:eventDate?.split("T")[0],
+            expiryDate:expiryDate?.split("T")[0],
           })
         );
         const metadata = {
@@ -67,10 +68,10 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
     }),
 
     updateAdjustment: builder.mutation({
-      query: ({ updatedData }) => ({
-        url: "stock/update",
-        method: 'PUT',
-        body: updatedData,
+      query: (updatedData) => ({
+        url: `stock/update?id=${updatedData?.id}`,
+        method: "POST",
+        body: updatedData
       }),
       invalidatesTags: ["Adjustments"],
     }),
