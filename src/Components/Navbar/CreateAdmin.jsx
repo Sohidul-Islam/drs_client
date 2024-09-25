@@ -23,7 +23,7 @@ const CreateAdmin = () => {
     }
   };
 
-  console.log("Create Temp Admin",response)
+  // console.log("Create Temp Admin",response)
 
   return (
     <div>

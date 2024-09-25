@@ -12,7 +12,6 @@ const CreateCustomer = () => {
   const [addCustomer] = useAddCustomerMutation()
 
   const onSubmit = async (data) => {
-   
     const customer = {
       name: data?.name,
       phoneNumber: data?.phoneNumber,

@@ -33,7 +33,6 @@ const SalesTable = () => {
   }
 
   const { totalPages } = payments?.metadata;
-  console.log("payments is: ", payments.data)
 
   // Delete
   // open delete modal

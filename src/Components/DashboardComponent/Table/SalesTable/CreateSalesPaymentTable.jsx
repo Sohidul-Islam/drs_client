@@ -13,8 +13,6 @@ const CreateSalesPaymentTable = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("payment data: ", payments.data)
-
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
       <table className="min-w-full divide-y divide-gray-200 whitespace-nowrap">

@@ -199,6 +199,7 @@ const CreateSalesProductForm = () => {
         <CustomerModal
           isOpen={isModalOpen}
           onClose={() => setModalOpen(false)}
+          customerData={customers.data}
         />
       )}
     </div>

@@ -57,7 +57,6 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
     // console.log("Updated product data: ",data)
     try {
       const { data: res } = await updateProduct(data);
-      console.log(res, 'res from backend')
       if (res?.status) {
         toast.success(res?.message);
         onClose(); // Close modal on success
