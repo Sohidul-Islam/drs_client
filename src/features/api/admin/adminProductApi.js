@@ -60,7 +60,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
 
     // update product
     updateProduct: builder.mutation({
-      query: ({ updatedData }) => ({
+      query: (updatedData) => ({
         url: "product/update",
         method: 'POST',
         body: updatedData,

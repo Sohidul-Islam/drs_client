@@ -29,9 +29,6 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
 
   const [updateProduct] = useUpdateProductMutation();
 
-  // console.log("Product for update: ", productData)
-
-  // Prepopulate form with existing data
   useEffect(() => {
     if (productData) {
       setValue("productName", productData.productName);
@@ -43,8 +40,7 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
       });
       setValue("manufacturerId", {
         value: productData.menufacturer?.id,
-        label: productData.menufacturer?.name
-        ,
+        label: productData.menufacturer?.name,
       });
       setValue("dosageForm", productData.dosageForm);
       setValue("packBoxSize", productData.packBoxSize);
@@ -52,23 +48,27 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
   }, [productData, setValue]);
 
   const onSubmit = async (data) => {
-    // setLoading(true);
+    setLoading(true);
+    data.id = productData.id;
     data.manufacturerId = data.manufacturerId.value;
     data.categoryId = data.categoryId.value;
-    console.log({ id: productData.id, sellerId: user.id, ...data })
-    // try {
-    //   const { data: res } = await updateProduct({ id: productData.id, sellerId: user.id, ...data });
-    //   if (res?.status) {
-    //     toast.success(res?.message);
-    //     onClose(); // Close modal on success
-    //   } else {
-    //     toast.error(res?.message);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    data.sellerId = user.id;
+    data.status = "active";
+    // console.log("Updated product data: ",data)
+    try {
+      const { data: res } = await updateProduct(data);
+      console.log(res, 'res from backend')
+      if (res?.status) {
+        toast.success(res?.message);
+        onClose(); // Close modal on success
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;

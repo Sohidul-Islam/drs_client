@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileMedical } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -11,8 +11,8 @@ import SearchableDropdown from "../../Common/SearchableDropdown/SearchableDropdo
 const UpdateAdjustmentModal = ({ isOpen, onClose, adjustmentData }) => {
   const { register, handleSubmit, reset, watch, control, setValue } = useForm();
   const { user } = useSelector((state) => state.auth);
-  const [loading, setLoading] = React.useState(false);
-  const [searchInputValue, setSearchInputValue] = React.useState("");
+  const [loading, setLoading] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   const productQuantity = watch("adjustedProductQuantity", 0);
   const productUnitPrice = watch("productUnitPrice", 0);
