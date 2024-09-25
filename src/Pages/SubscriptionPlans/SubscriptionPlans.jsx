@@ -2,8 +2,14 @@ import React from "react";
 import logo from "../../assets/logo.png";
 import PlanCard from "../../Components/PlanCard/PlanCard";
 import { Link } from "react-router-dom";
+import { useGetAllSubscriptionQuery } from "../../features/api/admin/adminSubscriptionApi";
 
 const SubscriptionPlans = () => {
+  const { data: subscriptions, isLoading } = useGetAllSubscriptionQuery();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="container mx-auto p-5 md:p-10 ">
       <Link to="/" className="flex items-center gap-3">
@@ -22,17 +28,10 @@ const SubscriptionPlans = () => {
           typesetting industry.
         </p>
       </div>
-      {/* className="mt-5 md:mt-10 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5" */}
-
       <div className="mt-5 md:mt-10 md:flex justify-center gap-5 md:gap-10">
-        <PlanCard planeType="Free Trial" price="0.00" />
-        <PlanCard
-          planeType="Stellar"
-          price="300.00"
-          month="6"
-          backgroundColor="bg-gradient-sky-35"
-        />
-        <PlanCard planeType="Stellar Business" price="1200.00" month="12" />
+        {subscriptions?.map((subscription, index) => (
+          <PlanCard key={index} index={index} subscription={subscription} planeType="Free Trial" price="0.00" />
+        ))}
       </div>
     </div>
   );

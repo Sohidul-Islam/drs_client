@@ -13,7 +13,7 @@ const CreatePurchaseProductTable = () => {
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
-  const { data: purchaseProducts, isLoading } = useGetAllPurchaseProductQuery({
+  const { data: purchaseProducts } = useGetAllPurchaseProductQuery({
     page: 1,
     pageSize: 15,
     searchKey: "",
@@ -23,11 +23,9 @@ const CreatePurchaseProductTable = () => {
 
   const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // console.log("purchaseProducts", purchaseProducts)
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
   
   // Delete
   // open delete modal
@@ -61,7 +59,7 @@ const CreatePurchaseProductTable = () => {
         <thead className="bg-gray-50">
           <tr>
             {[
-              "Name",
+              "Id",
               "Generic Name",
               "Batch",
               "Manufactured Date",
@@ -85,8 +83,8 @@ const CreatePurchaseProductTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {purchaseProducts.data.length > 0 ? (
-            purchaseProducts.data.map((row, index) => (
+          {purchaseProducts?.data?.length > 0 ? (
+            purchaseProducts?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row?.id}

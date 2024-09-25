@@ -14,6 +14,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
           ({
             id,
             productName,
+            category,
             genericName,
             menufacturer,
             strength,
@@ -23,8 +24,9 @@ const adminProductApi = adminBaseApi.injectEndpoints({
           }) => ({
             id,
             productName,
+            category,
             genericName,
-            manufacturer: menufacturer.name,
+            menufacturer,
             strength,
             dosageForm,
             packBoxSize,
@@ -56,6 +58,16 @@ const adminProductApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Products"],
     }),
 
+    // update product
+    updateProduct: builder.mutation({
+      query: (updatedData) => ({
+        url: "product/update",
+        method: 'POST',
+        body: updatedData,
+      }),
+      invalidatesTags: ["Products"],
+    }),
+
     // delete a product
     deleteProduct: builder.mutation({
       query: (id) => ({
@@ -74,5 +86,6 @@ const adminProductApi = adminBaseApi.injectEndpoints({
 export const {
   useGetAllProductQuery,
   useAddProductMutation,
+  useUpdateProductMutation,
   useDeleteProductMutation,
 } = adminProductApi;

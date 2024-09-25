@@ -14,9 +14,9 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
         const data = res.data.map(
           ({ id, name, address, phoneNumber, updatedAt }) => ({
             id,
-            customer_name: name,
+            name,
             address,
-            mobile_number: phoneNumber,
+            phoneNumber,
             date: updatedAt.split("T")[0],
           })
         );
@@ -47,7 +47,17 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
     // add customer
     addCustomer: builder.mutation({
       query: (customerData) => ({
-        url: "/customer/create",
+        url: "customer/create",
+        method: "POST",
+        body: customerData,
+      }),
+      invalidatesTags: ["Customers"],
+    }),
+
+    // update customer
+    updateCustomer: builder.mutation({
+      query: (customerData) => ({
+        url: "customer/update",
         method: "POST",
         body: customerData,
       }),
@@ -71,5 +81,6 @@ export const {
   useGetAllCustomerQuery,
   useGetSingleCustomerQuery,
   useAddCustomerMutation,
+  useUpdateCustomerMutation,
   useDeleteCustomerMutation
 } = adminCustomerApi;

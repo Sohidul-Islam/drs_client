@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import CustomerModal from "../SalesTable/CustomerModal";
 
 const CustomerTable = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ const CustomerTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [customerToEdit, setCustomerToEdit] = useState(null);
 
   const { data, isLoading } = useGetAllCustomerQuery({
     page: currentPage,
@@ -58,6 +61,17 @@ const CustomerTable = () => {
     dispatch(closeModal());
   };
 
+   // Edit logic
+   const handleEditClick = (customer) => {
+    setCustomerToEdit(customer); 
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setCustomerToEdit(null);
+  };
+
   return (
     <div className="bg-white px-5">
       {/* Search and Export */}
@@ -65,7 +79,7 @@ const CustomerTable = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         data={data}
-        columns={["id", "customer_name", "address", "mobile_number", "date"]}
+        columns={["id", "name", "address", "phoneNumber", "date"]}
         title="Customer Report"
       />
 
@@ -100,20 +114,20 @@ const CustomerTable = () => {
                     {row?.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row?.customer_name}
+                    {row?.name}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row?.address}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row?.mobile_number}
+                    {row?.phoneNumber}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row?.date}
                   </td>
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <EditButton />
+                  <EditButton item={row} handleEditClick={handleEditClick} />
                     <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
@@ -140,6 +154,15 @@ const CustomerTable = () => {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+
+      {/* Update/Edit Modal */}
+      {isEditModalOpen && (
+        <CustomerModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          customerData={customerToEdit}
+        />
+      )}
     </div>
   );
 };

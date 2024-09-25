@@ -14,7 +14,7 @@ const baseQuery = fetchBaseQuery({
 
 export const adminBaseApi = createApi({
   baseQuery,
-  tagTypes: ["Manufactures"],
+  tagTypes: ["Manufactures", "Purchase-product", "Customers", "Products", "ProductCategories", "Subscription", "User-Subscription", "Supplier", "Payment", "Sale-product", "Adjustments", "Stock-Item", "Expiring", "Expired"],
   endpoints: () => ({}),
 });
 

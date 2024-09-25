@@ -8,7 +8,7 @@ const Customers = () => {
     <div>
       <div className="flex items-center gap-x-[10px]">
         <GiDiscussion className="text-lg" />
-        <p>Supplier</p>
+        <p>Customer</p>
       </div>
 
       {/*Supplier Table  */}
