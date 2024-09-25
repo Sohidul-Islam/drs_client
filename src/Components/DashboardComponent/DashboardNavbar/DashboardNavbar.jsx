@@ -11,7 +11,6 @@ const DashboardNavbar = () => {
   const navigate = useNavigate();
   // const { data } = useSelector((state) => state?.auth || { user: undefined });
   const { user } = useSelector((state) => state?.auth || { user: undefined });
-  // console.log(user, 'user from dashboard navbar')
 
   const handleLogout = () => {
     dispatch(logout());
@@ -42,7 +41,7 @@ const DashboardNavbar = () => {
           <div
             className={`${
               isOpen ? "opacity-100" : "opacity-0"
-            } w-[274px] h-[61px] bg-white border border-gray-300 flex justify-between p-3 shadow-xl absolute top-12 -right-5  transition-all duration-300`}
+            } w-[274px] h-[61px] bg-white border border-gray-300 flex justify-between p-3 shadow-xl absolute top-12 -right-5  transition-all duration-300 z-10`}
           >
             <Link
               to="/dashboard/profile"

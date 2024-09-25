@@ -11,7 +11,7 @@ const StockAdjustment = () => {
         <p>Stock Adjustment</p>
       </div>
 
-      {/*Supplier Table  */}
+      {/*Stock Adjustment Table  */}
       <div className="mt-3">
         <div className="flex justify-end mr-5 mb-3">
           <Link

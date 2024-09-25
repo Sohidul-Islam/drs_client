@@ -48,9 +48,10 @@ const CreateAdjustment = () => {
     delete adjustment.product;
     setLoading(true);
 
+    console.log("Sending data:", adjustment);
+
     try {
       const { data: res } = await addAdjustment(adjustment);
-      console.log(res, "res");
       if (res?.status) {
         reset();
         toast.success(res?.message);
@@ -108,25 +109,6 @@ const CreateAdjustment = () => {
               </select>
             </div>
             {/* Product - searchable dropdown */}
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Product <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                list="data"
-                placeholder="search product"
-                type="text"
-                {...register("batchNo", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-              <datalist id="data">
-                {products.map((product, index) => (
-                  <option key={index} value={product.productName}>
-                    {product.productName}
-                  </option>
-                ))}
-              </datalist>
-            </div> */}
             <SearchableDropdown
               labelText="Product"
               name="product"
@@ -169,7 +151,7 @@ const CreateAdjustment = () => {
                 Product Unit Price <span className="text-[#FF0027]">*</span>
               </label>
               <input
-                type="text"
+                type="number"
                 {...register("productUnitPrice", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -211,6 +193,7 @@ const CreateAdjustment = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
+                <option value="income">Income</option>
                 <option value="expense">Expense</option>
               </select>
             </div>
@@ -222,7 +205,7 @@ const CreateAdjustment = () => {
               </label>
               <input
                 type="date"
-                {...register("expiredAt", { required: true })}
+                {...register("expiryDate", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>

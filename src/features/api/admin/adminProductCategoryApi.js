@@ -53,6 +53,16 @@ const adminProductCategoryApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["ProductCategories"],
     }),
 
+    // update product category
+    updateProductCategory: builder.mutation({
+      query: (categoryData) => ({
+        url: "product-categories/update",
+        method: "POST",
+        body: categoryData,
+      }),
+      invalidatesTags: ["ProductCategories"],
+    }),
+
     // delete product category
     deleteProductCategory: builder.mutation({
       query: (id) => ({
@@ -69,5 +79,6 @@ export const {
   useGetAllProductCategoryQuery,
   useGetSingleProductCategoryQuery,
   useAddProductCategoryMutation,
+  useUpdateProductCategoryMutation,
   useDeleteProductCategoryMutation,
 } = adminProductCategoryApi;

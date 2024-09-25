@@ -15,10 +15,10 @@ const CreateSupplier = () => {
   const onSubmit = async (data) => {
     const supplierData = {
       name: data.name,
-      status: "active",
+      contactPerson: data.contactPerson,
+      phone:data.phone,
       sellerId: user?.id,
-      contactPersonName: data.contactPersonName,
-      phone: data.number
+      status: "active",
     };
     try {
       const { data } = await addSupplier(supplierData);
@@ -63,7 +63,7 @@ const CreateSupplier = () => {
               </label>
               <input
                 type="text"
-                {...register("contactPersonName", { required: true })}
+                {...register("contactPerson", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -73,8 +73,8 @@ const CreateSupplier = () => {
               Mobile Number <span className="text-[#FF0027]">*</span>
               </label>
               <input
-                type="number"
-                {...register("contactPersonName", { required: true })}
+                type="tel"
+                {...register("phone", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>

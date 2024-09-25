@@ -19,7 +19,7 @@ const CreateManufacturer = () => {
       status: "active",
       sellerId: user?.id,
       contactPerson: data?.contactPerson,
-      phone: data?.phone,
+      phoneNumber: data?.phone,
     };
     // console.log('Manufacture' ,manufacture)
     try {

@@ -5,8 +5,47 @@ import {
   exportExcel,
   exportPDF,
 } from "../../../../features/export/exportSlice";
+import CommonDropdown from "../CommonDropdown/CommonDropdown";
 
-const SearchAndExport = ({ searchQuery, onSearchChange, data, columns, title }) => {
+const adjustments = [
+  { name: "Income", value: "income" },
+  { name: "Expense", value: "expense" },
+];
+
+const stockInOut = [
+  { name: "In", value: "in" },
+  { name: "Out", value: "out" },
+];
+
+const events = [
+  { name: "Purchase", value: "Purchase" },
+  { name: "Sale Returned", value: "Sale Returned" },
+  { name: "Sale Order", value: "Sale Order" },
+  { name: "Purchase Returned", value: "Purchase Returned" },
+  { name: "Damage", value: "Damage" },
+  { name: "Correction", value: "Correction" },
+  { name: "Opening", value: "Opening" },
+];
+
+const dosagesForm = [
+  { name: "Purchase", value: "Purchase" },
+  { name: "Sale Returned", value: "Sale Returned" },
+  { name: "Sale Order", value: "Sale Order" },
+  { name: "Purchase Returned", value: "Purchase Returned" },
+  { name: "Damage", value: "Damage" },
+  { name: "Correction", value: "Correction" },
+  { name: "Opening", value: "Opening" },
+];
+
+const SearchAndExport = ({
+  searchQuery,
+  onSearchChange,
+  data,
+  columns,
+  title,
+  advanceFilter,
+  name,
+}) => {
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -22,6 +61,7 @@ const SearchAndExport = ({ searchQuery, onSearchChange, data, columns, title }) 
 
   return (
     <div className="flex justify-between py-5">
+      {/* Search field  */}
       <div>
         <label className="text-sm mr-2">Search:</label>
         <input
@@ -31,22 +71,46 @@ const SearchAndExport = ({ searchQuery, onSearchChange, data, columns, title }) 
           className="border outline-gray-300 text-gray-700 py-[5px] px-2"
         />
       </div>
+
       <div className="flex items-center gap-2">
+        {/* Advance Filter  */}
         <div>
-          <label className="text-sm font-medium text-[#1F1F1F] mr-2">
-            Filter:
-          </label>
-          <select
-            className="text-sm border outline-gray-300 text-gray-700 py-2 px-1 rounded-md"
-            // value={statusFilter}
-            // onChange={handleStatusFilterChange}
-          >
-            <option value="all">Active Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+          {advanceFilter && (
+            <div className="flex items-center gap-2">
+              {/* For stock adjustment  */}
+              {name === "stock-adjustment" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={adjustments}
+                    itemName="Transaction"
+                    level="true"
+                  />
+                  <CommonDropdown
+                    dropdownData={stockInOut}
+                    itemName="Stock In/Out"
+                  />
+                  <CommonDropdown
+                    dropdownData={events}
+                    itemName="Event"
+                  />
+                </div>
+              )}
+
+              {/* For Product  */}
+              {name === "product" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={dosagesForm}
+                    itemName="Dosage Form"
+                    level="true"
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
+        {/* Export  */}
         <div className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}

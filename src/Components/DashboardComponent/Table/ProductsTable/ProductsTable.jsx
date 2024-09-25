@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../Common/Pagination/Pagination";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
+import UpdateProductModal from "./UpdateProductModal";
 
 const ProductsTable = () => {
   const dispatch = useDispatch();
@@ -23,11 +24,15 @@ const ProductsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const filterQuery = useSelector((state) => state.advanceFilter.filterQuery);
 
   const { data, isLoading } = useGetAllProductQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery,
+    searchKey: searchQuery || filterQuery,
   });
 
   const [deleteProduct] = useDeleteProductMutation();
@@ -36,7 +41,6 @@ const ProductsTable = () => {
     return <div>Loading...</div>;
   }
   const { totalPages } = data.metadata;
-  // console.log(data, "data");
 
   // Delete
   // open delete modal
@@ -63,6 +67,18 @@ const ProductsTable = () => {
     dispatch(closeModal());
   };
 
+  // Open update modal and set selected product
+  const handleEditClick = (product) => {
+    setSelectedProduct(product); // Set the product to be edited
+    setUpdateModalOpen(true); // Open the update modal
+  };
+
+  // Close update modal
+  const handleCloseUpdateModal = () => {
+    setUpdateModalOpen(false);
+    setSelectedProduct(null); // Clear the selected product
+  };
+
   return (
     <div className="bg-white px-5">
       {/* Search and Export */}
@@ -81,6 +97,8 @@ const ProductsTable = () => {
           "date",
         ]}
         title="Product Report"
+        advanceFilter={true}
+        name="product"
       />
 
       {/* Table and Pagination */}
@@ -111,45 +129,58 @@ const ProductsTable = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {data?.data?.map((row, index) => (
-              <tr key={index}>
-                <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row?.id}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.productName}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.genericName}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.manufacturer}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.strength}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.dosageForm}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.packBoxSize} Pack's
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.id} temp-data
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.date}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+          {data?.data && data?.data.length > 0 ? (
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data?.data?.map((row, index) => (
+                <tr key={index}>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
+                    {row?.id}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.productName}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.genericName}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.menufacturer?.name}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.strength}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.dosageForm}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.packBoxSize} Pack's
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.id} temp-data
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row?.date}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
+                    <EditButton handleEditClick={handleEditClick} item={row} />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan="12">
+                  <div className="flex justify-center items-center py-5">
+                    <p className="text-gray-500 text-lg">No data found</p>
+                  </div>
                 </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          )}
         </table>
       </div>
+
       {/* pagination  */}
       <Pagination
         currentPage={currentPage}
@@ -165,6 +196,15 @@ const ProductsTable = () => {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+
+      {/* Update Modal  */}
+      {selectedProduct && (
+        <UpdateProductModal
+          isOpen={isUpdateModalOpen}
+          onClose={handleCloseUpdateModal}
+          productData={selectedProduct}
+        />
+      )}
     </div>
   );
 };
