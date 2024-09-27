@@ -1,5 +1,4 @@
 import React from "react";
-import { useDeletePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import { useDispatch, useSelector } from "react-redux";
 import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
@@ -8,13 +7,12 @@ import {
   closeModal,
   openModal,
 } from "../../../../features/deleteModal/deleteModalSlice";
+import { useDeletePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const CreatePurchaseProductTable = ({ purchaseProducts }) => {
   const dispatch = useDispatch();
-  const { isModalOpen, selectedItemId } = useSelector(
-    (state) => state.deleteModal
-  );
+  const { isModalOpen, selectedItemId } = useSelector((state) => state.deleteModal);
 
   // -------------------------------------------------------------------------------
   //     I have moved this code to it's parent for refetch data after payment
@@ -41,6 +39,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
 
   // delete confirm
   const handleConfirmDelete = async () => {
+    console.log('what the fuska')
     try {
       const res = await deletePurchaseProduct(selectedItemId).unwrap();
       if (res.status) {

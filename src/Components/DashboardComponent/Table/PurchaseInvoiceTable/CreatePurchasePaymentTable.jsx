@@ -1,11 +1,8 @@
 import React from "react";
-import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 import EditButton from "../../Common/EditButton/EditButton";
-import DeleteButton from "../../Common/DeleteButton/DeleteButton";
-import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 
 const CreatePurchasePaymentTable = () => {
   const dispatch = useDispatch();
@@ -19,7 +16,7 @@ const CreatePurchasePaymentTable = () => {
     type: "purchase",
   });
 
-  const [deletePayment] = useDeletePaymentMutation();
+  // const [deletePayment] = useDeletePaymentMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -27,28 +24,28 @@ const CreatePurchasePaymentTable = () => {
 
   // Delete
   // open delete modal
-  const handleDeleteClick = (id) => {
-    dispatch(openModal({ id }));
-  };
+  // const handleDeleteClick = (id) => {
+  //   dispatch(openModal({ id }));
+  // };
 
   // delete confirm
-  const handleConfirmDelete = async () => {
-    try {
-      const res = await deletePayment(selectedItemId).unwrap();
-      if (res.status) {
-        toast.success("Item deleted successfully");
-      }
-    } catch (error) {
-      console.error("Failed to delete the supplier:", error);
-    } finally {
-      dispatch(closeModal());
-    }
-  };
+  // const handleConfirmDelete = async () => {
+  //   try {
+  //     const res = await deletePayment(selectedItemId).unwrap();
+  //     if (res.status) {
+  //       toast.success("Item deleted successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to delete the supplier:", error);
+  //   } finally {
+  //     dispatch(closeModal());
+  //   }
+  // };
 
   // close delete modal
-  const handleCancelDelete = () => {
-    dispatch(closeModal());
-  };
+  // const handleCancelDelete = () => {
+  //   dispatch(closeModal());
+  // };
 
 
   return (
@@ -91,7 +88,7 @@ const CreatePurchasePaymentTable = () => {
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  {/* <DeleteButton id={row.id} onDelete={handleDeleteClick} /> */}
                 </td>
                 
               </tr>
@@ -103,11 +100,11 @@ const CreatePurchasePaymentTable = () => {
       </table>
 
       {/* Delete Modal  */}
-      <DeleteConfirmationModal
+      {/* <DeleteConfirmationModal  
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-      />
+      /> */}
     </div>
   );
 };

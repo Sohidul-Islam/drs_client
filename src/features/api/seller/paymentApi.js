@@ -55,14 +55,14 @@ const paymentApi = adminBaseApi.injectEndpoints({
     }),
 
     // delete Payment
-    deletePayment: builder.mutation({
-      query: (id) => ({
-        url: `payment/delete?id=${id}`,
-        method: "POST",
-        body: { id },
-      }),
-      invalidatesTags: ["Payment"],
-    }),
+    // deletePayment: builder.mutation({
+    //   query: (id) => ({
+    //     url: `payment/delete?id=${id}`,
+    //     method: "POST",
+    //     body: { id },
+    //   }),
+    //   invalidatesTags: ["Payment"],
+    // }),
   }),
 });
 
