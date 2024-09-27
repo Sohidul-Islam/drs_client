@@ -7,19 +7,22 @@ import { toast } from "react-toastify";
 import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
-const CreatePurchaseProductTable = () => {
+const CreatePurchaseProductTable = ({purchaseProducts}) => {
   const dispatch = useDispatch()
-  const { user } = useSelector((state) => state.auth);
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
-  const { data: purchaseProducts } = useGetAllPurchaseProductQuery({
-    page: 1,
-    pageSize: 15,
-    searchKey: "",
-    status: "inactive",
-    sellerId: user?.id || 1,
-  });
+
+  // -------------------------------------------------------------------------------
+  //     I have moved this code to it's parent for refetch data after payment
+  // -------------------------------------------------------------------------------
+  // const { data: purchaseProducts } = useGetAllPurchaseProductQuery({
+  //   page: 1,
+  //   pageSize: 15,
+  //   searchKey: "",
+  //   status: "inactive",
+  //   sellerId: user?.id || 1,
+  // });
 
   const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
 
