@@ -1,14 +1,17 @@
 import React from "react";
-import { useDeletePurchaseProductMutation, useGetAllPurchaseProductQuery } from "../../../../features/api/seller/purchaseProductApi";
+import { useDeletePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import { useDispatch, useSelector } from "react-redux";
 import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import { toast } from "react-toastify";
-import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
-const CreatePurchaseProductTable = ({purchaseProducts}) => {
-  const dispatch = useDispatch()
+const CreatePurchaseProductTable = ({ purchaseProducts }) => {
+  const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
@@ -29,7 +32,7 @@ const CreatePurchaseProductTable = ({purchaseProducts}) => {
   // if (isLoading) {
   //   return <div>Loading...</div>;
   // }
-  
+
   // Delete
   // open delete modal
   const handleDeleteClick = (id) => {
@@ -65,13 +68,13 @@ const CreatePurchaseProductTable = ({purchaseProducts}) => {
               "Id",
               "Generic Name",
               "Batch",
+              "Unit",
               "Manufactured Date",
               "Expiry Date",
               "Quantity (Pieces)",
               "Trade Price",
               "VAT",
               "Total Trade Price (TP+VAT)",
-              "Unit Price",
               "MRP (Per Unit)",
               "Action",
             ].map((heading) => (
@@ -85,9 +88,9 @@ const CreatePurchaseProductTable = ({purchaseProducts}) => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {purchaseProducts?.data?.length > 0 ? (
-            purchaseProducts?.data?.map((row, index) => (
+        {purchaseProducts?.data?.length > 0 ? (
+          <tbody className="bg-white divide-y divide-gray-200">
+            {purchaseProducts?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row?.id}
@@ -97,6 +100,9 @@ const CreatePurchaseProductTable = ({purchaseProducts}) => {
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.batchNo}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row?.unit}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.manufacturedDate}
@@ -117,9 +123,6 @@ const CreatePurchaseProductTable = ({purchaseProducts}) => {
                   {row?.totalTradePrice}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.id} temp
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.MRP}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
@@ -127,15 +130,23 @@ const CreatePurchaseProductTable = ({purchaseProducts}) => {
                   <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
-            ))
-          ) : (
-            <p className="text-sm py-1">No data available</p>
-          )}
-        </tbody>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan="12">
+                <div className="flex justify-center items-center py-5">
+                  <p className="text-gray-500 text-lg">No data found</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        )}
       </table>
 
-       {/* Delete Modal  */}
-       <DeleteConfirmationModal
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
