@@ -39,7 +39,6 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
 
   // delete confirm
   const handleConfirmDelete = async () => {
-    console.log('what the fuska')
     try {
       const res = await deletePurchaseProduct(selectedItemId).unwrap();
       if (res.status) {
