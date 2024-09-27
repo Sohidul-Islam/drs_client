@@ -56,6 +56,7 @@ const CreateSalesProductForm = () => {
       console.log(error);
     }
   };
+  
 
   return (
     <div>
@@ -72,11 +73,11 @@ const CreateSalesProductForm = () => {
                 placeholder="customer"
                 required="false"
                 propertyValue="id"
-                propertyName="customer_name"
+                propertyName="name"
                 setSearchInputValue={setSearchInputValue}
               />
             </div>
-            <div className="px-4 absolute bottom-[5.5px] -right-4 z-10">
+            <div className="absolute bottom-[5.5px] right-0 z-10">
               <button
                 type="button"
                 className="w-9 h-[38px] p-3 bg-[#0085FF] text-white text-3xl flex items-center justify-center"
