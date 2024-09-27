@@ -10,7 +10,7 @@ const paymentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, type },
       }),
       transformResponse: (res) => {
-        // console.log(res.data);
+        // console.log('Payment data: ',res.data);
         const data = res?.data?.map(
           ({ id, payment, updatedAt, purchase_product, sales_order }) => ({
             id,
@@ -21,7 +21,7 @@ const paymentApi = adminBaseApi.injectEndpoints({
             date: updatedAt?.split("T")[0],
             invoiceNumber: purchase_product?.invoiceNumber,
             invoiceDate: purchase_product?.invoiceDate?.split("T")[0],
-            manufacturer: "Missing",
+            manufacturer: purchase_product?.manufacturer?.name,
 
             // sales product
             customerName: sales_order?.customer?.name,
