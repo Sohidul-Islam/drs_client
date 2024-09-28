@@ -18,6 +18,7 @@ const PurchaseInvoiceTable = () => {
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
+  const filterQuery = useSelector((state) => state.advanceFilter.filterQuery);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,7 +26,7 @@ const PurchaseInvoiceTable = () => {
   const { data: payments, isLoading } = useGetAllPaymentQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery,
+    searchKey: searchQuery || filterQuery,
     type: "purchase",
   });
 
@@ -82,6 +83,7 @@ const PurchaseInvoiceTable = () => {
         ]}
         title="Purchase Report"
         advanceFilter={true}
+        name="purchase"
       />
       <div className="overflow-x-auto">
         {/* Table  */}

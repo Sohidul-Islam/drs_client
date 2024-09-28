@@ -78,10 +78,17 @@ const SearchAndExport = ({
         <div>
           {advanceFilter && (
             <div className="flex items-center gap-2">
+              {/* For purchase Product  */}
+              {name === "purchase" && (
+                <div className="flex items-center gap-2">
+                  <DateFilter name="Invoice Date" />
+                </div>
+              )}
+
               {/* For Sales Product  */}
               {name === "sales" && (
                 <div className="flex items-center gap-2">
-                  <DateFilter/>
+                  <DateFilter name="Order Date" />
                 </div>
               )}
 
