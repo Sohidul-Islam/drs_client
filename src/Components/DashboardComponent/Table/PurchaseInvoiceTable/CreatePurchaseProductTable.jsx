@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
@@ -9,10 +9,13 @@ import {
 } from "../../../../features/deleteModal/deleteModalSlice";
 import { useDeletePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import UpdatePurchaseProductModal from "./UpdatePurchaseProductModal";
 
 const CreatePurchaseProductTable = ({ purchaseProducts }) => {
   const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector((state) => state.deleteModal);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
   // -------------------------------------------------------------------------------
   //     I have moved this code to it's parent for refetch data after payment
@@ -54,6 +57,18 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
   // close delete modal
   const handleCancelDelete = () => {
     dispatch(closeModal());
+  };
+
+   // Open update modal and set selected product
+   const handleEditClick = (product) => {
+    setSelectedProduct(product); // Set the product to be edited
+    setUpdateModalOpen(true); // Open the update modal
+  };
+
+  // Close update modal
+  const handleCloseUpdateModal = () => {
+    setUpdateModalOpen(false);
+    setSelectedProduct(null); // Clear the selected product
   };
 
   return (
@@ -124,7 +139,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
                   {row?.MRP}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
+                <EditButton handleEditClick={handleEditClick} item={row} />
                   <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
@@ -149,6 +164,15 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+
+      {/* Update Modal  */}
+      {selectedProduct && (
+        <UpdatePurchaseProductModal
+          isOpen={isUpdateModalOpen}
+          onClose={handleCloseUpdateModal}
+          productData={selectedProduct}
+        />
+      )}
     </div>
   );
 };

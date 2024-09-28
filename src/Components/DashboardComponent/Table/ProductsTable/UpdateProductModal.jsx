@@ -10,7 +10,7 @@ import SearchableDropdown from "../../../DashboardComponent/Common/SearchableDro
 import { useSelector } from "react-redux";
 
 const UpdateProductModal = ({ isOpen, onClose, productData }) => {
-  const { register, handleSubmit, reset, control, setValue } = useForm();
+  const { register, handleSubmit, control, setValue } = useForm();
   const [loading, setLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const { user } = useSelector((state) => state.auth);
