@@ -13,7 +13,9 @@ import UpdatePurchaseProductModal from "./UpdatePurchaseProductModal";
 
 const CreatePurchaseProductTable = ({ purchaseProducts }) => {
   const dispatch = useDispatch();
-  const { isModalOpen, selectedItemId } = useSelector((state) => state.deleteModal);
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
@@ -59,8 +61,8 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
     dispatch(closeModal());
   };
 
-   // Open update modal and set selected product
-   const handleEditClick = (product) => {
+  // Open update modal and set selected product
+  const handleEditClick = (product) => {
     setSelectedProduct(product); // Set the product to be edited
     setUpdateModalOpen(true); // Open the update modal
   };
@@ -139,7 +141,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
                   {row?.MRP}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                <EditButton handleEditClick={handleEditClick} item={row} />
+                  <EditButton handleEditClick={handleEditClick} item={row} />
                   <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>

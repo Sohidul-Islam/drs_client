@@ -16,6 +16,7 @@ const saleProductApi = adminBaseApi.injectEndpoints({
             id,
             product,
             BMDCRegistrationNo,
+            date,
             doctorName,
             discount,
             quantity,
@@ -23,7 +24,8 @@ const saleProductApi = adminBaseApi.injectEndpoints({
             id,
             name: product.productName,
             genericName: product.genericName,
-            regNo: BMDCRegistrationNo,
+            BMDCRegistrationNo,
+            date: date.split('T')[0],
             doctorName,
             discount,
             quantity,
@@ -54,6 +56,16 @@ const saleProductApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Sale-product"],
     }),
 
+    // update Sale-product
+    updateSaleProduct: builder.mutation({
+      query: (saleProduct) => ({
+        url: "sales-order/update",
+        method: "POST",
+        body: saleProduct,
+      }),
+      invalidatesTags: ["Sale-product"],
+    }),
+
     // delete Sale-product
     deleteSaleProduct: builder.mutation({
       query: (id) => ({
@@ -68,5 +80,6 @@ const saleProductApi = adminBaseApi.injectEndpoints({
 export const {
   useGetAllSaleProductQuery,
   useAddSaleProductMutation,
+  useUpdateSaleProductMutation,
   useDeleteSaleProductMutation,
 } = saleProductApi;

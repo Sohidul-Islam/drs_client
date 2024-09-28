@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDeleteSaleProductMutation } from "../../../../features/api/seller/saleProductApi";
 import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import { toast } from "react-toastify";
-import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import UpdateSalesProductModal from "./UpdateSalesProductModal";
 
-const CreateSalesProductTable = ({saleProducts}) => {
+const CreateSalesProductTable = ({ saleProducts }) => {
   const dispatch = useDispatch();
-  const { isModalOpen, selectedItemId } = useSelector((state) => state.deleteModal);
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
-   // -------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------
   //     I have moved this code to it's parent for refetch data after payment
   // -------------------------------------------------------------------------------
   // const { data: saleProducts } = useGetAllSaleProductQuery({
@@ -24,7 +32,7 @@ const CreateSalesProductTable = ({saleProducts}) => {
 
   const [deleteSaleProduct] = useDeleteSaleProductMutation();
 
-    // Delete
+  // Delete
   // open delete modal
   const handleDeleteClick = (id) => {
     dispatch(openModal({ id }));
@@ -49,7 +57,17 @@ const CreateSalesProductTable = ({saleProducts}) => {
     dispatch(closeModal());
   };
 
-  // console.log("sales data: ",saleProducts)
+  // Open update modal and set selected product
+  const handleEditClick = (product) => {
+    setSelectedProduct(product); // Set the product to be edited
+    setUpdateModalOpen(true); // Open the update modal
+  };
+
+  // Close update modal
+  const handleCloseUpdateModal = () => {
+    setUpdateModalOpen(false);
+    setSelectedProduct(null); // Clear the selected product
+  };
 
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
@@ -87,7 +105,7 @@ const CreateSalesProductTable = ({saleProducts}) => {
                   {row.genericName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.regNo}
+                  {row.BMDCRegistrationNo}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.doctorName}
@@ -99,8 +117,8 @@ const CreateSalesProductTable = ({saleProducts}) => {
                   {row.quantity}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick}/>
+                  <EditButton handleEditClick={handleEditClick} item={row} />
+                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}
@@ -118,12 +136,21 @@ const CreateSalesProductTable = ({saleProducts}) => {
         )}
       </table>
 
-       {/* Delete Modal  */}
-       <DeleteConfirmationModal
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+
+      {/* Update Modal  */}
+      {selectedProduct && (
+        <UpdateSalesProductModal
+          isOpen={isUpdateModalOpen}
+          onClose={handleCloseUpdateModal}
+          productData={selectedProduct}
+        />
+      )}
     </div>
   );
 };
