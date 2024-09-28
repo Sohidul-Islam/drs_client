@@ -86,7 +86,7 @@ const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
               Paid Amount <span className="text-[#FF0027]">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               {...register("paidAmount", { required: true })}
               className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
             />

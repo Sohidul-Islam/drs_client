@@ -6,6 +6,7 @@ import {
   exportPDF,
 } from "../../../../features/export/exportSlice";
 import CommonDropdown from "../CommonDropdown/CommonDropdown";
+import DateFilter from "../DateFilter/DateFilter";
 
 const adjustments = [
   { name: "Income", value: "income" },
@@ -77,6 +78,24 @@ const SearchAndExport = ({
         <div>
           {advanceFilter && (
             <div className="flex items-center gap-2">
+              {/* For Sales Product  */}
+              {name === "sales" && (
+                <div className="flex items-center gap-2">
+                  <DateFilter/>
+                </div>
+              )}
+
+              {/* For Product  */}
+              {name === "product" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={dosagesForm}
+                    itemName="Dosage Form"
+                    level="true"
+                  />
+                </div>
+              )}
+
               {/* For stock adjustment  */}
               {name === "stock-adjustment" && (
                 <div className="flex items-center gap-2">
@@ -89,21 +108,7 @@ const SearchAndExport = ({
                     dropdownData={stockInOut}
                     itemName="Stock In/Out"
                   />
-                  <CommonDropdown
-                    dropdownData={events}
-                    itemName="Event"
-                  />
-                </div>
-              )}
-
-              {/* For Product  */}
-              {name === "product" && (
-                <div className="flex items-center gap-2">
-                  <CommonDropdown
-                    dropdownData={dosagesForm}
-                    itemName="Dosage Form"
-                    level="true"
-                  />
+                  <CommonDropdown dropdownData={events} itemName="Event" />
                 </div>
               )}
             </div>
