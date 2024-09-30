@@ -1,6 +1,6 @@
 import React from "react";
 import { AiOutlineAudit } from "react-icons/ai";
-import ExpiredTable from "../../../Components/DashboardComponent/Table/ExpiredTable/ExpiredTable";
+import SubscriptionDetailsTable from "../../../Components/DashboardComponent/Table/SubscriptionDetailsTable/SubscriptionDetailsTable";
 
 const SubscriptionDetails = () => {
   return (
@@ -12,7 +12,7 @@ const SubscriptionDetails = () => {
 
       {/*Stock Item Table  */}
       <div className="mt-3">
-        <ExpiredTable />
+        <SubscriptionDetailsTable />
       </div>
     </div>
   );

@@ -53,9 +53,9 @@ const SearchAndExport = ({
   // Export PDF and Excel File
   const handleExport = (type) => {
     if (type === "pdf") {
-      dispatch(exportPDF({ columns, data: data.data, title }));
+      dispatch(exportPDF({ columns, data: data?.data || data, title }));
     } else if (type === "excel") {
-      dispatch(exportExcel({ columns, data: data.data, title }));
+      dispatch(exportExcel({ columns, data: data?.data || data, title }));
     }
     setIsDropdownOpen(false);
   };

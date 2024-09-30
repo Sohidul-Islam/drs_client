@@ -91,7 +91,6 @@ const SupplierTable = () => {
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           {/* table head  */}
-
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left text-[13px] font-medium tracking-wider">
