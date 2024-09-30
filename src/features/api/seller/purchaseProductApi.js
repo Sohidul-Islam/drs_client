@@ -10,11 +10,12 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, status, sellerId },
       }),
       transformResponse: (res) => {
-        console.log(res,'from api')
+        console.log("Data from Purchase Product Api --> ", res);
         const data = res.data.map(
           ({
             id,
             product,
+            supplier,
             batchNo,
             unit,
             manufacturer,
@@ -30,6 +31,7 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
           }) => ({
             id,
             product,
+            supplier,
             genericName: product.genericName,
             batchNo,
             unit,

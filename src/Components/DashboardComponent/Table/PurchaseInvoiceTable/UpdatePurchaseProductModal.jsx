@@ -43,18 +43,7 @@ const UpdatePurchaseProductModal = ({
     searchKey: searchInputValue,
   });
 
-  console.log("Product data: ", productData);
-
   const [updatePurchaseProduct] = useUpdatePurchaseProductMutation();
-
-  // Set form values when product data is passed in
-  // useEffect(() => {
-  //   if (productData) {
-  //     Object.keys(productData).forEach((key) => {
-  //       setValue(key, productData[key]);
-  //     });
-  //   }
-  // }, [productData, setValue]);
 
   useEffect(() => {
     if (productData) {
@@ -65,11 +54,18 @@ const UpdatePurchaseProductModal = ({
         }
       });
 
-      // Handle product and manufacturer separately
+      // Handle supplier, product and manufacturer separately
       if (productData.product) {
         setValue("productId", {
           value: productData.product.id,
           label: productData.product.productName,
+        });
+      }
+
+      if (productData.supplier) {
+        setValue("supplierId", {
+          value: productData.supplier.id,
+          label: productData.supplier.name,
         });
       }
 
@@ -94,12 +90,12 @@ const UpdatePurchaseProductModal = ({
   const onSubmit = async (data) => {
     setLoading(true);
     data.manufacturerId =
-      data.manufacturerId.value || productData.manufacturerId;
+    data.manufacturerId.value || productData.manufacturerId;
     data.productId = data.productId.value || productData.productId;
-    // data.supplierId = data.supplierId.value || productData.supplierId;
+    data.supplierId = data.supplierId.value || productData.supplierId;
     data.sellerId = user?.id || productData.sellerId;
-
-    console.log("Sending data: ", data);
+    data.status = "inactive";
+    // console.log("Sending data: ", data);
     try {
       const { data: res } = await updatePurchaseProduct(data);
       if (res?.status) {
