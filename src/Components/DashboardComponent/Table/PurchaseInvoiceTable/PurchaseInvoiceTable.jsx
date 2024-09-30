@@ -141,7 +141,6 @@ const PurchaseInvoiceTable = () => {
                     {row?.date}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <EditButton />
                     <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>

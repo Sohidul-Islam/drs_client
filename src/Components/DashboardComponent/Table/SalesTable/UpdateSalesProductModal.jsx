@@ -40,7 +40,14 @@ const UpdateSalesProductModal = ({ isOpen, onClose, productData }) => {
         }
       });
 
-      // Handle product and manufacturer separately
+      // Handle customer, product and manufacturer separately
+      if (productData.customer) {
+        setValue("customerId", {
+          value: productData.customer.id,
+          label: productData.customer.name,
+        });
+      }
+      
       if (productData.product) {
         setValue("productId", {
           value: productData.product.id,
@@ -59,11 +66,12 @@ const UpdateSalesProductModal = ({ isOpen, onClose, productData }) => {
 
   const onSubmit = async (data) => {
     // setLoading(true);
+    // data.customerId = data.customerId.value || productData.customerId;
     data.productId = data.productId.value || productData.productId;
     data.sellerId = user?.id || productData.sellerId;
     data.status = "active";
 
-    // console.log("Sending data of sales product: ", data);
+    console.log("Sending data of sales product: ", data);
 
     // try {
     //   const { data: res } = await updateSaleProduct(data);

@@ -1,5 +1,5 @@
 import React from "react";
-import EditButton from "../../Common/EditButton/EditButton";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 
 const CreatePurchasePaymentTable = () => {
@@ -53,9 +53,9 @@ const CreatePurchasePaymentTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.date}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
+                <td className="px-4 py-4 whitespace-nowrap text-xs text-center">
                   {/* <DeleteButton id={row.id} onDelete={handleDeleteClick} /> */}
+                  <DeleteButton />
                 </td>
               </tr>
             ))}

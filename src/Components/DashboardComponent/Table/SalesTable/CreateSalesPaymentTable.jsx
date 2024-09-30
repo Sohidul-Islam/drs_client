@@ -1,5 +1,6 @@
 import React from "react";
 import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
 const CreateSalesPaymentTable = () => {
   const { data: payments, isLoading } = useGetAllPaymentQuery({
@@ -23,6 +24,7 @@ const CreateSalesPaymentTable = () => {
               "Payment Method",
               "Due Amount",
               "Updater at",
+              "Action",
             ].map((heading) => (
               <th
                 key={heading}
@@ -49,6 +51,10 @@ const CreateSalesPaymentTable = () => {
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {/* <DeleteButton id={row.id} onDelete={handleDeleteClick} /> */}
+                  <DeleteButton />
                 </td>
               </tr>
             ))
