@@ -8,73 +8,103 @@ import Pagination from "../../Common/Pagination/Pagination";
 const data = [
   {
     id: "#01",
-    storeName: "MAA Pharmacy",
+    shopName: "MAA Pharmacy",
     ownerName: "Sabariya Muzumder",
-    mobileNumber: "01994779217",
-    previousPackage: "Free Trail",
-    currentPackage: "Starter",
-    amount: 300,
-    updateOn: "05/06/2024",
+    division: "Dhaka",
+    district: "Dhaka",
+    upzillaThana: "Badda",
+    phoneNumber: "01994779217",
+    status: "Active",
+    updateOn: "05/06/2024"
   },
   {
     id: "#02",
-    storeName: "Health Hub",
-    ownerName: "Arif Rahman",
-    mobileNumber: "01845789324",
-    previousPackage: "Free Trail",
-    currentPackage: "Starter",
-    amount: 250,
-    updateOn: "06/07/2024",
+    shopName: "Health Mart",
+    ownerName: "Tariqul Islam",
+    division: "Dhaka",
+    district: "Gazipur",
+    upzillaThana: "Sreepur",
+    phoneNumber: "01894779217",
+    status: "Inactive",
+    updateOn: "05/05/2024"
   },
   {
     id: "#03",
-    storeName: "City Pharmacy",
-    ownerName: "Nazia Khan",
-    mobileNumber: "01712345678",
-    previousPackage: "Basic",
-    currentPackage: "Pro",
-    amount: 500,
-    updateOn: "07/08/2024",
+    shopName: "City Pharmacy",
+    ownerName: "Anisur Rahman",
+    division: "Dhaka",
+    district: "Dhaka",
+    upzillaThana: "Mohammadpur",
+    phoneNumber: "01794779217",
+    status: "Active",
+    updateOn: "05/04/2024"
   },
   {
     id: "#04",
-    storeName: "Good Health",
-    ownerName: "Mahmudul Hasan",
-    mobileNumber: "01678912345",
-    previousPackage: "Free Trail",
-    currentPackage: "Starter",
-    amount: 300,
-    updateOn: "08/09/2024",
+    shopName: "MediCare",
+    ownerName: "Farzana Khan",
+    division: "Chittagong",
+    district: "Comilla",
+    upzillaThana: "Comilla Sadar",
+    phoneNumber: "01994779218",
+    status: "Inactive",
+    updateOn: "05/03/2024"
   },
   {
     id: "#05",
-    storeName: "Care Plus",
-    ownerName: "Samira Jahan",
-    mobileNumber: "01567891234",
-    previousPackage: "Free Trail",
-    currentPackage: "Pro",
-    amount: 600,
-    updateOn: "09/10/2024",
+    shopName: "Pharma Plus",
+    ownerName: "Nasir Uddin",
+    division: "Dhaka",
+    district: "Tangail",
+    upzillaThana: "Tangail Sadar",
+    phoneNumber: "01694779219",
+    status: "Active",
+    updateOn: "05/02/2024"
   },
+  {
+    id: "#06",
+    shopName: "Amin Pharmacy",
+    ownerName: "Jamil Ahmed",
+    division: "Sylhet",
+    district: "Sylhet",
+    upzillaThana: "Sylhet Sadar",
+    phoneNumber: "01794779219",
+    status: "Active",
+    updateOn: "05/01/2024"
+  },
+  {
+    id: "#07",
+    shopName: "Dhaka Chemist",
+    ownerName: "Shakil Hossain",
+    division: "Dhaka",
+    district: "Dhaka",
+    upzillaThana: "Gulshan",
+    phoneNumber: "01994779220",
+    status: "Inactive",
+    updateOn: "04/30/2024"
+  }
 ];
+
 
 const tableHeadings = [
   "ID",
-  "Store Name",
+  "Shop Name",
   "Owner Name",
-  "Mobile Number",
-  "Previous Package",
-  "Current Package",
-  "Amount",
-  "Update On",
+  "Division",
+  "District",
+  "Upzilla/Thana",
+  "Phone Number",
+  "Status",
+  "Update On"
 ];
 
-const SubscriptionDetailsTable = () => {
+
+const ManageStoreTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: subscriptions, isLoading } = useGetAllUserSubscriptionQuery({
+  const { data: manageStores, isLoading } = useGetAllUserSubscriptionQuery({
     page: currentPage,
     pageSize: pageSize,
     searchKey: searchQuery,
@@ -84,12 +114,12 @@ const SubscriptionDetailsTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = subscriptions?.metadata || 2;
+  const { totalPages } = manageStores?.metadata || 2;
 
-  // console.log("Subscriptions --> ", subscriptions)
+  // console.log("Manage store --> ", manageStores)
 
   return (
-    <div className="bg-white px-5">
+    <div className="bg-white px-5 pb-1">
       {/* Search and Export */}
       <SearchAndExport
         searchQuery={searchQuery}
@@ -97,18 +127,21 @@ const SubscriptionDetailsTable = () => {
         data={data}
         columns={[
           "id",
-          "storeName",
+          "shopName",
           "ownerName",
-          "mobileNumber",
-          "previousPackage",
-          "currentPackage",
-          "amount",
+          "division",
+          "district",
+          "upzillaThana",
+          "phoneNumber",
+          "status",
           "updateOn",
         ]}
-        title="Subscription Details Report"
+        advanceFilter={true}
+        title="Manage Store Report"
+        name="manage-store"
       />
 
-      {/* subscription details table and pagination  */}
+      {/* Manage Store table */}
       <div className="overflow-x-auto">
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
@@ -137,23 +170,26 @@ const SubscriptionDetailsTable = () => {
                     {row.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.storeName}
+                    {row.shopName}
                   </td>
 
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row.ownerName}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.mobileNumber}
+                    {row.division}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.previousPackage}
+                    {row.district}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.currentPackage}
+                    {row.upzillaThana}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.amount}
+                    {row.phoneNumber}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-xs">
+                    {row.status}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row.updateOn}
@@ -179,7 +215,12 @@ const SubscriptionDetailsTable = () => {
           )}
         </table>
 
-        {/* Update Modal */}
+       
+
+       
+      </div>
+
+       {/* Update Modal */}
         {/* {isUpdateModalOpen && (
           <UpdateSupplierModal
             isOpen={isUpdateModalOpen}
@@ -188,15 +229,14 @@ const SubscriptionDetailsTable = () => {
           />
         )} */}
 
-        {/* pagination  */}
-        <Pagination
+       {/* pagination  */}
+       <Pagination
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}
           pageSize={pageSize}
           setPageSize={setPageSize}
         />
-      </div>
 
       {/* Delete Modal  */}
       {/* <DeleteConfirmationModal
@@ -208,4 +248,4 @@ const SubscriptionDetailsTable = () => {
   );
 };
 
-export default SubscriptionDetailsTable;
+export default ManageStoreTable;

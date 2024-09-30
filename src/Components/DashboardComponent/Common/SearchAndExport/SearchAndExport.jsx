@@ -118,6 +118,27 @@ const SearchAndExport = ({
                   <CommonDropdown dropdownData={events} itemName="Event" />
                 </div>
               )}
+
+              {/* For Manage Store  */}
+              {/* manage-store */}
+              {name === "manage-store" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={[]}
+                    itemName="Division"
+                    level="true"
+                  />
+                  <CommonDropdown
+                    dropdownData={[]}
+                    itemName="District"
+                  />
+                  <CommonDropdown
+                    dropdownData={[]}
+                    itemName="Upazilla/Thana"
+                  />
+                </div>
+              )}
+
             </div>
           )}
         </div>

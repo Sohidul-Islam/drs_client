@@ -101,7 +101,7 @@ const ProductsTable = () => {
         name="product"
       />
 
-      {/* Table and Pagination */}
+      {/* Table */}
       <div className="overflow-x-auto">
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
