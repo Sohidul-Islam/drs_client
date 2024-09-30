@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import EditButton from "../../Common/EditButton/EditButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 import { useDeleteSaleProductMutation } from "../../../../features/api/seller/saleProductApi";
