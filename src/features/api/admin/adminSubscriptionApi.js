@@ -65,6 +65,16 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["User-Subscription"],
     }),
+
+    // delete USER Subscription
+    deleteUserSubscription: builder.mutation({
+      query: (userSubscription) => ({
+        url: "subscription/user/delete",
+        method: "POST",
+        body: userSubscription,
+      }),
+      invalidatesTags: ["User-Subscription"],
+    }),
   }),
 });
 
@@ -75,4 +85,5 @@ export const {
   useDeleteSubscriptionMutation,
   useGetAllUserSubscriptionQuery,
   useAddUserSubscriptionMutation,
+  useDeleteUserSubscriptionMutation,
 } = subscriptionApi;

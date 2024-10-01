@@ -4,6 +4,14 @@ import { useGetAllUserSubscriptionQuery } from "../../../../features/api/admin/a
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import Pagination from "../../Common/Pagination/Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
+import { toast } from "react-toastify";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import { useDeleteManageStoreMutation } from "../../../../features/api/admin/adminManageStoreApi";
 
 const data = [
   {
@@ -15,7 +23,7 @@ const data = [
     upzillaThana: "Badda",
     phoneNumber: "01994779217",
     status: "Active",
-    updateOn: "05/06/2024"
+    updateOn: "05/06/2024",
   },
   {
     id: "#02",
@@ -26,7 +34,7 @@ const data = [
     upzillaThana: "Sreepur",
     phoneNumber: "01894779217",
     status: "Inactive",
-    updateOn: "05/05/2024"
+    updateOn: "05/05/2024",
   },
   {
     id: "#03",
@@ -37,7 +45,7 @@ const data = [
     upzillaThana: "Mohammadpur",
     phoneNumber: "01794779217",
     status: "Active",
-    updateOn: "05/04/2024"
+    updateOn: "05/04/2024",
   },
   {
     id: "#04",
@@ -48,7 +56,7 @@ const data = [
     upzillaThana: "Comilla Sadar",
     phoneNumber: "01994779218",
     status: "Inactive",
-    updateOn: "05/03/2024"
+    updateOn: "05/03/2024",
   },
   {
     id: "#05",
@@ -59,7 +67,7 @@ const data = [
     upzillaThana: "Tangail Sadar",
     phoneNumber: "01694779219",
     status: "Active",
-    updateOn: "05/02/2024"
+    updateOn: "05/02/2024",
   },
   {
     id: "#06",
@@ -70,7 +78,7 @@ const data = [
     upzillaThana: "Sylhet Sadar",
     phoneNumber: "01794779219",
     status: "Active",
-    updateOn: "05/01/2024"
+    updateOn: "05/01/2024",
   },
   {
     id: "#07",
@@ -81,10 +89,9 @@ const data = [
     upzillaThana: "Gulshan",
     phoneNumber: "01994779220",
     status: "Inactive",
-    updateOn: "04/30/2024"
-  }
+    updateOn: "04/30/2024",
+  },
 ];
-
 
 const tableHeadings = [
   "ID",
@@ -95,11 +102,14 @@ const tableHeadings = [
   "Upzilla/Thana",
   "Phone Number",
   "Status",
-  "Update On"
+  "Update On",
 ];
 
-
 const ManageStoreTable = () => {
+  const dispatch = useDispatch();
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,6 +120,8 @@ const ManageStoreTable = () => {
     searchKey: searchQuery,
   });
 
+  const [deleteManageStore] = useDeleteManageStoreMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -117,6 +129,30 @@ const ManageStoreTable = () => {
   const { totalPages } = manageStores?.metadata || 2;
 
   // console.log("Manage store --> ", manageStores)
+
+  // Delete user subscription - open modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deleteManageStore(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // delete close modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div className="bg-white px-5 pb-1">
@@ -197,7 +233,7 @@ const ManageStoreTable = () => {
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                     <EditButton />
-                    <DeleteButton />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
               ))}
@@ -214,14 +250,10 @@ const ManageStoreTable = () => {
             </tbody>
           )}
         </table>
-
-       
-
-       
       </div>
 
-       {/* Update Modal */}
-        {/* {isUpdateModalOpen && (
+      {/* Update Modal */}
+      {/* {isUpdateModalOpen && (
           <UpdateSupplierModal
             isOpen={isUpdateModalOpen}
             onClose={() => setIsUpdateModalOpen(false)}
@@ -229,21 +261,21 @@ const ManageStoreTable = () => {
           />
         )} */}
 
-       {/* pagination  */}
-       <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-        />
+      {/* pagination  */}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+      />
 
       {/* Delete Modal  */}
-      {/* <DeleteConfirmationModal
+      <DeleteConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-      /> */}
+      />
     </div>
   );
 };

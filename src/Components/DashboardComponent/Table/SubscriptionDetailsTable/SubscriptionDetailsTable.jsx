@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
-import { useGetAllUserSubscriptionQuery } from "../../../../features/api/admin/adminSubscriptionApi";
+import { useGetAllUserSubscriptionQuery, useDeleteUserSubscriptionMutation } from "../../../../features/api/admin/adminSubscriptionApi";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import Pagination from "../../Common/Pagination/Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice.js";
+import { toast } from "react-toastify";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const data = [
   {
@@ -70,6 +77,10 @@ const tableHeadings = [
 ];
 
 const SubscriptionDetailsTable = () => {
+  const dispatch = useDispatch();
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,6 +91,8 @@ const SubscriptionDetailsTable = () => {
     searchKey: searchQuery,
   });
 
+  const [deleteUserSubscription] = useDeleteUserSubscriptionMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -87,6 +100,30 @@ const SubscriptionDetailsTable = () => {
   const { totalPages } = subscriptions?.metadata || 2;
 
   // console.log("Subscriptions --> ", subscriptions)
+
+  // Delete user subscription - open modal
+  const handleDeleteClick = (id) => {
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deleteUserSubscription(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the supplier:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // delete close modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div className="bg-white px-5">
@@ -161,7 +198,7 @@ const SubscriptionDetailsTable = () => {
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                     <EditButton />
-                    <DeleteButton />
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
               ))}
@@ -199,11 +236,11 @@ const SubscriptionDetailsTable = () => {
       </div>
 
       {/* Delete Modal  */}
-      {/* <DeleteConfirmationModal
+      <DeleteConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-      /> */}
+      />
     </div>
   );
 };

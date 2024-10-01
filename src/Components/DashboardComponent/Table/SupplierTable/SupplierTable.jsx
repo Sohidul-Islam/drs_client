@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import "jspdf-autotable";
 import {
   useDeleteSupplierMutation,
   useGetAllSupplierQuery,
 } from "../../../../features/api/admin/adminSupplierApi";
 import { useDispatch, useSelector } from "react-redux";
 import EditButton from "../../Common/EditButton/EditButton";
-import { RiDeleteBinLine } from "react-icons/ri";
 import {
   closeModal,
   openModal,
@@ -16,6 +14,7 @@ import { toast } from "react-toastify";
 import UpdateSupplierModal from "./UpdateSupplierModal";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import Pagination from "../../Common/Pagination/Pagination";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
 const SupplierTable = () => {
   const dispatch = useDispatch();
@@ -151,12 +150,7 @@ const SupplierTable = () => {
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                     <EditButton handleEditClick={handleEditClick} item={row} />
-                    <button
-                      onClick={() => handleDeleteClick(row?.id)}
-                      className="bg-[#CE1124] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
-                    >
-                      <RiDeleteBinLine />
-                    </button>
+                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
               ))}
