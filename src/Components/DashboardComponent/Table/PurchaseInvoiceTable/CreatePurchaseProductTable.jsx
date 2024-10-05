@@ -73,6 +73,8 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
     setSelectedProduct(null); // Clear the selected product
   };
 
+  console.log(purchaseProducts,'purchaseProducts')
+
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
       {/* Table  */}
@@ -81,6 +83,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
           <tr>
             {[
               "Id",
+              "Name",
               "Generic Name",
               "Batch",
               "Unit",
@@ -109,6 +112,9 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row?.id}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row?.product?.productName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.genericName}
