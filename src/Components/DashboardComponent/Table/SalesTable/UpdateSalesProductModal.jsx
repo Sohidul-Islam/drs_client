@@ -62,7 +62,6 @@ const UpdateSalesProductModal = ({ isOpen, onClose, productData }) => {
     data.customerId = data.customerId.value || productData.customerId;
     data.productId = data.productId.value || productData.productId;
     data.sellerId = user?.id || productData.sellerId;
-    data.status = "active";
 
     try {
       const { data: res } = await updateSaleProduct(data);

@@ -1,7 +1,6 @@
 import React from "react";
 import { AiOutlineReconciliation } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import StockAdjustmentTable from "../../../Components/DashboardComponent/Table/StockAdjustmentTable/StockAdjustmentTable";
 import ManageStoreTable from "../../../Components/DashboardComponent/Table/ManageStoreTable/ManageStoreTable";
 
 const ManageStore = () => {

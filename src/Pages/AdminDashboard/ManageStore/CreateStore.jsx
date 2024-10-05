@@ -3,47 +3,48 @@ import { useForm } from "react-hook-form";
 import { AiOutlineReconciliation } from "react-icons/ai";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
+import { useDispatch } from "react-redux";
+import { registers } from "../../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const CreateStore = () => {
-  const { register, handleSubmit, reset, watch, control, setValue } = useForm();
+  const { register, handleSubmit, reset, setValue } = useForm();
   const [loading, setLoading] = useState(false);
-  const [nidSrc, setNidSrc] = useState("https://i.ibb.co/KrT7qK8/nid.png");
-  const [nidFileName, setNidFileName] = useState("No image found");
+  const [fileName, setFileName] = useState("No image found");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [addFile] = useAddFileMutation();
 
   const onSubmit = async (data) => {
-    console.log("Store data: ", data);
-    // setLoading(true);
-    // try {
-    //   const { data: res } = await addAdjustment(adjustment);
-    //   console.log(res, "res");
-    //   if (res?.status) {
-    //     reset();
-    //     toast.success(res?.message);
-    //     setLoading(false);
-    //   } else {
-    //     toast.error(res?.message);
-    //     reset();
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    setLoading(true);
+    data.accountType = "seller";
+    try {
+      await dispatch(registers(data)).unwrap();
+      toast.success("successfully created an account");
+      setLoading(false);
+    } catch (error) {
+      toast.error("something went wrong");
+      setLoading(false);
+    }
   };
 
-  const handleImageUpload = (
-    e,
-    setImageSrcCallback,
-    fieldName,
-    setFileNameCallback
-  ) => {
+  // Handle file selection and upload
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setValue(fieldName, file);
-      setFileNameCallback(file.name);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrcCallback(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    setFileName(file.name);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await addFile(formData).unwrap();
+      console.log("File uploaded successfully:", res);
+      setValue("drugLicenseDocument", res?.file?.url);
+    } catch (error) {
+      console.error("Failed to upload file:", error);
     }
   };
 
@@ -64,7 +65,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                {...register("storeName", { required: true })}
+                {...register("shop_name", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -76,7 +77,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                {...register("storeOwner", { required: true })}
+                {...register("shop_owner_name", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -118,7 +119,7 @@ const CreateStore = () => {
                 Upozilla/Thana <span className="text-[#FF0027]">*</span>
               </label>
               <select
-                {...register("upozilla", { required: true })}
+                {...register("upazila", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
@@ -155,11 +156,11 @@ const CreateStore = () => {
             {/* Phone Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-              Phone Number <span className="text-[#FF0027]">*</span>
+                Phone Number <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="number"
-                {...register("phoneNumber", { required: true })}
+                {...register("phone_number", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -167,7 +168,7 @@ const CreateStore = () => {
             {/* Pharmacist Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-              Pharmacist Name
+                Pharmacist Name
               </label>
               <input
                 type="text"
@@ -184,7 +185,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                {...register("regNo", { required: true })}
+                {...register("pharmacistRegNo", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -196,42 +197,36 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                {...register("licenseNo", { required: true })}
+                {...register("drugLicenseNo", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
 
+            {/* Upload Drug License */}
             <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Upload NID
+              <label className="block text-sm font-medium text-gray-700">
+                Upload Drug License
+              </label>
+              <div className="mt-1 flex items-center border p-2 rounded-md">
+                <input
+                  type="file"
+                  accept="image/*"
+                  {...register("drugLicenseDocument")}
+                  className="hidden"
+                  id="file-upload"
+                  onChange={handleFileChange}
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                >
+                  Upload
                 </label>
-                <div className="mt-1 flex items-center border p-2 rounded-md">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    {...register("nidImage")}
-                    onChange={(e) =>
-                      handleImageUpload(
-                        e,
-                        setNidSrc,
-                        "nidImage",
-                        setNidFileName
-                      )
-                    }
-                    className="hidden"
-                    id="nid-upload"
-                  />
-                  <label
-                    htmlFor="nid-upload"
-                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
-                  >
-                    Upload
-                  </label>
-                  <span className="text-xs text-gray-700 ml-2">
-                    {nidFileName}
-                  </span>
-                </div>
+                <span className="text-xs text-gray-700 ml-2">
+                  {fileName ? fileName : "No file selected"}
+                </span>
               </div>
+            </div>
 
             {/* Establishment Date */}
             <div>
@@ -240,7 +235,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="date"
-                {...register("establishmentDate", { required: true })}
+                {...register("establishMentData", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -258,6 +253,18 @@ const CreateStore = () => {
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                {...register("password", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
             </div>
           </div>
 
