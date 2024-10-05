@@ -27,7 +27,11 @@ const DashboardNavbar = () => {
       </Link>
       <div className="flex gap-x-2 items-center">
         {/* <img className="w-9 h-9 bg-slate-700 rounded-full" src={user?.image} alt="user-img" /> */}
-        <img className="w-9 h-9 bg-slate-700 rounded-full" src={userImage} alt="user-img" />
+        <img
+          className="w-9 h-9 bg-slate-700 rounded-full"
+          src={userImage}
+          alt="user-img"
+        />
         <div className="relative">
           <button onClick={() => setIsOpen(!isOpen)}>
             <p className="text-left text-sm font-semibold w-24 truncate">
@@ -38,7 +42,7 @@ const DashboardNavbar = () => {
             </p>
           </button>
 
-          <div
+          {/* <div
             className={`${
               isOpen ? "opacity-100" : "opacity-0"
             } w-[274px] h-[61px] bg-white border border-gray-300 flex justify-between p-3 shadow-xl absolute top-12 -right-5  transition-all duration-300 z-10`}
@@ -53,6 +57,27 @@ const DashboardNavbar = () => {
             <button
               onClick={handleLogout}
               className="px-4 py-2 border border-[#C4C4C4] text-sm"
+            >
+              Logout
+            </button>
+          </div> */}
+          <div
+            className={`${
+              isOpen
+                ? "visible opacity-100 translate-y-0"
+                : "invisible opacity-0 -translate-y-2"
+            } w-[274px] h-[61px] bg-white border border-gray-300 flex justify-between p-3 shadow-xl absolute top-12 -right-5 transition-all duration-300 z-10`}
+          >
+            <Link
+              to="/dashboard/profile"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 border border-[#C4C4C4] text-sm hover:bg-red-600 hover:text-white"
+            >
+              Profile
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-[#C4C4C4] text-sm hover:bg-red-600 hover:text-white"
             >
               Logout
             </button>

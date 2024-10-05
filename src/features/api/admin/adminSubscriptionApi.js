@@ -47,11 +47,41 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
 
     // All USER Subscription
     getAllUserSubscription: builder.query({
-      query: () => ({
+      query: ({ page, pageSize, searchKey }) => ({
         url: "subscription/user/all",
+        params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data;
+        const data = res.data.map(
+          ({
+            id,
+            user,
+            prevPlan,
+            subscription_plan,
+            price,
+            subscribed_date,
+          }) => ({
+            id,
+            storeName: user?.shop_name,
+            ownerName: user?.shop_owner_name,
+            mobileNumber: user?.phone_number,
+            prevPlan,
+            currentPackage: subscription_plan?.package,
+            price,
+            updateOn: subscribed_date?.split("T")[0],
+          })
+        );
+        const metadata = {
+          totalItems: res.metadata.totalItems,
+          totalPages: res.metadata.totalPages,
+          currentPage: res.metadata.currentPage,
+          pageSize: res.metadata.pageSize,
+        };
+
+        return {
+          data,
+          metadata,
+        };
       },
       providesTags: ["User-Subscription"],
     }),

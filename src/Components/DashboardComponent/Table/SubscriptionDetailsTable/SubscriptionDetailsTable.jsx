@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
-import { useGetAllUserSubscriptionQuery, useDeleteUserSubscriptionMutation } from "../../../../features/api/admin/adminSubscriptionApi";
+import { useGetAllUserSubscriptionQuery, useDeleteUserSubscriptionMutation, useDeleteSubscriptionMutation } from "../../../../features/api/admin/adminSubscriptionApi";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import Pagination from "../../Common/Pagination/Pagination";
@@ -91,15 +91,16 @@ const SubscriptionDetailsTable = () => {
     searchKey: searchQuery,
   });
 
-  const [deleteUserSubscription] = useDeleteUserSubscriptionMutation();
+  // const [deleteUserSubscription] = useDeleteUserSubscriptionMutation();
+  const [deleteSubscription] = useDeleteSubscriptionMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = subscriptions?.metadata || 2;
+  const { totalPages } = subscriptions?.metadata || 1;
 
-  // console.log("Subscriptions --> ", subscriptions)
+  console.log("Subscriptions --> ", subscriptions)
 
   // Delete user subscription - open modal
   const handleDeleteClick = (id) => {
@@ -109,7 +110,7 @@ const SubscriptionDetailsTable = () => {
   // delete confirm
   const handleConfirmDelete = async () => {
     try {
-      const res = await deleteUserSubscription(selectedItemId).unwrap();
+      const res = await deleteSubscription(selectedItemId).unwrap();
       if (res.status) {
         toast.success("Item deleted successfully");
       }
@@ -137,9 +138,9 @@ const SubscriptionDetailsTable = () => {
           "storeName",
           "ownerName",
           "mobileNumber",
-          "previousPackage",
+          "prevPlan",
           "currentPackage",
-          "amount",
+          "price",
           "updateOn",
         ]}
         title="Subscription Details Report"
@@ -166,34 +167,34 @@ const SubscriptionDetailsTable = () => {
             </tr>
           </thead>
           {/* table body  */}
-          {data?.length > 0 ? (
+          {subscriptions?.data?.length > 0 ? (
             <tbody className="bg-white divide-y divide-gray-200">
-              {data?.map((row, index) => (
+              {subscriptions?.data?.map((row, index) => (
                 <tr key={index}>
                   <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                     {row.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.storeName}
+                    {row?.storeName}
                   </td>
 
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.ownerName}
+                    {row?.ownerName}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.mobileNumber}
+                    {row?.mobileNumber}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.previousPackage}
+                    {row?.prevPlan ? row?.prevPlan : 'No Prev Plan'}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.currentPackage}
+                    {row?.currentPackage}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.amount}
+                    {row?.price}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.updateOn}
+                    {row?.updateOn}
                   </td>
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
