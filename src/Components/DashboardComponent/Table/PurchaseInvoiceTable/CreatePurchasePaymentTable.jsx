@@ -1,8 +1,16 @@
 import React from "react";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
-import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import { useDispatch, useSelector } from "react-redux";
+import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
+import { toast } from "react-toastify";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const CreatePurchasePaymentTable = () => {
+  const dispatch = useDispatch();
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const { data: payments, isLoading } = useGetAllPaymentQuery({
     page: 1,
     pageSize: 20,
@@ -10,9 +18,37 @@ const CreatePurchasePaymentTable = () => {
     type: "purchase",
   });
 
+  const [deletePayment] = useDeletePaymentMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  
+  // Delete
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    console.log("Payment id: ", id)
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deletePayment(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the item:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
@@ -54,8 +90,7 @@ const CreatePurchasePaymentTable = () => {
                   {row?.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs text-center">
-                  {/* <DeleteButton id={row.id} onDelete={handleDeleteClick} /> */}
-                  <DeleteButton />
+                  <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}
@@ -72,6 +107,13 @@ const CreatePurchasePaymentTable = () => {
           </tbody>
         )}
       </table>
+
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };

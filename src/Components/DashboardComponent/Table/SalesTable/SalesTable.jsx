@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
-import { useDeleteSaleProductMutation } from "../../../../features/api/seller/saleProductApi";
+import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 import {
   closeModal,
   openModal,
@@ -27,9 +26,11 @@ const SalesTable = () => {
     pageSize: pageSize,
     searchKey: searchQuery || filterQuery,
     type: "sales",
+    startDate: filterQuery,
+    endDate: filterQuery,
   });
 
-  const [deleteSaleProduct] = useDeleteSaleProductMutation();
+  const [deletePayment] = useDeletePaymentMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -46,7 +47,7 @@ const SalesTable = () => {
   // delete confirm
   const handleConfirmDelete = async () => {
     try {
-      const res = await deleteSaleProduct(selectedItemId).unwrap();
+      const res = await deletePayment(selectedItemId).unwrap();
       if (res.status) {
         toast.success("Item deleted successfully");
       }
@@ -140,7 +141,7 @@ const SalesTable = () => {
                     {row.orderDate}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                    <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
               ))}

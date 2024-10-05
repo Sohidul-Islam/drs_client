@@ -54,38 +54,29 @@ const UpdateSalesProductModal = ({ isOpen, onClose, productData }) => {
           label: productData.product.productName,
         });
       }
-
-      if (productData.customer) {
-        setValue("manufacturerId", {
-          value: productData.manufacturer.id,
-          label: productData.manufacturer.name,
-        });
-      }
     }
   }, [productData, setValue]);
 
   const onSubmit = async (data) => {
-    // setLoading(true);
-    // data.customerId = data.customerId.value || productData.customerId;
+    setLoading(true);
+    data.customerId = data.customerId.value || productData.customerId;
     data.productId = data.productId.value || productData.productId;
     data.sellerId = user?.id || productData.sellerId;
     data.status = "active";
 
-    console.log("Sending data of sales product: ", data);
-
-    // try {
-    //   const { data: res } = await updateSaleProduct(data);
-    //   if (res?.status) {
-    //     toast.success(res?.message);
-    //     onClose();
-    //   } else {
-    //     toast.error(res?.message);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const { data: res } = await updateSaleProduct(data);
+      if (res?.status) {
+        toast.success(res?.message);
+        onClose();
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;

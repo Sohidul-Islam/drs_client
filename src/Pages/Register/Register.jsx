@@ -323,7 +323,7 @@ const Register = () => {
               type="submit"
               disabled={loading}
             >
-              {loading ? <Spinner/> : "REGISTER"}
+              {loading ? <Spinner /> : "REGISTER"}
             </button>
 
             {/* Forgot password  */}

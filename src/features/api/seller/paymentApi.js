@@ -5,15 +5,16 @@ const paymentApi = adminBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // all Payment
     getAllPayment: builder.query({
-      query: ({ page, pageSize, searchKey, type }) => ({
+      query: ({ page, pageSize, searchKey, type, startDate, endDate }) => ({
         url: "payment/all",
-        params: { page, pageSize, searchKey, type },
+        params: { page, pageSize, searchKey, type, startDate,endDate },
       }),
       transformResponse: (res) => {
-        // console.log('Payment data: ',res.data);
+        console.log("Payment data from api: ", res.data);
         const data = res?.data?.map(
           ({ id, payment, updatedAt, purchase_product, sales_order }) => ({
             id,
+            paymentId: payment?.id,
             due: payment?.due?.toFixed(2),
             paidAmount: payment?.paidAmount?.toFixed(2),
             paymentMethod: payment?.paymentMethod,
@@ -26,7 +27,7 @@ const paymentApi = adminBaseApi.injectEndpoints({
             // sales product
             customerName: sales_order?.customer?.name,
             phoneNumber: sales_order?.customer?.phoneNumber,
-            orderDate: sales_order?.createdAt?.split("T")[0]
+            orderDate: sales_order?.createdAt?.split("T")[0],
           })
         );
         const metadata = {
@@ -53,10 +54,21 @@ const paymentApi = adminBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Payment"],
     }),
+
+    // delete Payment
+    deletePayment: builder.mutation({
+      query: (paymentId) => ({
+        url: "payment/delete",
+        method: "POST",
+        body: { paymentId },
+      }),
+      invalidatesTags: ["Payment"],
+    }),
   }),
 });
 
 export const {
   useGetAllPaymentQuery,
   useAddPaymentMutation,
+  useDeletePaymentMutation,
 } = paymentApi;

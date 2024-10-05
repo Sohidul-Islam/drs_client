@@ -9,13 +9,19 @@ import { useGetAllSaleProductQuery } from "../../../features/api/seller/saleProd
 
 const CreateSales = () => {
   const { user } = useSelector((state) => state.auth);
-   const { data: saleProducts, refetch } = useGetAllSaleProductQuery({
+   const { data: saleProducts, refetch, isLoading } = useGetAllSaleProductQuery({
     page: 1,
     pageSize: 15,
     searchKey: "",
     status: "inactive",
     sellerId: user?.id || 1,
    });
+  
+   if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log('Sales product: ',saleProducts)
   
   return (
     <div className="relative">

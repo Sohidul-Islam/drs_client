@@ -10,11 +10,12 @@ const saleProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, status, sellerId },
       }),
       transformResponse: (res) => {
-        // console.log('res data from sale api:',res)
+        console.log('res from sales api:',res)
         const data = res.data.map(
           ({
             id,
             product,
+            customer,
             BMDCRegistrationNo,
             date,
             doctorName,
@@ -29,7 +30,8 @@ const saleProductApi = adminBaseApi.injectEndpoints({
             doctorName,
             discount,
             quantity,
-            product
+            product,
+            customer
           })
         );
         const metadata = {

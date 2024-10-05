@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
 import { useDispatch, useSelector } from "react-redux";
-import { useDeletePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import {
   closeModal,
   openModal,
@@ -25,17 +24,19 @@ const PurchaseInvoiceTable = () => {
   const { data: payments, isLoading } = useGetAllPaymentQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery || filterQuery,
+    searchKey: searchQuery,
     type: "purchase",
+    startDate: filterQuery,
+    endDate: filterQuery,
   });
 
-  const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
+  const [deletePayment] = useDeletePaymentMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = payments?.metadata;
+  const { totalPages } = payments?.metadata || '';
 
   // Delete
   // open delete modal
@@ -46,7 +47,7 @@ const PurchaseInvoiceTable = () => {
   // delete confirm
   const handleConfirmDelete = async () => {
     try {
-      const res = await deletePurchaseProduct(selectedItemId).unwrap();
+      const res = await deletePayment(selectedItemId).unwrap();
       if (res.status) {
         toast.success("Item deleted successfully");
       }
@@ -140,7 +141,7 @@ const PurchaseInvoiceTable = () => {
                     {row?.date}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                    <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
               ))}
