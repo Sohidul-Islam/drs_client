@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EditButton from "../../Common/EditButton/EditButton";
-import { useGetAllUserSubscriptionQuery } from "../../../../features/api/admin/adminSubscriptionApi";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import Pagination from "../../Common/Pagination/Pagination";
@@ -11,87 +10,7 @@ import {
 } from "../../../../features/deleteModal/deleteModalSlice";
 import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
-import { useDeleteManageStoreMutation } from "../../../../features/api/admin/adminManageStoreApi";
-
-const data = [
-  {
-    id: "#01",
-    shopName: "MAA Pharmacy",
-    ownerName: "Sabariya Muzumder",
-    division: "Dhaka",
-    district: "Dhaka",
-    upzillaThana: "Badda",
-    phoneNumber: "01994779217",
-    status: "Active",
-    updateOn: "05/06/2024",
-  },
-  {
-    id: "#02",
-    shopName: "Health Mart",
-    ownerName: "Tariqul Islam",
-    division: "Dhaka",
-    district: "Gazipur",
-    upzillaThana: "Sreepur",
-    phoneNumber: "01894779217",
-    status: "Inactive",
-    updateOn: "05/05/2024",
-  },
-  {
-    id: "#03",
-    shopName: "City Pharmacy",
-    ownerName: "Anisur Rahman",
-    division: "Dhaka",
-    district: "Dhaka",
-    upzillaThana: "Mohammadpur",
-    phoneNumber: "01794779217",
-    status: "Active",
-    updateOn: "05/04/2024",
-  },
-  {
-    id: "#04",
-    shopName: "MediCare",
-    ownerName: "Farzana Khan",
-    division: "Chittagong",
-    district: "Comilla",
-    upzillaThana: "Comilla Sadar",
-    phoneNumber: "01994779218",
-    status: "Inactive",
-    updateOn: "05/03/2024",
-  },
-  {
-    id: "#05",
-    shopName: "Pharma Plus",
-    ownerName: "Nasir Uddin",
-    division: "Dhaka",
-    district: "Tangail",
-    upzillaThana: "Tangail Sadar",
-    phoneNumber: "01694779219",
-    status: "Active",
-    updateOn: "05/02/2024",
-  },
-  {
-    id: "#06",
-    shopName: "Amin Pharmacy",
-    ownerName: "Jamil Ahmed",
-    division: "Sylhet",
-    district: "Sylhet",
-    upzillaThana: "Sylhet Sadar",
-    phoneNumber: "01794779219",
-    status: "Active",
-    updateOn: "05/01/2024",
-  },
-  {
-    id: "#07",
-    shopName: "Dhaka Chemist",
-    ownerName: "Shakil Hossain",
-    division: "Dhaka",
-    district: "Dhaka",
-    upzillaThana: "Gulshan",
-    phoneNumber: "01994779220",
-    status: "Inactive",
-    updateOn: "04/30/2024",
-  },
-];
+import { useDeleteUserMutation, useGetAllUsersQuery } from "../../../../features/api/admin/adminUserApi";
 
 const tableHeadings = [
   "ID",
@@ -114,21 +33,21 @@ const ManageStoreTable = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: manageStores, isLoading } = useGetAllUserSubscriptionQuery({
+  const { data: users, isLoading } = useGetAllUsersQuery({
     page: currentPage,
     pageSize: pageSize,
     searchKey: searchQuery,
   });
 
-  const [deleteManageStore] = useDeleteManageStoreMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = manageStores?.metadata || 2;
+  const { totalPages } = users?.metadata || 1;
 
-  // console.log("Manage store --> ", manageStores)
+  console.log("users data --> ", users?.data)
 
   // Delete user subscription - open modal
   const handleDeleteClick = (id) => {
@@ -138,7 +57,7 @@ const ManageStoreTable = () => {
   // delete confirm
   const handleConfirmDelete = async () => {
     try {
-      const res = await deleteManageStore(selectedItemId).unwrap();
+      const res = await deleteUser(selectedItemId).unwrap();
       if (res.status) {
         toast.success("Item deleted successfully");
       }
@@ -160,17 +79,17 @@ const ManageStoreTable = () => {
       <SearchAndExport
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        data={data}
+        data={users}
         columns={[
           "id",
-          "shopName",
-          "ownerName",
+          "shop_name",
+          "shop_owner_name",
           "division",
           "district",
-          "upzillaThana",
-          "phoneNumber",
+          "upazila",
+          "phone_number",
           "status",
-          "updateOn",
+          "updatedAt",
         ]}
         advanceFilter={true}
         title="Manage Store Report"
@@ -182,7 +101,7 @@ const ManageStoreTable = () => {
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           {/* table head  */}
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 whitespace-nowrap">
             <tr>
               {tableHeadings?.map((item, index) => (
                 <th
@@ -198,37 +117,37 @@ const ManageStoreTable = () => {
             </tr>
           </thead>
           {/* table body  */}
-          {data?.length > 0 ? (
+          {users?.data?.length > 0 ? (
             <tbody className="bg-white divide-y divide-gray-200">
-              {data?.map((row, index) => (
+              {users?.data?.map((row, index) => (
                 <tr key={index}>
                   <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                     {row.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.shopName}
+                    {row?.shop_name}
                   </td>
 
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.ownerName}
+                    {row?.shop_owner_name}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.division}
+                    {row?.division}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.district}
+                    {row?.district}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.upzillaThana}
+                    {row?.upazila}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.phoneNumber}
+                    {row?.phone_number}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row.status}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.updateOn}
+                    {row.updatedAt.split('T')[0]}
                   </td>
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
