@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineReconciliation } from "react-icons/ai";
-import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
-import { useDispatch } from "react-redux";
-import { registers } from "../../../features/auth/authSlice";
-// import { useNavigate } from "react-router-dom";
+import { useUpdateUserMutation } from "../../../../features/api/admin/adminUserApi";
+import { useAddFileMutation } from "../../../../features/api/admin/adminFileUploadApi";
 
 const divisions = [
   { value: "Dhaka", label: "Dhaka" },
@@ -36,27 +33,58 @@ const thanas = {
   ],
 };
 
-const CreateStore = () => {
-  const { register, handleSubmit, reset, setValue, watch } = useForm();
-  const [loading, setLoading] = useState(false);
-  const [fileName, setFileName] = useState("No image found");
-  const dispatch = useDispatch();
-  // const navigate = useNavigate();
+const UpdateUserModal = ({ isOpen, onClose, userData }) => {
+  const { register, handleSubmit, setValue, watch, reset } = useForm();
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
-
+  const [updateUser] = useUpdateUserMutation();
   const [addFile] = useAddFileMutation();
 
+  const url = userData?.drugLicenseDocument || "https://example.com/1122-no image";
+  const parts = url?.split("/");
+  const endPortion = parts[parts?.length - 1];
+  const drugLicenseDocument = endPortion?.split('-')[1];
+  const [fileName, setFileName] = useState(drugLicenseDocument);
+
+  useEffect(() => {
+    if (userData) {
+      setValue("shop_name", userData?.shop_name);
+      setValue("shop_owner_name", userData?.shop_owner_name);
+      setValue("division", userData?.division);
+      setTimeout(() => {
+        setValue("district", userData?.district);
+      }, 100);
+      setValue("email", userData?.email);
+      setValue("phone_number", userData?.phone_number);
+      setValue("pharmacistName", userData?.pharmacistName);
+      setValue("pharmacistRegNo", userData?.pharmacistRegNo);
+      setValue("drugLicenseNo", userData?.drugLicenseNo);
+      setValue("drugLicenseDocument", userData?.drugLicenseDocument);
+      setValue("establishMentData", userData?.date);
+      setValue("status", userData?.status);
+    }
+  }, [userData, setValue]);
+
+  useEffect(() => {
+    if (userData?.district) {
+      setTimeout(() => {
+        setValue("upazila", userData?.upazila);
+      }, 200);
+    }
+  }, [userData, setValue]);
+
   const onSubmit = async (data) => {
-    setLoading(true);
-    data.accountType = "seller";
+    console.log("Sending data", data)
     try {
-      await dispatch(registers(data)).unwrap();
-      toast.success("successfully created an account");
-      setLoading(false);
+      const res = await updateUser({ id: userData.id, ...data }).unwrap();
+      if (res.status) {
+        toast.success("Store updated successfully");
+        onClose();
+        reset();
+      }
     } catch (error) {
-      toast.error("something went wrong");
-      setLoading(false);
+      console.error("Failed to update the store:", error);
+      toast.error("Failed to update the store");
     }
   };
 
@@ -71,54 +99,55 @@ const CreateStore = () => {
 
     try {
       const res = await addFile(formData).unwrap();
-      console.log("File uploaded successfully:", res);
       setValue("drugLicenseDocument", res?.file?.url);
     } catch (error) {
       console.error("Failed to upload file:", error);
     }
   };
 
-  return (
-    <div className="relative h-screen">
-      <div className="flex items-center gap-x-[10px]">
-        <AiOutlineReconciliation className="text-lg" />
-        <p>Create New Store</p>
-      </div>
+  if (!isOpen) return null;
 
-      <div className="px-5 py-3 mt-3 bg-white ">
+  return (
+    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
+      <div className="relative p-8 bg-white w-full">
+        <div className="flex items-center gap-x-[10px] mb-5">
+          <AiOutlineReconciliation className="text-lg" />
+          <p>Update User</p>
+        </div>
+        {/* form  */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-4 gap-x-4 gap-y-5">
-            {/* Store Name */}
+            {/* Shop name  */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Store Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
-                {...register("shop_name", { required: true })}
+                {...register("shop_name")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
 
-            {/* Store Owner Name */}
+            {/* owner name  */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Store Owner Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
-                {...register("shop_owner_name", { required: true })}
+                {...register("shop_owner_name")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
 
-            {/* Division */}
+            {/* Division  */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Division <span className="text-[#FF0027]">*</span>
               </label>
               <select
-                {...register("division", { required: true })}
+                {...register("division")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select Division</option>
@@ -130,13 +159,13 @@ const CreateStore = () => {
               </select>
             </div>
 
-            {/* District */}
+            {/* District  */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 District <span className="text-[#FF0027]">*</span>
               </label>
               <select
-                {...register("district", { required: true })}
+                {...register("district")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 disabled={!selectedDivision}
               >
@@ -150,13 +179,13 @@ const CreateStore = () => {
               </select>
             </div>
 
-            {/* Upozilla/Thana */}
+            {/* Thana  */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Upozilla/Thana <span className="text-[#FF0027]">*</span>
               </label>
               <select
-                {...register("upazila", { required: true })}
+                {...register("upazila")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 disabled={!selectedDistrict}
               >
@@ -213,7 +242,6 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                // readOnly
                 {...register("pharmacistName", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -296,10 +324,10 @@ const CreateStore = () => {
               </select>
             </div>
 
-            {/* Password */}
+            {/* New Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Password
+                New Password
               </label>
               <input
                 type="password"
@@ -309,38 +337,21 @@ const CreateStore = () => {
             </div>
           </div>
 
-          {/* button  */}
-          <div className="absolute bottom-0">
-            <div className="flex gap-x-5">
-              {/* Save button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className={`${
-                  loading
-                    ? "text-gray-400 border-gray-400 cursor-no-drop"
-                    : "text-[#139238] border-[#139238]"
-                } border rounded-md px-3 py-1 flex items-center font-medium`}
-              >
-                <span className="mr-2">
-                  <FaFileMedical />
-                </span>
-                Save{" "}
-                {loading && (
-                  <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
-                )}
-              </button>
-              {/* Clear button */}
-              <button
-                onClick={() => reset()}
-                className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
-              >
-                <span className="mr-2">
-                  <FaRegTrashCan />
-                </span>
-                Clear all
-              </button>
-            </div>
+          {/* Button  */}
+          <div className="px-6 py-4 flex justify-end">
+            <button
+              type="button"
+              className="mr-2 px-4 py-2 bg-gray-500 text-white rounded-md"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md"
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>
@@ -348,4 +359,4 @@ const CreateStore = () => {
   );
 };
 
-export default CreateStore;
+export default UpdateUserModal;

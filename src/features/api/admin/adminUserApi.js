@@ -10,6 +10,46 @@ const adminUserApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
+        // console.log(res, 'from api')
+        const data = res?.data?.map(
+          ({
+            id,
+            shop_name,
+            email,
+            image,
+            banner,
+            shop_owner_name,
+            division,
+            district,
+            upazila,
+            phone_number,
+            pharmacistName,
+            pharmacistRegNo,
+            drugLicenseNo,
+            drugLicenseDocument,
+            status,
+            updatedAt,
+            establishMentData,
+          }) => ({
+            id,
+            shop_name,
+            email,
+            image,
+            banner,
+            shop_owner_name,
+            division,
+            district,
+            upazila,
+            phone_number,
+            pharmacistName,
+            pharmacistRegNo,
+            drugLicenseNo,
+            drugLicenseDocument,
+            status,
+            date: updatedAt?.split("T")[0],
+            establishMentData: establishMentData?.split("T")[0],
+          })
+        );
         const metadata = {
           totalItems: res.metadata.totalItems,
           totalPages: res.metadata.totalPages,
@@ -17,15 +57,25 @@ const adminUserApi = adminBaseApi.injectEndpoints({
           pageSize: res.metadata.pageSize,
         };
         return {
-          data: res?.data,
+          data,
           metadata,
         };
       },
       providesTags: ["Users"],
     }),
 
-     // delete user
-     deleteUser: builder.mutation({
+    // update Users
+    updateUser: builder.mutation({
+      query: (userData) => ({
+        url: "update/seller",
+        method: "POST",
+        body: userData,
+      }),
+      invalidatesTags: ["Users"],
+    }),
+
+    // delete user
+    deleteUser: builder.mutation({
       query: (id) => ({
         url: "user/delete",
         method: "POST",
@@ -36,4 +86,8 @@ const adminUserApi = adminBaseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllUsersQuery, useDeleteUserMutation, } = adminUserApi;
+export const {
+  useGetAllUsersQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} = adminUserApi;

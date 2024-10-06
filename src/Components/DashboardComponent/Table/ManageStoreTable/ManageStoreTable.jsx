@@ -11,6 +11,7 @@ import {
 import { toast } from "react-toastify";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useDeleteUserMutation, useGetAllUsersQuery } from "../../../../features/api/admin/adminUserApi";
+import UpdateUserModal from "./UpdateUserModal";
 
 const tableHeadings = [
   "ID",
@@ -32,6 +33,8 @@ const ManageStoreTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
 
   const { data: users, isLoading } = useGetAllUsersQuery({
     page: currentPage,
@@ -47,7 +50,7 @@ const ManageStoreTable = () => {
 
   const { totalPages } = users?.metadata || 1;
 
-  console.log("users data --> ", users?.data)
+  // console.log("users data --> ", users?.data)
 
   // Delete user subscription - open modal
   const handleDeleteClick = (id) => {
@@ -72,6 +75,13 @@ const ManageStoreTable = () => {
   const handleCancelDelete = () => {
     dispatch(closeModal());
   };
+
+    // Edit logic
+    const handleEditClick = (user) => {
+      setUserToEdit(user); 
+      setIsEditModalOpen(true);
+    };
+
 
   return (
     <div className="bg-white px-5 pb-1">
@@ -147,11 +157,11 @@ const ManageStoreTable = () => {
                     {row.status}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.updatedAt.split('T')[0]}
+                    {row.date}
                   </td>
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <EditButton />
+                  <EditButton handleEditClick={handleEditClick} item={row} />
                     <DeleteButton id={row.id} onDelete={handleDeleteClick} />
                   </td>
                 </tr>
@@ -172,13 +182,13 @@ const ManageStoreTable = () => {
       </div>
 
       {/* Update Modal */}
-      {/* {isUpdateModalOpen && (
-          <UpdateSupplierModal
-            isOpen={isUpdateModalOpen}
-            onClose={() => setIsUpdateModalOpen(false)}
-            supplier={selectedSupplier}
+      {isEditModalOpen && (
+          <UpdateUserModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            userData={userToEdit}
           />
-        )} */}
+        )}
 
       {/* pagination  */}
       <Pagination
