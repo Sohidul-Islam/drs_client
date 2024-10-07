@@ -1,51 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
 
 const UserInformation = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [userFileName, setUserFileName] = useState("No image found");
+  const [userImageSrc, setUserImageSrc] = useState("");
+  const [nidFileName, setNidFileName] = useState("No image found");
+  const [nidImageSrc, setNidImageSrc] = useState("");
+  const [signatureFileName, setSignatureFileName] = useState("No image found");
+  const [signatureImageSrc, setSignatureImageSrc] = useState("");
+
+
+  const [addFile] = useAddFileMutation();
+  // console.log("User data", user);
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      phone_number: "01828632233",
-      image: "https://i.ibb.co/PC3rxMG/sabaria.png",
-      nidImage: "https://i.ibb.co/KrT7qK8/nid.png",
-      signatureImage: "https://i.ibb.co/zFt3338/signature.png",
-    },
-  });
-  const [imageSrc, setImageSrc] = useState(
-    "https://i.ibb.co/PC3rxMG/sabaria.png"
-  );
-  const [nidSrc, setNidSrc] = useState("https://i.ibb.co/KrT7qK8/nid.png");
-  const [signatureSrc, setSignatureSrc] = useState(
-    "https://i.ibb.co/zFt3338/signature.png"
-  );
-  const [nidFileName, setNidFileName] = useState("Sabariya NID.jpg");
-  const [signatureFileName, setSignatureFileName] =
-    useState("Sabariya Sign.PNG");
+  } = useForm();
+
+  useEffect(() => {
+    if (user) {
+      setValue("full-name", user?.shop_owner_name);
+      setValue("email", user?.email);
+      setValue("phone_number", user?.phone_number);
+      setValue("UserImage", user?.UserImage);
+      setValue("nidImage", user?.nidImage);
+      setValue("signature", user?.signature);
+    }
+  }, [user, setValue]);
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
-  const handleImageUpload = (
-    e,
-    setImageSrcCallback,
-    fieldName,
-    setFileNameCallback
-  ) => {
+  // upload image or file
+  const handleFileUpload = async (e, setFileName, fieldName, setImageSrc) => {
     const file = e.target.files[0];
-    if (file) {
-      setValue(fieldName, file);
-      setFileNameCallback(file.name);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrcCallback(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    setFileName(file.name);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await addFile(formData).unwrap();
+      setValue(fieldName, res?.file?.url);
+      setImageSrc(res?.file?.url);
+    } catch (error) {
+      console.error("Failed to upload file:", error);
     }
   };
 
@@ -55,9 +62,9 @@ const UserInformation = () => {
         {/* user image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {imageSrc && (
+            {userImageSrc && (
               <img
-                src={imageSrc}
+                src={userImageSrc}
                 alt="Uploaded"
                 className="mt-4 w-24 h-24 rounded-full"
               />
@@ -68,15 +75,13 @@ const UserInformation = () => {
             <input
               type="file"
               accept="image/*"
-              {...register("image")}
-              onChange={(e) =>
-                handleImageUpload(e, setImageSrc, "image", setNidFileName)
-              }
+              {...register("UserImage")}
+              onChange={(e) => handleFileUpload(e, setUserFileName, "UserImage", setUserImageSrc)}
               className="hidden"
-              id="file-upload"
+              id="user-image-upload"
             />
             <label
-              htmlFor="file-upload"
+              htmlFor="user-image-upload"
               className="cursor-pointer bg-[#006E9E] text-white p-[10px] text-xs"
             >
               Upload Image
@@ -96,7 +101,6 @@ const UserInformation = () => {
                 <input
                   type="text"
                   {...register("full-name", { required: true })}
-                  defaultValue="Sabariya Muzumder"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -108,7 +112,6 @@ const UserInformation = () => {
                 <input
                   type="email"
                   {...register("email", { required: true })}
-                  defaultValue="sabariyamuzumder9921@gmail.com"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -119,7 +122,7 @@ const UserInformation = () => {
                   Phone number
                 </label>
                 <input
-                  type="number"
+                  type="tel"
                   {...register("phone_number", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -141,6 +144,7 @@ const UserInformation = () => {
                     <option value="other">Other</option>
                   </select>
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Date of Birth
@@ -195,31 +199,25 @@ const UserInformation = () => {
                     type="file"
                     accept="image/*"
                     {...register("nidImage")}
-                    onChange={(e) =>
-                      handleImageUpload(
-                        e,
-                        setNidSrc,
-                        "nidImage",
-                        setNidFileName
-                      )
-                    }
                     className="hidden"
-                    id="nid-upload"
+                    id="nid-image-upload"
+                    onChange={(e) => handleFileUpload(e, setNidFileName, "nidImage", setNidImageSrc)}
                   />
                   <label
-                    htmlFor="nid-upload"
+                    htmlFor="nid-image-upload"
                     className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
                   >
                     Upload
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {nidFileName}
+                    {nidFileName ? nidFileName : "No file selected"}
                   </span>
                 </div>
-                {nidSrc && (
+
+                {nidImageSrc && (
                   <div>
                     <img
-                      src={nidSrc}
+                      src={nidImageSrc}
                       alt="NID"
                       className="mt-2 w-28 h-20 border"
                     />
@@ -235,17 +233,10 @@ const UserInformation = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    {...register("signatureImage")}
-                    onChange={(e) =>
-                      handleImageUpload(
-                        e,
-                        setSignatureSrc,
-                        "signatureImage",
-                        setSignatureFileName
-                      )
-                    }
+                    {...register("signature")}
                     className="hidden"
                     id="signature-upload"
+                    onChange={(e) => handleFileUpload(e, setSignatureFileName, "signature", setSignatureImageSrc)}
                   />
                   <label
                     htmlFor="signature-upload"
@@ -254,13 +245,13 @@ const UserInformation = () => {
                     Upload
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {signatureFileName}
+                  {signatureFileName ? signatureFileName : "No file selected"}
                   </span>
                 </div>
-                {signatureSrc && (
+                {signatureImageSrc && (
                   <div>
                     <img
-                      src={signatureSrc}
+                      src={signatureImageSrc}
                       alt="Signature"
                       className="mt-2 w-28 h-20 border"
                     />
