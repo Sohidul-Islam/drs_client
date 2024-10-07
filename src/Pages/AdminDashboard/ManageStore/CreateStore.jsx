@@ -4,9 +4,7 @@ import { AiOutlineReconciliation } from "react-icons/ai";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
-import { useDispatch } from "react-redux";
-import { registers } from "../../../features/auth/authSlice";
-// import { useNavigate } from "react-router-dom";
+import { useAddUserMutation } from "../../../features/api/admin/adminUserApi";
 
 const divisions = [
   { value: "Dhaka", label: "Dhaka" },
@@ -40,23 +38,26 @@ const CreateStore = () => {
   const { register, handleSubmit, reset, setValue, watch } = useForm();
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState("No image found");
-  const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
 
+  const [addUser] = useAddUserMutation();
   const [addFile] = useAddFileMutation();
 
   const onSubmit = async (data) => {
     setLoading(true);
     data.accountType = "seller";
     try {
-      await dispatch(registers(data)).unwrap();
-      toast.success("successfully created an account");
-      setLoading(false);
+      const res = await addUser(data);
+      if (res?.data?.status) {
+        toast.success("successfully created an account");
+        setLoading(false);
+        reset();
+      }
     } catch (error) {
       toast.error("something went wrong");
       setLoading(false);
+      reset();
     }
   };
 

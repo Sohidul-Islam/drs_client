@@ -64,6 +64,17 @@ const adminUserApi = adminBaseApi.injectEndpoints({
       providesTags: ["Users"],
     }),
 
+    // add User
+    addUser: builder.mutation({
+      query: (userData) => ({
+        url: "register",
+        method: "POST",
+        body: userData,
+      }),
+      invalidatesTags: ["Users"],
+    }),
+
+
     // update Users
     updateUser: builder.mutation({
       query: (userData) => ({
@@ -88,6 +99,7 @@ const adminUserApi = adminBaseApi.injectEndpoints({
 
 export const {
   useGetAllUsersQuery,
+  useAddUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
 } = adminUserApi;

@@ -48,6 +48,8 @@ const ManageStoreTable = () => {
     return <div>Loading...</div>;
   }
 
+  console.log("searchQuery", searchQuery)
+
   const { totalPages } = users?.metadata || 1;
 
   // console.log("users data --> ", users?.data)
@@ -61,6 +63,7 @@ const ManageStoreTable = () => {
   const handleConfirmDelete = async () => {
     try {
       const res = await deleteUser(selectedItemId).unwrap();
+      // console.log("res11", res)
       if (res.status) {
         toast.success("Item deleted successfully");
       }
@@ -99,7 +102,7 @@ const ManageStoreTable = () => {
           "upazila",
           "phone_number",
           "status",
-          "updatedAt",
+          "date",
         ]}
         advanceFilter={true}
         title="Manage Store Report"
