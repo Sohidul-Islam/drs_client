@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
+import { useUpdateUserMutation } from "../../../features/api/admin/adminUserApi";
+import { toast } from "react-toastify";
 
 const UserInformation = () => {
   const { user } = useSelector((state) => state.auth);
@@ -11,8 +13,10 @@ const UserInformation = () => {
   const [nidImageSrc, setNidImageSrc] = useState("");
   const [signatureFileName, setSignatureFileName] = useState("No image found");
   const [signatureImageSrc, setSignatureImageSrc] = useState("");
+  const [loading, setLoading] = useState(false)
 
 
+  const [updateUser] = useUpdateUserMutation();
   const [addFile] = useAddFileMutation();
   // console.log("User data", user);
   const {
@@ -28,14 +32,26 @@ const UserInformation = () => {
       setValue("full-name", user?.shop_owner_name);
       setValue("email", user?.email);
       setValue("phone_number", user?.phone_number);
-      setValue("UserImage", user?.UserImage);
+      setValue("image", user?.UserImage);
       setValue("nidImage", user?.nidImage);
       setValue("signature", user?.signature);
     }
   }, [user, setValue]);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  // console.log("User data:  ", user)
+  const onSubmit = async (data) => {
+    setLoading(true)
+    // console.log(data);
+    try {
+      const res = await updateUser({ id: user.id, ...data }).unwrap();
+      if (res.status) {
+        toast.success("Store updated successfully");
+        setLoading(false)
+      }
+    } catch (error) {
+      toast.error("Failed to update the store");
+      setLoading(false)
+    }
   };
 
   // upload image or file
@@ -75,7 +91,7 @@ const UserInformation = () => {
             <input
               type="file"
               accept="image/*"
-              {...register("UserImage")}
+              {...register("image")}
               onChange={(e) => handleFileUpload(e, setUserFileName, "UserImage", setUserImageSrc)}
               className="hidden"
               id="user-image-upload"
@@ -320,7 +336,8 @@ const UserInformation = () => {
           {/* submit button  */}
           <button
             type="submit"
-            className="cursor-pointer bg-[#006E9E] text-white px-7 py-[10px] text-sm"
+            disabled={loading}
+            className={`${loading ? "cursor-wait bg-[#c1c0c0] text-black " : "cursor-pointer bg-[#006E9E] text-white "} px-7 py-[10px] text-sm`}
           >
             Save
           </button>

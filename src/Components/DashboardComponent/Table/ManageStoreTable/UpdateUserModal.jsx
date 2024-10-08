@@ -74,7 +74,7 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
   }, [userData, setValue]);
 
   const onSubmit = async (data) => {
-    console.log("Sending data", data)
+    // console.log("Sending data", data)
     try {
       const res = await updateUser({ id: userData.id, ...data }).unwrap();
       if (res.status) {
