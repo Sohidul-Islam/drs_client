@@ -1,38 +1,109 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { useUpdateUserMutation } from "../../../features/api/admin/adminUserApi";
+import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
+import { toast } from "react-toastify";
+
+const divisions = [
+  { value: "Dhaka", label: "Dhaka" },
+  { value: "Chittagong", label: "Chittagong" },
+  { value: "Khulna", label: "Khulna" },
+];
+
+const districts = {
+  Dhaka: [
+    { value: "Dhaka", label: "Dhaka" },
+    { value: "Gazipur", label: "Gazipur" },
+  ],
+  Chittagong: [
+    { value: "Chittagong", label: "Chittagong" },
+    { value: "Comilla", label: "Comilla" },
+  ],
+};
+
+const thanas = {
+  Dhaka: [
+    { value: "Dhaka", label: "Dhaka" },
+    { value: "Dhanmondi", label: "Dhanmondi" },
+    { value: "Uttara", label: "Uttara" },
+  ],
+  Gazipur: [
+    { value: "Tongi", label: "Tongi" },
+    { value: "Kaliakoir", label: "Kaliakoir" },
+  ],
+};
 
 const ShopInformation = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [storeFileName, setStoreFileName] = useState("No image found");
+  const [storeImageSrc, storeUserImageSrc] = useState("");
+  const [dragLicFileName, setDragLicFileName] = useState("No image found");
+  const [dragLicImageSrc, setDragLicImageSrc] = useState("");
+  const [loading, setLoading] = useState("");
+
+  const [updateUser] = useUpdateUserMutation();
+  const [addFile] = useAddFileMutation();
+
   const {
     register,
     handleSubmit,
     setValue,
-    // formState: { errors },
-  } = useForm({
-    defaultValues: {
-      shop_name: "MAA Pharmacy",
-      shop_email: "sabariyamuzumder9921@gmail.com",
-      shop_phone_number: "+8801994779217",
-      image: "https://i.ibb.co/J7RfLqK/shope-photo.png",
-    },
-  });
-  const [imageSrc, setImageSrc] = useState(
-    "https://i.ibb.co/J7RfLqK/shope-photo.png"
-  );
-  const [drugLicense, setDrugLicense] = useState("Choose file");
+    watch,
+    formState: { errors },
+  } = useForm();
+  
+  const selectedDivision = watch("division");
+  const selectedDistrict = watch("district");
+
+
+  useEffect(() => {
+    if (user) {
+      setValue("shop_owner_name", user?.shop_owner_name);
+      setValue("email", user?.email);
+      setValue("phone_number", user?.phone_number);
+      setValue("drugLicenseNo", user?.drugLicenseNo);
+      setValue("establishMentData", user?.establishMentData);
+      setValue("division", user?.division);
+      setTimeout(() => {
+        setValue("district", user?.district);
+      }, 100);
+      setTimeout(() => {
+        setValue("upazila", user?.upazila);
+      }, 100);
+      setValue("pharmacistName", user?.pharmacistName);
+      setValue("pharmacistRegNo", user?.pharmacistRegNo);
+      setValue("storeImage", user?.UserImage);
+      setValue("drugLicenseDocument", user?.drugLicenseDocument);
+    }
+  }, [user, setValue]);
 
   const onSubmit = (data) => {
-    console.log(data);
+    setLoading("submit");
+    setTimeout(()=> {setLoading("")}, 5000)
+    console.log('submitting data',data);
   };
 
-  const handleImageUpload = (e, setImageSrcCallback, fieldName) => {
+  const handleFileUpload = async (e, setFileName, fieldName, setImageSrc) => {
+    setLoading(fieldName);
     const file = e.target.files[0];
-    if (file) {
-      setValue(fieldName, file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrcCallback(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    setFileName(file.name);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await addFile(formData).unwrap();
+      if (res?.message === "File uploaded successfully") {
+        setValue(fieldName, res?.file?.url);
+        setImageSrc(res?.file?.url);
+        toast.success("File uploaded successfully");
+        setLoading("");
+      }
+    } catch (error) {
+      toast.error("something went wrong");
+      setLoading("");
     }
   };
 
@@ -42,9 +113,9 @@ const ShopInformation = () => {
         {/* Shop image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {imageSrc && (
+            {storeImageSrc && (
               <img
-                src={imageSrc}
+                src={storeImageSrc}
                 alt="Uploaded"
                 className="mt-4 w-24 h-24 rounded-full"
               />
@@ -55,16 +126,27 @@ const ShopInformation = () => {
             <input
               type="file"
               accept="image/*"
-              {...register("image")}
-              onChange={(e) => handleImageUpload(e, setImageSrc, "image")}
+              {...register("storeImage")}
+              onChange={(e) =>
+                handleFileUpload(
+                  e,
+                  setStoreFileName,
+                  "storeImage",
+                  storeUserImageSrc
+                )
+              }
               className="hidden"
-              id="file-upload"
+              id="store-file-upload"
             />
             <label
-              htmlFor="file-upload"
-              className="cursor-pointer bg-[#006E9E] text-white p-[10px] text-xs"
+              htmlFor="store-file-upload"
+              className={`${
+                loading === "storeImage"
+                  ? "cursor-wait bg-[#c1c0c0] text-black"
+                  : "cursor-pointer bg-[#006E9E] text-white"
+              } p-[10px] text-xs`}
             >
-              Upload Image
+              {loading === "storeImage" ? "Uploading..." : "Upload Image"}
             </label>
           </div>
         </div>
@@ -80,9 +162,8 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("shop_name", { required: true })}
+                  {...register("shop_owner_name", { required: true })}
                   placeholder="Shop name"
-                  defaultValue="Larg Pharma"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -93,9 +174,8 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="email"
-                  {...register("shop_email", { required: true })}
+                  {...register("email", { required: true })}
                   placeholder="Email"
-                  defaultValue="largpharma1200@gmail.com"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -105,8 +185,8 @@ const ShopInformation = () => {
                   Phone number
                 </label>
                 <input
-                  type="number"
-                  {...register("shop_phone_number", { required: true })}
+                  type="tel"
+                  {...register("phone_number", { required: true })}
                   placeholder="Phone number"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -117,7 +197,7 @@ const ShopInformation = () => {
                   Has Drug license
                 </label>
                 <select
-                  {...register("drag-license", { required: true })}
+                  {...register("has-drag-license", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 >
                   <option value="">Select</option>
@@ -132,8 +212,7 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("license-no", { required: true })}
-                  // defaultValue="Larg Pharma"
+                  {...register("drugLicenseNo", { required: true })}
                   placeholder="License no."
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -145,7 +224,7 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="date"
-                  {...register("establishment-date", { required: true })}
+                  {...register("establishMentData", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -188,49 +267,61 @@ const ShopInformation = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
               {/* Division */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Division
-                </label>
-                <select
-                  {...register("division", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="dhaka">Dhaka</option>
-                  <option value="chittagong">Chittagong</option>
-                  <option value="khulna">Khulna</option>
-                </select>
-              </div>
-              {/* District */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  District
-                </label>
-                <select
-                  {...register("district", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="dhaka">Dhaka</option>
-                  <option value="cumilla">Cumilla</option>
-                  <option value="feni">Feni</option>
-                </select>
-              </div>
-              {/* Upazilla/Thana */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Upazilla/Thana
-                </label>
-                <select
-                  {...register("upazila", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="dhaka">Dhaka</option>
-                  <option value="burichang">Burichang</option>
-                  <option value="goripur">Goripur</option>
-                </select>
-              </div>
+              <label className="block text-sm font-medium text-gray-700">
+                Division <span className="text-[#FF0027]">*</span>
+              </label>
+              <select
+                {...register("division")}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+              >
+                <option value="">Select Division</option>
+                {divisions.map((division) => (
+                  <option key={division.value} value={division.value}>
+                    {division.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* District  */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                District <span className="text-[#FF0027]">*</span>
+              </label>
+              <select
+                {...register("district")}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                disabled={!selectedDivision}
+              >
+                <option value="">Select District</option>
+                {selectedDivision &&
+                  districts[selectedDivision]?.map((district) => (
+                    <option key={district.value} value={district.value}>
+                      {district.label}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            {/* Thana  */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Upozilla/Thana <span className="text-[#FF0027]">*</span>
+              </label>
+              <select
+                {...register("upazila")}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                disabled={!selectedDistrict}
+              >
+                <option value="">Select Upazila</option>
+                {selectedDistrict &&
+                  thanas[selectedDistrict]?.map((thana) => (
+                    <option key={thana.value} value={thana.value}>
+                      {thana.label}
+                    </option>
+                  ))}
+              </select>
+            </div>
+              
               {/* Postal Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -291,7 +382,7 @@ const ShopInformation = () => {
                   Owner's Phone Number
                 </label>
                 <input
-                  type="number"
+                  type="tel"
                   {...register("owner-phone-number", { required: true })}
                   placeholder="Phone number"
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
@@ -304,7 +395,7 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("pharmacist-name", { required: true })}
+                  {...register("pharmacistName", { required: true })}
                   placeholder="Pharmacist name"
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -315,8 +406,8 @@ const ShopInformation = () => {
                   Pharmacist Registration No
                 </label>
                 <input
-                  type="number"
-                  {...register("pharmacist-reg-no", { required: true })}
+                  type="text"
+                  {...register("pharmacistRegNo", { required: true })}
                   placeholder="Registration No"
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -331,22 +422,30 @@ const ShopInformation = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    {...register("drug_license")}
-                    onChange={(e) => {
-                      setDrugLicense(e.target.files[0]?.name);
-                      setValue("drug_license", e.target.files[0]);
-                    }}
+                    {...register("drugLicenseDocument")}
+                    onChange={(e) =>
+                      handleFileUpload(
+                        e,
+                        setDragLicFileName,
+                        "drugLicenseDocument",
+                        setDragLicImageSrc
+                      )
+                    }
                     className="hidden"
                     id="drag-license-upload"
                   />
                   <label
                     htmlFor="drag-license-upload"
-                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                    className={`${
+                      loading === "drugLicenseDocument"
+                        ? "cursor-wait bg-[#c1c0c0] text-black"
+                        : "cursor-pointer bg-[#006E9E] text-white"
+                    } p-[10px] text-xs`}
                   >
-                    Upload
+                    {loading === "drugLicenseDocument" ? "Uploading..." : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {drugLicense}
+                    {dragLicFileName}
                   </span>
                 </div>
               </div>
@@ -356,9 +455,9 @@ const ShopInformation = () => {
           {/* submit button  */}
           <button
             type="submit"
-            className="cursor-pointer bg-[#006E9E] text-white px-7 py-[10px] text-sm"
+            className={`${loading? "bg-[#c1c0c0] text-black":"bg-blue-600 text-white"} px-4 py-2 rounded-md`}
           >
-            Save
+             {loading === "submit" ? "Wait..." : "Save"}
           </button>
         </div>
       </form>

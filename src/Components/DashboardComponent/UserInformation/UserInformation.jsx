@@ -13,8 +13,7 @@ const UserInformation = () => {
   const [nidImageSrc, setNidImageSrc] = useState("");
   const [signatureFileName, setSignatureFileName] = useState("No image found");
   const [signatureImageSrc, setSignatureImageSrc] = useState("");
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState("");
 
   const [updateUser] = useUpdateUserMutation();
   const [addFile] = useAddFileMutation();
@@ -38,24 +37,24 @@ const UserInformation = () => {
     }
   }, [user, setValue]);
 
-  // console.log("User data:  ", user)
   const onSubmit = async (data) => {
-    setLoading(true)
+    setLoading("submit");
     // console.log(data);
     try {
       const res = await updateUser({ id: user.id, ...data }).unwrap();
       if (res.status) {
         toast.success("Store updated successfully");
-        setLoading(false)
+        setLoading("");
       }
     } catch (error) {
       toast.error("Failed to update the store");
-      setLoading(false)
+      setLoading("");
     }
   };
 
   // upload image or file
   const handleFileUpload = async (e, setFileName, fieldName, setImageSrc) => {
+    setLoading(fieldName);
     const file = e.target.files[0];
     if (!file) return;
     setFileName(file.name);
@@ -67,8 +66,11 @@ const UserInformation = () => {
       const res = await addFile(formData).unwrap();
       setValue(fieldName, res?.file?.url);
       setImageSrc(res?.file?.url);
+      toast.success("File uploaded successfully");
+      setLoading("");
     } catch (error) {
-      console.error("Failed to upload file:", error);
+      toast.error("something went wrong");
+      setLoading("");
     }
   };
 
@@ -92,15 +94,21 @@ const UserInformation = () => {
               type="file"
               accept="image/*"
               {...register("image")}
-              onChange={(e) => handleFileUpload(e, setUserFileName, "UserImage", setUserImageSrc)}
+              onChange={(e) =>
+                handleFileUpload(e, setUserFileName, "image", setUserImageSrc)
+              }
               className="hidden"
               id="user-image-upload"
             />
             <label
               htmlFor="user-image-upload"
-              className="cursor-pointer bg-[#006E9E] text-white p-[10px] text-xs"
+              className={`${
+                loading === "image"
+                  ? "cursor-wait bg-[#c1c0c0] text-black"
+                  : "cursor-pointer bg-[#006E9E] text-white"
+              } p-[10px] text-xs`}
             >
-              Upload Image
+              {loading === "image" ? "Uploading..." : "Upload Image"}
             </label>
           </div>
         </div>
@@ -217,13 +225,24 @@ const UserInformation = () => {
                     {...register("nidImage")}
                     className="hidden"
                     id="nid-image-upload"
-                    onChange={(e) => handleFileUpload(e, setNidFileName, "nidImage", setNidImageSrc)}
+                    onChange={(e) =>
+                      handleFileUpload(
+                        e,
+                        setNidFileName,
+                        "nidImage",
+                        setNidImageSrc
+                      )
+                    }
                   />
                   <label
                     htmlFor="nid-image-upload"
-                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                    className={`${
+                      loading === "nidImage"
+                        ? "cursor-wait bg-[#c1c0c0] text-black"
+                        : "cursor-pointer bg-[#006E9E] text-white"
+                    } p-[10px] text-xs`}
                   >
-                    Upload
+                    {loading === "nidImage" ? "Uploading..." : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
                     {nidFileName ? nidFileName : "No file selected"}
@@ -252,16 +271,27 @@ const UserInformation = () => {
                     {...register("signature")}
                     className="hidden"
                     id="signature-upload"
-                    onChange={(e) => handleFileUpload(e, setSignatureFileName, "signature", setSignatureImageSrc)}
+                    onChange={(e) =>
+                      handleFileUpload(
+                        e,
+                        setSignatureFileName,
+                        "signature",
+                        setSignatureImageSrc
+                      )
+                    }
                   />
                   <label
                     htmlFor="signature-upload"
-                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                    className={`${
+                      loading === "signature"
+                        ? "cursor-wait bg-[#c1c0c0] text-black"
+                        : "cursor-pointer bg-[#006E9E] text-white"
+                    } p-[10px] text-xs`}
                   >
-                    Upload
+                    {loading === "signature" ? "Uploading..." : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                  {signatureFileName ? signatureFileName : "No file selected"}
+                    {signatureFileName ? signatureFileName : "No file selected"}
                   </span>
                 </div>
                 {signatureImageSrc && (
@@ -337,9 +367,13 @@ const UserInformation = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`${loading ? "cursor-wait bg-[#c1c0c0] text-black " : "cursor-pointer bg-[#006E9E] text-white "} px-7 py-[10px] text-sm`}
+            className={`${
+              loading
+                ? "cursor-wait bg-[#c1c0c0] text-black"
+                : "cursor-pointer bg-[#006E9E] text-white "
+            } px-7 py-[10px] text-sm`}
           >
-            Save
+            {loading ? "Wait" : "Save"}
           </button>
         </div>
       </form>

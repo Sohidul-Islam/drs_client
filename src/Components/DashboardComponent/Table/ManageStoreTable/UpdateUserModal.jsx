@@ -39,6 +39,7 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
   const selectedDistrict = watch("district");
   const [updateUser] = useUpdateUserMutation();
   const [addFile] = useAddFileMutation();
+  const [loading, setLoading] = useState("");
 
   const url = userData?.drugLicenseDocument || "https://example.com/1122-no image";
   const parts = url?.split("/");
@@ -74,17 +75,18 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
   }, [userData, setValue]);
 
   const onSubmit = async (data) => {
-    // console.log("Sending data", data)
+      setLoading("submit")
     try {
       const res = await updateUser({ id: userData.id, ...data }).unwrap();
       if (res.status) {
         toast.success("Store updated successfully");
         onClose();
         reset();
+        setLoading("")
       }
     } catch (error) {
-      console.error("Failed to update the store:", error);
       toast.error("Failed to update the store");
+      setLoading("")
     }
   };
 
@@ -287,9 +289,13 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
                 />
                 <label
                   htmlFor="file-upload"
-                  className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                  className={`${
+                    loading === "drugLicenseDocument"
+                      ? "cursor-wait bg-[#c1c0c0] text-black"
+                      : "cursor-pointer bg-[#006E9E] text-white"
+                  } p-[10px] text-xs`}
                 >
-                  Upload
+                  {loading === "drugLicenseDocument" ? "Uploading..." : "Upload"}
                 </label>
                 <span className="text-xs text-gray-700 ml-2">
                   {fileName ? fileName : "No file selected"}
@@ -348,9 +354,10 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md"
+              disabled={loading}
+              className={`${loading? "bg-[#c1c0c0] text-black":"bg-blue-600 text-white"} px-4 py-2 rounded-md`}
             >
-              Save
+               {loading === "submit" ? "Wait..." : "Save"}
             </button>
           </div>
         </form>
