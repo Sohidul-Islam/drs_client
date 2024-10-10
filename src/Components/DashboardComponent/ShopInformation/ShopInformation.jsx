@@ -52,10 +52,9 @@ const ShopInformation = () => {
     watch,
     formState: { errors },
   } = useForm();
-  
+
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
-
 
   useEffect(() => {
     if (user) {
@@ -80,8 +79,10 @@ const ShopInformation = () => {
 
   const onSubmit = (data) => {
     setLoading("submit");
-    setTimeout(()=> {setLoading("")}, 5000)
-    console.log('submitting data',data);
+    setTimeout(() => {
+      setLoading("");
+    }, 5000);
+    console.log("submitting data", data);
   };
 
   const handleFileUpload = async (e, setFileName, fieldName, setImageSrc) => {
@@ -113,12 +114,16 @@ const ShopInformation = () => {
         {/* Shop image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {storeImageSrc && (
+            {storeImageSrc ? (
               <img
                 src={storeImageSrc}
                 alt="Uploaded"
                 className="mt-4 w-24 h-24 rounded-full"
               />
+            ) : (
+              <div className="mt-4 w-24 h-24 border rounded-full text-xs text-center flex items-center">
+                no image found
+              </div>
             )}
           </div>
           {/* image button  */}
@@ -162,11 +167,12 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("shop_owner_name", { required: true })}
                   placeholder="Shop name"
+                  {...register("shop_owner_name", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
+
               {/*shop email  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -174,11 +180,12 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="email"
+                  placeholder="E-mail"
                   {...register("email", { required: true })}
-                  placeholder="Email"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
+
               {/*shop phone number  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -186,25 +193,12 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="tel"
-                  {...register("phone_number", { required: true })}
                   placeholder="Phone number"
+                  {...register("phone_number", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
-              {/* has drag license  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Has Drug license
-                </label>
-                <select
-                  {...register("has-drag-license", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
+
               {/* drag license no  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -212,11 +206,12 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("drugLicenseNo", { required: true })}
                   placeholder="License no."
+                  {...register("drugLicenseNo", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
+
               {/* Establishment Date  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -228,36 +223,6 @@ const ShopInformation = () => {
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
-              {/* Store/Pharmacy Category  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Store/Pharmacy Category
-                </label>
-                <select
-                  {...register("store-category", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="category-1">Category-1</option>
-                  <option value="category-2">Category-2</option>
-                  <option value="category-3">Category-3</option>
-                </select>
-              </div>
-              {/* Store/Pharmacy Type  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Store/Pharmacy Type
-                </label>
-                <select
-                  {...register("store-type", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="type-1">Type-1</option>
-                  <option value="type-2">Type-2</option>
-                  <option value="type-3">Type-3</option>
-                </select>
-              </div>
             </div>
           </div>
 
@@ -267,81 +232,69 @@ const ShopInformation = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
               {/* Division */}
               <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Division <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("division")}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select Division</option>
-                {divisions.map((division) => (
-                  <option key={division.value} value={division.value}>
-                    {division.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* District  */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                District <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("district")}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                disabled={!selectedDivision}
-              >
-                <option value="">Select District</option>
-                {selectedDivision &&
-                  districts[selectedDivision]?.map((district) => (
-                    <option key={district.value} value={district.value}>
-                      {district.label}
+                <label className="block text-sm font-medium text-gray-700">
+                  Division <span className="text-[#FF0027]">*</span>
+                </label>
+                <select
+                  {...register("division")}
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                >
+                  <option value="">Select Division</option>
+                  {divisions.map((division) => (
+                    <option key={division.value} value={division.value}>
+                      {division.label}
                     </option>
                   ))}
-              </select>
-            </div>
-
-            {/* Thana  */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Upozilla/Thana <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("upazila")}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                disabled={!selectedDistrict}
-              >
-                <option value="">Select Upazila</option>
-                {selectedDistrict &&
-                  thanas[selectedDistrict]?.map((thana) => (
-                    <option key={thana.value} value={thana.value}>
-                      {thana.label}
-                    </option>
-                  ))}
-              </select>
-            </div>
-              
-              {/* Postal Code */}
+                </select>
+              </div>
+              {/* District  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Postal Code
+                  District <span className="text-[#FF0027]">*</span>
                 </label>
-                <input
-                  type="number"
-                  {...register("postal-code", { required: true })}
-                  placeholder="Postal code"
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
-                />
+                <select
+                  {...register("district")}
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  disabled={!selectedDivision}
+                >
+                  <option value="">Select District</option>
+                  {selectedDivision &&
+                    districts[selectedDivision]?.map((district) => (
+                      <option key={district.value} value={district.value}>
+                        {district.label}
+                      </option>
+                    ))}
+                </select>
               </div>
+
+              {/* Thana  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Upozilla/Thana <span className="text-[#FF0027]">*</span>
+                </label>
+                <select
+                  {...register("upazila")}
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  disabled={!selectedDistrict}
+                >
+                  <option value="">Select Upazila</option>
+                  {selectedDistrict &&
+                    thanas[selectedDistrict]?.map((thana) => (
+                      <option key={thana.value} value={thana.value}>
+                        {thana.label}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
               {/* Address Line */}
               <div className="md:col-span-">
                 <label className="block text-sm font-medium text-gray-700">
                   Address Line
                 </label>
                 <textarea
+                  placeholder="Address..."
                   {...register("address-line", { required: true })}
-                  placeholder="Address line"
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
                 />
               </div>
@@ -364,30 +317,7 @@ const ShopInformation = () => {
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
-              {/*Owner's Email  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Owner's Email
-                </label>
-                <input
-                  type="email"
-                  {...register("owner-email", { required: true })}
-                  placeholder="Email address"
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                />
-              </div>
-              {/* Owner's Phone Number  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Owner's Phone Number
-                </label>
-                <input
-                  type="tel"
-                  {...register("owner-phone-number", { required: true })}
-                  placeholder="Phone number"
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                />
-              </div>
+
               {/* Pharmacist Name  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -395,11 +325,12 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("pharmacistName", { required: true })}
                   placeholder="Pharmacist name"
+                  {...register("pharmacistName", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
+
               {/* Pharmacist Registration No. */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -407,18 +338,18 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("pharmacistRegNo", { required: true })}
                   placeholder="Registration No"
+                  {...register("pharmacistRegNo", { required: true })}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
-              <br />
+
               {/* Upload Drug License  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Upload Drug License
                 </label>
-                <div className="mt-1 flex items-center border p-2 rounded-md">
+                <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
                   <input
                     type="file"
                     accept="image/*"
@@ -440,12 +371,14 @@ const ShopInformation = () => {
                       loading === "drugLicenseDocument"
                         ? "cursor-wait bg-[#c1c0c0] text-black"
                         : "cursor-pointer bg-[#006E9E] text-white"
-                    } p-[10px] text-xs`}
+                    } p-2.5 text-xs`}
                   >
-                    {loading === "drugLicenseDocument" ? "Uploading..." : "Upload"}
+                    {loading === "drugLicenseDocument"
+                      ? "Uploading..."
+                      : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {dragLicFileName}
+                    {dragLicFileName?.slice(0, 25)}
                   </span>
                 </div>
               </div>
@@ -455,9 +388,13 @@ const ShopInformation = () => {
           {/* submit button  */}
           <button
             type="submit"
-            className={`${loading? "bg-[#c1c0c0] text-black":"bg-blue-600 text-white"} px-4 py-2 rounded-md`}
+            className={`${
+              loading
+                ? "cursor-wait bg-[#c1c0c0] text-black"
+                : "cursor-pointer bg-[#006E9E] text-white"
+            } px-7 py-[10px] text-sm`}
           >
-             {loading === "submit" ? "Wait..." : "Save"}
+            {loading === "submit" ? "Wait..." : "Save"}
           </button>
         </div>
       </form>
