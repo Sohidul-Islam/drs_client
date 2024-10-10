@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
 import { useUpdateUserMutation } from "../../../features/api/admin/adminUserApi";
 import { toast } from "react-toastify";
+import { getUser } from "../../../features/auth/authSlice";
 
 const UserInformation = () => {
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch()
   const [userFileName, setUserFileName] = useState("No image found");
   const [userImageSrc, setUserImageSrc] = useState("");
   const [nidFileName, setNidFileName] = useState("No image found");
@@ -26,27 +28,30 @@ const UserInformation = () => {
 
   useEffect(() => {
     if (user) {
-      setValue("full-name", user?.shop_owner_name);
+      setValue("shop_owner_name", user?.shop_owner_name);
       setValue("email", user?.email);
       setValue("phone_number", user?.phone_number);
-      setValue("image", user?.UserImage);
-      setValue("nidImage", user?.nidImage);
+      setValue("nidNumber", user?.nidNumber);
+      setValue("image", user?.image);
+      setValue("nid_image", user?.nid_image);
     }
   }, [user, setValue]);
 
   const onSubmit = async (data) => {
-    // setLoading("submit");
-    console.log(data);
-    // try {
-    //   const res = await updateUser({ id: user.id, ...data }).unwrap();
-    //   if (res.status) {
-    //     toast.success("Store updated successfully");
-    //     setLoading("");
-    //   }
-    // } catch (error) {
-    //   toast.error("Failed to update the store");
-    //   setLoading("");
-    // }
+    setLoading("submit");
+    // console.log(data);
+    console.log({ id: user.id, ...data });
+    try {
+      const res = await updateUser({ id: user.id, ...data }).unwrap();
+      if (res.status) {
+        toast.success("Store updated successfully");
+        setLoading("");
+        dispatch(getUser(user?.email));
+      }
+    } catch (error) {
+      toast.error("Failed to update the store");
+      setLoading("");
+    }
   };
 
   // upload image or file
@@ -77,11 +82,23 @@ const UserInformation = () => {
         {/* user image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {userImageSrc ? <img
+            {userImageSrc ? (
+              <img
                 src={userImageSrc}
+                alt="user"
+                className="mt-4 w-24 h-24 rounded-full"
+              />
+            ) : user?.image ? (
+              <img
+                src={user?.image}
                 alt="Uploaded"
                 className="mt-4 w-24 h-24 rounded-full"
-              /> : <div className="mt-4 w-24 h-24 border rounded-full text-xs text-center flex items-center">no image found</div> }
+              />
+            ) : (
+              <div className="mt-4 w-24 h-24 border rounded-full text-xs text-center flex items-center">
+                no image found
+              </div>
+            )}
           </div>
           {/* image button  */}
           <div className="mt-4 flex items-center">
@@ -120,7 +137,7 @@ const UserInformation = () => {
                 <input
                   type="text"
                   placeholder="Full name"
-                  {...register("full-name", { required: true })}
+                  {...register("shop_owner_name", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -158,7 +175,7 @@ const UserInformation = () => {
                 <input
                   type="number"
                   placeholder="National Id No."
-                  {...register("nid-no", { required: true })}
+                  {...register("nidNumber", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -172,14 +189,14 @@ const UserInformation = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    {...register("nidImage")}
+                    {...register("nid_image")}
                     className="hidden"
                     id="nid-image-upload"
                     onChange={(e) =>
                       handleFileUpload(
                         e,
                         setNidFileName,
-                        "nidImage",
+                        "nid_image",
                         setNidImageSrc
                       )
                     }
@@ -187,12 +204,12 @@ const UserInformation = () => {
                   <label
                     htmlFor="nid-image-upload"
                     className={`${
-                      loading === "nidImage"
+                      loading === "nid_image"
                         ? "cursor-wait bg-[#c1c0c0] text-black"
                         : "cursor-pointer bg-[#006E9E] text-white"
                     } p-2.5 text-xs`}
                   >
-                    {loading === "nidImage" ? "Uploading..." : "Upload"}
+                    {loading === "nid_image" ? "Uploading..." : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
                     {nidFileName
@@ -201,19 +218,25 @@ const UserInformation = () => {
                   </span>
                 </div>
 
-                {nidImageSrc ? (
-                  <div>
+                <div>
+                  {nidImageSrc ? (
                     <img
                       src={nidImageSrc}
-                      alt="NID"
+                      alt="nid_image"
                       className="mt-2 w-28 h-20 border"
                     />
-                  </div>
-                ) : (
-                  <div className="mt-2 w-28 h-20 border text-xs flex justify-center items-center">
-                    no image found
-                  </div>
-                )}
+                  ) : user?.nid_image ? (
+                    <img
+                      src={user?.nid_image}
+                      alt="nid_image"
+                      className="mt-2 w-28 h-20 border"
+                    />
+                  ) : (
+                    <div className="mt-2 w-28 h-20 border text-xs flex justify-center items-center">
+                      no image found
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
