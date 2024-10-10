@@ -11,8 +11,6 @@ const UserInformation = () => {
   const [userImageSrc, setUserImageSrc] = useState("");
   const [nidFileName, setNidFileName] = useState("No image found");
   const [nidImageSrc, setNidImageSrc] = useState("");
-  const [signatureFileName, setSignatureFileName] = useState("No image found");
-  const [signatureImageSrc, setSignatureImageSrc] = useState("");
   const [loading, setLoading] = useState("");
 
   const [updateUser] = useUpdateUserMutation();
@@ -33,23 +31,22 @@ const UserInformation = () => {
       setValue("phone_number", user?.phone_number);
       setValue("image", user?.UserImage);
       setValue("nidImage", user?.nidImage);
-      setValue("signature", user?.signature);
     }
   }, [user, setValue]);
 
   const onSubmit = async (data) => {
-    setLoading("submit");
-    // console.log(data);
-    try {
-      const res = await updateUser({ id: user.id, ...data }).unwrap();
-      if (res.status) {
-        toast.success("Store updated successfully");
-        setLoading("");
-      }
-    } catch (error) {
-      toast.error("Failed to update the store");
-      setLoading("");
-    }
+    // setLoading("submit");
+    console.log(data);
+    // try {
+    //   const res = await updateUser({ id: user.id, ...data }).unwrap();
+    //   if (res.status) {
+    //     toast.success("Store updated successfully");
+    //     setLoading("");
+    //   }
+    // } catch (error) {
+    //   toast.error("Failed to update the store");
+    //   setLoading("");
+    // }
   };
 
   // upload image or file
@@ -80,13 +77,11 @@ const UserInformation = () => {
         {/* user image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {userImageSrc && (
-              <img
+            {userImageSrc ? <img
                 src={userImageSrc}
                 alt="Uploaded"
                 className="mt-4 w-24 h-24 rounded-full"
-              />
-            )}
+              /> : <div className="mt-4 w-24 h-24 border rounded-full text-xs text-center flex items-center">no image found</div> }
           </div>
           {/* image button  */}
           <div className="mt-4 flex items-center">
@@ -124,6 +119,7 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="text"
+                  placeholder="Full name"
                   {...register("full-name", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -135,6 +131,7 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="email"
+                  placeholder="E-mail"
                   {...register("email", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -147,61 +144,12 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="tel"
+                  placeholder="Phone number"
                   {...register("phone_number", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
-              {/* Gender and Date  */}
-              <div className="grid grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Gender
-                  </label>
-                  <select
-                    {...register("gender", { required: true })}
-                    className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                  >
-                    <option value="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    {...register("dob", { required: true })}
-                    className="mt-1 block w-full border outline-gray-300 text-gray-700 py-1 px-3 rounded-md"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Photos & Signature */}
-          <div>
-            <p className="border-b pb-2">Photos & Signature</p>
-            <div className="w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-              {/* Nationality */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Nationality
-                </label>
-                <select
-                  {...register("nationality", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="bangladeshi">Bangladeshi</option>
-                  <option value="indian">Indian</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
               {/* NID No. */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -209,16 +157,18 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="number"
+                  placeholder="National Id No."
                   {...register("nid-no", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
+
               {/* Upload NID Photo  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Upload NID
                 </label>
-                <div className="mt-1 flex items-center border p-2 rounded-md">
+                <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
                   <input
                     type="file"
                     accept="image/*"
@@ -240,16 +190,18 @@ const UserInformation = () => {
                       loading === "nidImage"
                         ? "cursor-wait bg-[#c1c0c0] text-black"
                         : "cursor-pointer bg-[#006E9E] text-white"
-                    } p-[10px] text-xs`}
+                    } p-2.5 text-xs`}
                   >
                     {loading === "nidImage" ? "Uploading..." : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {nidFileName ? nidFileName : "No file selected"}
+                    {nidFileName
+                      ? nidFileName?.slice(0, 25)
+                      : "No file selected"}
                   </span>
                 </div>
 
-                {nidImageSrc && (
+                {nidImageSrc ? (
                   <div>
                     <img
                       src={nidImageSrc}
@@ -257,50 +209,9 @@ const UserInformation = () => {
                       className="mt-2 w-28 h-20 border"
                     />
                   </div>
-                )}
-              </div>
-              {/* Upload Signature Photo  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Upload Signature
-                </label>
-                <div className="mt-1 flex items-center border p-2 rounded-md">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    {...register("signature")}
-                    className="hidden"
-                    id="signature-upload"
-                    onChange={(e) =>
-                      handleFileUpload(
-                        e,
-                        setSignatureFileName,
-                        "signature",
-                        setSignatureImageSrc
-                      )
-                    }
-                  />
-                  <label
-                    htmlFor="signature-upload"
-                    className={`${
-                      loading === "signature"
-                        ? "cursor-wait bg-[#c1c0c0] text-black"
-                        : "cursor-pointer bg-[#006E9E] text-white"
-                    } p-[10px] text-xs`}
-                  >
-                    {loading === "signature" ? "Uploading..." : "Upload"}
-                  </label>
-                  <span className="text-xs text-gray-700 ml-2">
-                    {signatureFileName ? signatureFileName : "No file selected"}
-                  </span>
-                </div>
-                {signatureImageSrc && (
-                  <div>
-                    <img
-                      src={signatureImageSrc}
-                      alt="Signature"
-                      className="mt-2 w-28 h-20 border"
-                    />
+                ) : (
+                  <div className="mt-2 w-28 h-20 border text-xs flex justify-center items-center">
+                    no image found
                   </div>
                 )}
               </div>
@@ -370,7 +281,7 @@ const UserInformation = () => {
             className={`${
               loading
                 ? "cursor-wait bg-[#c1c0c0] text-black"
-                : "cursor-pointer bg-[#006E9E] text-white "
+                : "cursor-pointer bg-[#006E9E] text-white"
             } px-7 py-[10px] text-sm`}
           >
             {loading ? "Wait" : "Save"}
