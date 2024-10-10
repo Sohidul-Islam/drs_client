@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useUpdateUserMutation } from "../../../features/api/admin/adminUserApi";
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
 import { toast } from "react-toastify";
+import { getUser } from "../../../features/auth/authSlice";
 
 const divisions = [
   { value: "Dhaka", label: "Dhaka" },
@@ -36,10 +37,10 @@ const thanas = {
 
 const ShopInformation = () => {
   const { user } = useSelector((state) => state.auth);
-  const [storeFileName, setStoreFileName] = useState("No image found");
-  const [storeImageSrc, storeUserImageSrc] = useState("");
+  const dispatch = useDispatch()
+  const [imageSrc, setImageSrc] = useState("");
+  const [nidFileName, setNidFileName] = useState("No image found");
   const [dragLicFileName, setDragLicFileName] = useState("No image found");
-  const [dragLicImageSrc, setDragLicImageSrc] = useState("");
   const [loading, setLoading] = useState("");
 
   const [updateUser] = useUpdateUserMutation();
@@ -49,20 +50,23 @@ const ShopInformation = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     watch,
     formState: { errors },
   } = useForm();
 
+  const establishMentDate = user && user?.establishMentData.split('T')[0];
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
 
   useEffect(() => {
     if (user) {
-      setValue("shop_owner_name", user?.shop_owner_name);
+      setValue("image", user?.image);
+      setValue("shop_name", user?.shop_name);
       setValue("email", user?.email);
       setValue("phone_number", user?.phone_number);
       setValue("drugLicenseNo", user?.drugLicenseNo);
-      setValue("establishMentData", user?.establishMentData);
+      setValue("establishMentData", establishMentDate);
       setValue("division", user?.division);
       setTimeout(() => {
         setValue("district", user?.district);
@@ -70,22 +74,37 @@ const ShopInformation = () => {
       setTimeout(() => {
         setValue("upazila", user?.upazila);
       }, 100);
+      setValue("shop_owner_name", user?.shop_owner_name);
       setValue("pharmacistName", user?.pharmacistName);
       setValue("pharmacistRegNo", user?.pharmacistRegNo);
-      setValue("storeImage", user?.UserImage);
+      setValue("nidNumber", user?.nidNumber);
+      setValue("nid_image", user?.nid_image);
       setValue("drugLicenseDocument", user?.drugLicenseDocument);
     }
-  }, [user, setValue]);
+  }, [user, setValue, establishMentDate]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setLoading("submit");
-    setTimeout(() => {
+    // console.log(data);
+    try {
+      const res = await updateUser({ id: user.id, ...data }).unwrap();
+      if (res.status) {
+        toast.success("Store updated successfully");
+        setLoading("");
+        dispatch(getUser(user?.email));
+      }
+    } catch (error) {
+      toast.error("Failed to update the store");
       setLoading("");
-    }, 5000);
-    console.log("submitting data", data);
+    }
   };
 
-  const handleFileUpload = async (e, setFileName, fieldName, setImageSrc) => {
+  const handleFileUpload = async (
+    e,
+    setFileName = () => {},
+    fieldName,
+    setImageSrc = () => {}
+  ) => {
     setLoading(fieldName);
     const file = e.target.files[0];
     if (!file) return;
@@ -114,16 +133,18 @@ const ShopInformation = () => {
         {/* Shop image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {storeImageSrc ? (
+            {imageSrc ? (
               <img
-                src={storeImageSrc}
-                alt="Uploaded"
+                src={imageSrc}
+                alt="shop logo"
                 className="mt-4 w-24 h-24 rounded-full"
               />
             ) : (
-              <div className="mt-4 w-24 h-24 border rounded-full text-xs text-center flex items-center">
-                no image found
-              </div>
+              <img
+                src={user?.image}
+                alt="shop logo"
+                className="mt-4 w-24 h-24 rounded-full border text-xs"
+              />
             )}
           </div>
           {/* image button  */}
@@ -131,14 +152,9 @@ const ShopInformation = () => {
             <input
               type="file"
               accept="image/*"
-              {...register("storeImage")}
+              {...register("image")}
               onChange={(e) =>
-                handleFileUpload(
-                  e,
-                  setStoreFileName,
-                  "storeImage",
-                  storeUserImageSrc
-                )
+                handleFileUpload(e, undefined, "image", setImageSrc)
               }
               className="hidden"
               id="store-file-upload"
@@ -146,12 +162,12 @@ const ShopInformation = () => {
             <label
               htmlFor="store-file-upload"
               className={`${
-                loading === "storeImage"
+                loading === "image"
                   ? "cursor-wait bg-[#c1c0c0] text-black"
                   : "cursor-pointer bg-[#006E9E] text-white"
               } p-[10px] text-xs`}
             >
-              {loading === "storeImage" ? "Uploading..." : "Upload Image"}
+              {loading === "image" ? "Uploading..." : "Upload Image"}
             </label>
           </div>
         </div>
@@ -168,7 +184,7 @@ const ShopInformation = () => {
                 <input
                   type="text"
                   placeholder="Shop name"
-                  {...register("shop_owner_name", { required: true })}
+                  {...register("shop_name", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -312,7 +328,7 @@ const ShopInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("owner-name", { required: true })}
+                  {...register("shop_owner_name", { required: true })}
                   placeholder="Name"
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
@@ -344,6 +360,58 @@ const ShopInformation = () => {
                 />
               </div>
 
+              {/* NID No. */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  NID No.
+                </label>
+                <input
+                  type="number"
+                  placeholder="National Id No."
+                  {...register("nidNumber", { required: true })}
+                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                />
+              </div>
+
+              {/* Upload NID Photo  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Upload NID
+                </label>
+                <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    {...register("nid_image")}
+                    className="hidden"
+                    id="nid-image-upload"
+                    onChange={(e) =>
+                      handleFileUpload(
+                        e,
+                        setNidFileName,
+                        "nid_image",
+                        undefined
+                      )
+                    }
+                  />
+                  <label
+                    htmlFor="nid-image-upload"
+                    className={`${
+                      loading === "nid_image"
+                        ? "cursor-wait bg-[#c1c0c0] text-black"
+                        : "cursor-pointer bg-[#006E9E] text-white"
+                    } p-2.5 text-xs`}
+                  >
+                    {loading === "nid_image" ? "Uploading..." : "Upload"}
+                  </label>
+                  <span className="text-xs text-gray-700 ml-2">
+                    {nidFileName
+                      ? nidFileName?.slice(0, 25)
+                      : "No file selected"}
+                  </span>
+                </div>
+              </div>
+
               {/* Upload Drug License  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -359,7 +427,7 @@ const ShopInformation = () => {
                         e,
                         setDragLicFileName,
                         "drugLicenseDocument",
-                        setDragLicImageSrc
+                        undefined
                       )
                     }
                     className="hidden"
@@ -378,9 +446,65 @@ const ShopInformation = () => {
                       : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {dragLicFileName?.slice(0, 25)}
+                    {dragLicFileName?.slice(0, 20)}
                   </span>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Privacy Settings */}
+          <div>
+            <p className="border-b pb-2">Privacy Settings</p>
+            <div className="w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+              {/* New password  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  New password
+                </label>
+                <input
+                  type="password"
+                  {...register("password", {
+                    required: true,
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+                      message:
+                        "Password must be at least 6 characters long and contain both letters and numbers",
+                    },
+                  })}
+                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                />
+                {errors.password ? (
+                  <p className="text-red-500 text-[10px]">
+                    {errors.password.message}
+                  </p>
+                ) : (
+                  <p className="text-[10px] text-[#989898]">
+                    Password (Minimum 6 characters with combination of letter &
+                    number)
+                  </p>
+                )}
+              </div>
+              {/* Confirm new password */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Confirm new password
+                </label>
+                <input
+                  type="password"
+                  {...register("confirm_password", {
+                    required: true,
+                    validate: (value) =>
+                      value === getValues("password") ||
+                      "Passwords do not match",
+                  })}
+                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                />
+                {errors.confirm_password && (
+                  <p className="text-red-500 text-[10px]">
+                    {errors.confirm_password.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>

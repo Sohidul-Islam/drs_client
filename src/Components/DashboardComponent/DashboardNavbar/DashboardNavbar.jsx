@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import logo from "../../../assets/logo.png";
-import userImage from "../../../assets/user.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../features/auth/authSlice";
@@ -26,10 +25,9 @@ const DashboardNavbar = () => {
         </p>
       </Link>
       <div className="flex gap-x-2 items-center">
-        {/* <img className="w-9 h-9 bg-slate-700 rounded-full" src={user?.image} alt="user-img" /> */}
         <img
           className="w-9 h-9 bg-slate-700 rounded-full"
-          src={userImage}
+          src={user?.image}
           alt="user-img"
         />
         <div className="relative">
