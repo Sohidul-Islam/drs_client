@@ -42,7 +42,7 @@ const ForgetPassword = () => {
       </Link>
 
       <div className="max-w-md mx-auto mt-10 p-4 border border-gray-300 rounded-md shadow-md">
-        <h2 className="text-xl font-bold mb-4">Change Password</h2>
+        <h2 className="text-xl font-bold mb-4">Forget Password</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* E-mail */}
           <div className="mb-4">
@@ -117,7 +117,7 @@ const ForgetPassword = () => {
           <div className="flex justify-between items-center">
             <button
               type="submit"
-              className={`px-4 py-2 text-white font-medium rounded-md ${
+              className={`px-4 py-2 text-white text-sm rounded-md ${
                 loading
                   ? "bg-gray-400 cursor-wait"
                   : "bg-[#006E9E] hover:bg-[#004f73]"
