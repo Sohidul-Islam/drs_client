@@ -73,8 +73,6 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
     setSelectedProduct(null); // Clear the selected product
   };
 
-  console.log(purchaseProducts,'purchaseProducts')
-
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
       {/* Table  */}

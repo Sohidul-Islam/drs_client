@@ -28,7 +28,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
           }) => ({
             id,
             product,
-            productName: product.productName,
+            productName: product?.productName,
             batchNo,
             adjustmentType,
             eventType,
@@ -43,10 +43,10 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {
@@ -67,6 +67,7 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       invalidatesTags: ["Adjustments"],
     }),
 
+    // update stock adjustment
     updateAdjustment: builder.mutation({
       query: (updatedData) => ({
         url: `stock/update?id=${updatedData?.id}`,
@@ -96,16 +97,16 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         const data = res.data.map(
           ({ productId, product, mrpPerUnit, stockQuantity }) => ({
             productId,
-            productName: product.productName,
-            mrp: mrpPerUnit.toFixed(2),
+            productName: product?.productName,
+            mrp: mrpPerUnit?.toFixed(2),
             stockQuantity,
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {
@@ -123,21 +124,20 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, sellerId, showExpired },
       }),
       transformResponse: (res) => {
-        console.log("Expiring Product", res.data);
         const data = res.data.map(
           ({ productId, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
             productId,
             batchNo,
-            expiryDate: expiryDate.split("T")[0],
+            expiryDate: expiryDate?.split("T")[0],
             stockQuantity,
-            mrp: mrpPerUnit.toFixed(2),
+            mrp: mrpPerUnit?.toFixed(2),
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {
@@ -155,7 +155,6 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, sellerId, showExpired },
       }),
       transformResponse: (res) => {
-        console.log("Expired Product", res.data);
         const data = res.data.map(
           ({ productId, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
             productId,
@@ -166,10 +165,10 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {

@@ -17,14 +17,14 @@ const adminCustomerApi = adminBaseApi.injectEndpoints({
             name,
             address,
             phoneNumber,
-            date: updatedAt.split("T")[0],
+            date: updatedAt?.split("T")[0],
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
         return {
           data: data,

@@ -20,8 +20,6 @@ const CreateSales = () => {
    if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  console.log('Sales product: ',saleProducts)
   
   return (
     <div className="relative">

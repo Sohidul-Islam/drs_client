@@ -98,9 +98,9 @@ const SubscriptionDetailsTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = subscriptions?.metadata || 1;
+  const { totalPages } = subscriptions?.metadata;
 
-  console.log("Subscriptions --> ", subscriptions)
+  // console.log("Subscriptions --> ", subscriptions)
 
   // Delete user subscription - open modal
   const handleDeleteClick = (id) => {

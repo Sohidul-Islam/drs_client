@@ -49,7 +49,7 @@ const ManageStoreTable = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("searchQuery", searchQuery, filterQuery)
+  // console.log("searchQuery", searchQuery, filterQuery)
 
   const { totalPages } = users?.metadata || 1;
 

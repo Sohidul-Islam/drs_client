@@ -10,7 +10,7 @@ const saleProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, status, sellerId },
       }),
       transformResponse: (res) => {
-        console.log('res from sales api:',res)
+        // console.log('sales api data:',res)
         const data = res.data.map(
           ({
             id,
@@ -23,10 +23,10 @@ const saleProductApi = adminBaseApi.injectEndpoints({
             quantity,
           }) => ({
             id,
-            name: product.productName,
-            genericName: product.genericName,
+            name: product?.productName,
+            genericName: product?.genericName,
             BMDCRegistrationNo,
-            date: date.split('T')[0],
+            date: date?.split('T')[0],
             doctorName,
             discount,
             quantity,
@@ -35,11 +35,12 @@ const saleProductApi = adminBaseApi.injectEndpoints({
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
+
         return {
           data,
           metadata,

@@ -51,10 +51,10 @@ const adminUserApi = adminBaseApi.injectEndpoints({
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
         return {
           data,

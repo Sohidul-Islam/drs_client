@@ -7,10 +7,10 @@ const paymentApi = adminBaseApi.injectEndpoints({
     getAllPayment: builder.query({
       query: ({ page, pageSize, searchKey, type, startDate, endDate }) => ({
         url: "payment/all",
-        params: { page, pageSize, searchKey, type, startDate,endDate },
+        params: { page, pageSize, searchKey, type, startDate, endDate },
       }),
       transformResponse: (res) => {
-        console.log("Payment data from api: ", res.data);
+        // console.log("Payment api data: ", res.data);
         const data = res?.data?.map(
           ({ id, payment, updatedAt, purchase_product, sales_order }) => ({
             id,
@@ -31,10 +31,10 @@ const paymentApi = adminBaseApi.injectEndpoints({
           })
         );
         const metadata = {
-          totalItems: res?.metadata?.totalItems,
-          totalPages: res?.metadata?.totalPages,
-          currentPage: res?.metadata?.currentPage,
-          pageSize: res?.metadata?.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {
