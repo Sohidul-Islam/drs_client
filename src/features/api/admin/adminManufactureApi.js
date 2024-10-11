@@ -10,7 +10,6 @@ const adminManufactureApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        console.log(res, 'api sss')
         const data = res?.data?.map(
           ({ id, name, Seller, contactPerson, phoneNumber, updatedAt }) => ({
             id,

@@ -48,7 +48,7 @@ const ManufactureTable = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("manufac data",data)
+  // console.log("manufac data",data)
 
   const { totalPages } = data?.metadata || 0;
 
