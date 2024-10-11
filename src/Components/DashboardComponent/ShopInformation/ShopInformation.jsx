@@ -381,7 +381,7 @@ const ShopInformation = () => {
                 <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.pdf"
                     {...register("nid_image")}
                     className="hidden"
                     id="nid-image-upload"
@@ -420,7 +420,7 @@ const ShopInformation = () => {
                 <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.pdf"
                     {...register("drugLicenseDocument")}
                     onChange={(e) =>
                       handleFileUpload(
