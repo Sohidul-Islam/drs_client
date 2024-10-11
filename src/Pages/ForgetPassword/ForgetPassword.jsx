@@ -1,20 +1,35 @@
 import React from "react";
 import logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { forgetPassword } from "../../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const ForgetPassword = () => {
-  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const loading = false;
 
-  const onSubmit = (data) => {
-    console.log({ email: user?.email, ...data });
+  const onSubmit = async (data) => {
+    try {
+      const res = await dispatch(forgetPassword({ ...data })).unwrap();
+      if (res?.status) {
+        navigate("/login")
+        toast.success(res?.message);
+      }
+      if (!res?.status) {
+        toast.error(res?.message);
+      }
+    } catch (err) {
+      toast.error(err.message || "Failed to reset password.");
+    }
   };
 
   return (
