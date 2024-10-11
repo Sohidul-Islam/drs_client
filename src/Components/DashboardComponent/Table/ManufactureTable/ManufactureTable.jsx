@@ -48,7 +48,9 @@ const ManufactureTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = data.metadata;
+  console.log("manufac data",data)
+
+  const { totalPages } = data?.metadata || 0;
 
   // Delete
   // open delete modal

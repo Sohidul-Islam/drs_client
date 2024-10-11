@@ -38,6 +38,26 @@ const dosagesForm = [
   { name: "Opening", value: "Opening" },
 ];
 
+const divisions = [
+  { name: "Dhaka", value: "Dhaka" },
+  { name: "Chittagong", value: "Chittagong" },
+  { name: "Khulna", value: "Khulna" },
+];
+
+const districts = [
+    { name: "Dhaka", value: "Dhaka" },
+    { name: "Gazipur", value: "Gazipur" },
+    { name: "Chittagong", value: "Chittagong" },
+    { name: "Comilla", value: "Comilla" },
+  ]
+
+const thanas = [
+    { name: "Dhaka", value: "Dhaka" },
+    { name: "Dhanmondi", value: "Dhanmondi" },
+    { name: "Uttara", value: "Uttara" },
+  ]
+
+
 const SearchAndExport = ({
   searchQuery,
   onSearchChange,
@@ -124,16 +144,16 @@ const SearchAndExport = ({
               {name === "manage-store" && (
                 <div className="flex items-center gap-2">
                   <CommonDropdown
-                    dropdownData={[]}
+                    dropdownData={divisions}
                     itemName="Division"
                     level="true"
                   />
                   <CommonDropdown
-                    dropdownData={[]}
+                    dropdownData={districts}
                     itemName="District"
                   />
                   <CommonDropdown
-                    dropdownData={[]}
+                    dropdownData={thanas}
                     itemName="Upazilla/Thana"
                   />
                 </div>

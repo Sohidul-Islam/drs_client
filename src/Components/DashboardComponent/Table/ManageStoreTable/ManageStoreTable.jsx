@@ -30,6 +30,7 @@ const ManageStoreTable = () => {
   const { isModalOpen, selectedItemId } = useSelector(
     (state) => state.deleteModal
   );
+  const filterQuery = useSelector((state) => state.advanceFilter.filterQuery);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,7 +40,7 @@ const ManageStoreTable = () => {
   const { data: users, isLoading } = useGetAllUsersQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery,
+    searchKey: searchQuery || filterQuery,
   });
 
   const [deleteUser] = useDeleteUserMutation();
@@ -48,7 +49,7 @@ const ManageStoreTable = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("searchQuery", searchQuery)
+  console.log("searchQuery", searchQuery, filterQuery)
 
   const { totalPages } = users?.metadata || 1;
 

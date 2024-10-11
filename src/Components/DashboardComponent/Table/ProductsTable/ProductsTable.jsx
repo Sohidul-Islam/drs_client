@@ -26,7 +26,6 @@ const ProductsTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
   const filterQuery = useSelector((state) => state.advanceFilter.filterQuery);
 
   const { data, isLoading } = useGetAllProductQuery({
