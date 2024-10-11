@@ -327,9 +327,9 @@ const Register = () => {
             </button>
 
             {/* Forgot password  */}
-            <span className="text-sm">
+            {/* <span className="text-sm">
               Forgot password? <Link className="underline">Click here</Link>
-            </span>
+            </span> */}
           </form>
           {/* end form  */}
 

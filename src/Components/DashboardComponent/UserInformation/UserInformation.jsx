@@ -9,7 +9,6 @@ import { getUser } from "../../../features/auth/authSlice";
 const UserInformation = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch()
-  const [userFileName, setUserFileName] = useState("No image found");
   const [userImageSrc, setUserImageSrc] = useState("");
   const [nidFileName, setNidFileName] = useState("No image found");
   const [nidImageSrc, setNidImageSrc] = useState("");
@@ -107,7 +106,7 @@ const UserInformation = () => {
               accept="image/*"
               {...register("image")}
               onChange={(e) =>
-                handleFileUpload(e, setUserFileName, "image", setUserImageSrc)
+                handleFileUpload(e, undefined, "image", setUserImageSrc)
               }
               className="hidden"
               id="user-image-upload"

@@ -32,6 +32,7 @@ import ManageStore from "../Pages/AdminDashboard/ManageStore/ManageStore";
 import CreateStore from "../Pages/AdminDashboard/ManageStore/CreateStore";
 import SubscriptionDetails from "../Pages/AdminDashboard/SubscriptionDetails/SubscriptionDetails";
 import CreateContent from "../Pages/AdminDashboard/ManageContent/CreateContent";
+import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
   {
     path: "/subscription-plan",
     element: <SubscriptionPlans />,
+  },
+  {
+    path: "/forget-password",
+    element: <ForgetPassword />,
   },
   {
     path: "/dashboard",
