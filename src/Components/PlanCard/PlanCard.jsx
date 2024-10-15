@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useAddUserSubscriptionMutation } from "../../features/api/admin/adminSubscriptionApi";
+import { toast } from "react-toastify";
 
 const PlanCard = ({ subscription, index, month }) => {
   const [loading, setLoading] = useState(false);
@@ -12,6 +13,10 @@ const PlanCard = ({ subscription, index, month }) => {
   const backgroundColor = isOdd ? "bg-[#F0F8FF]" : "";
 
   const handleSubscription = async (subscriptionId) => {
+    if (!user) {
+      toast.error('You are not logged in')
+      setLoading(false);
+    }
     setLoading(true);
     const userSubscriptionData = {
       userId: user?.id,

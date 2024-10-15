@@ -65,7 +65,7 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
             storeName: user?.shop_name,
             ownerName: user?.shop_owner_name,
             mobileNumber: user?.phone_number,
-            prevPlan,
+            prevPlan: prevPlan?.subscription_plan?.package,
             currentPackage: subscription_plan?.package,
             price,
             updateOn: subscribed_date?.split("T")[0],

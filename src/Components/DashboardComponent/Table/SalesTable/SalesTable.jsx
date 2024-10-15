@@ -24,7 +24,7 @@ const SalesTable = () => {
   const { data: payments, isLoading } = useGetAllPaymentQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery || filterQuery,
+    searchKey: searchQuery,
     type: "sales",
     startDate: filterQuery,
     endDate: filterQuery,
@@ -98,7 +98,7 @@ const SalesTable = () => {
                 "Total",
                 "Paid",
                 "Due",
-                "Updater On",
+                "Update On",
                 "Action",
               ].map((heading) => (
                 <th
@@ -117,28 +117,28 @@ const SalesTable = () => {
               {payments?.data?.map((row, idx) => (
                 <tr key={idx}>
                   <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                    {row.id}
+                    {row?.id}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.customerName}
+                    {row?.customerName}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.phoneNumber}
+                    {row?.phoneNumber}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.orderDate}
+                    {row?.orderDate}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.total} TK
+                    {row?.total} TK
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.paidAmount} TK
+                    {row?.paidAmount} TK
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.due} TK
+                    {row?.due} TK
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row.orderDate}
+                    {row?.updateOn}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                     <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />

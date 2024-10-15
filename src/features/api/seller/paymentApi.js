@@ -27,7 +27,8 @@ const paymentApi = adminBaseApi.injectEndpoints({
             // sales product
             customerName: sales_order?.customer?.name,
             phoneNumber: sales_order?.customer?.phoneNumber,
-            orderDate: sales_order?.createdAt?.split("T")[0],
+            updateOn: sales_order?.createdAt?.split("T")[0],
+            orderDate: sales_order?.date?.split("T")[0],
           })
         );
         const metadata = {
