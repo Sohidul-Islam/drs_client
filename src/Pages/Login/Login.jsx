@@ -130,7 +130,7 @@ const Login = () => {
                 {loading ? <Spinner/> : "LOG IN"}
               </button>
               <span className="text-sm">
-                Forgot password? <Link className="underline">Click here</Link>
+                Forgot password? <Link to="/forget-password" className="underline">Click here</Link>
               </span>
             </div>
           </form>

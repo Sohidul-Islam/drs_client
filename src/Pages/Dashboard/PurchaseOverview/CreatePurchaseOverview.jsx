@@ -4,8 +4,19 @@ import CreatePurchaseProductTable from "../../../Components/DashboardComponent/T
 import CreatePurchasePaymentTable from "../../../Components/DashboardComponent/Table/PurchaseInvoiceTable/CreatePurchasePaymentTable";
 import CreatePurchasePaymentForm from "../../../Components/DashboardComponent/Table/PurchaseInvoiceTable/CreatePurchasePaymentForm";
 import CreatePurchaseProductForm from "../../../Components/DashboardComponent/Table/PurchaseInvoiceTable/CreatePurchaseProductForm";
+import { useGetAllPurchaseProductQuery } from "../../../features/api/seller/purchaseProductApi";
+import { useSelector } from "react-redux";
 
 const CreatePurchaseOverview = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { data: purchaseProducts, refetch } = useGetAllPurchaseProductQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: "",
+    status: "inactive",
+    sellerId: user?.id || 1,
+  });
+  
   return (
     <div className="relative">
       <div className="flex items-center gap-x-[10px]">
@@ -16,12 +27,12 @@ const CreatePurchaseOverview = () => {
        {/* product form and table  */}
       <div className="mt-3">
         <CreatePurchaseProductForm />
-        <CreatePurchaseProductTable />
+        <CreatePurchaseProductTable purchaseProducts={purchaseProducts} />
       </div>
 
       {/* payment form and table  */}
       <div>
-        <CreatePurchasePaymentForm />
+        <CreatePurchasePaymentForm refetchProducts={refetch}/>
         <CreatePurchasePaymentTable />
       </div>
     </div>

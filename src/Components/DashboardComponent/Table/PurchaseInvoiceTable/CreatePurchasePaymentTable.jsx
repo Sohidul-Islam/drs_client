@@ -1,10 +1,9 @@
 import React from "react";
-import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
-import EditButton from "../../Common/EditButton/EditButton";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import { useDispatch, useSelector } from "react-redux";
 import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const CreatePurchasePaymentTable = () => {
@@ -24,10 +23,11 @@ const CreatePurchasePaymentTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
+  
   // Delete
   // open delete modal
   const handleDeleteClick = (id) => {
+    console.log("Payment id: ", id)
     dispatch(openModal({ id }));
   };
 
@@ -39,7 +39,7 @@ const CreatePurchasePaymentTable = () => {
         toast.success("Item deleted successfully");
       }
     } catch (error) {
-      console.error("Failed to delete the supplier:", error);
+      console.error("Failed to delete the item:", error);
     } finally {
       dispatch(closeModal());
     }
@@ -49,7 +49,6 @@ const CreatePurchasePaymentTable = () => {
   const handleCancelDelete = () => {
     dispatch(closeModal());
   };
-
 
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
@@ -73,9 +72,10 @@ const CreatePurchasePaymentTable = () => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {payments?.data?.length > 0 ? (
-            payments?.data?.map((row, index) => (
+
+        {payments?.data?.length > 0 ? (
+          <tbody className="bg-white divide-y divide-gray-200">
+            {payments?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row?.paidAmount} TK
@@ -84,22 +84,28 @@ const CreatePurchasePaymentTable = () => {
                   {row?.paymentMethod}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                {row?.due} TK
+                  {row?.due} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.date}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                  <EditButton />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                <td className="px-4 py-4 whitespace-nowrap text-xs text-center">
+                  <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />
                 </td>
-                
               </tr>
-            ))
-          ) : (
-            <p className="text-sm py-1">No data available</p>
-          )}
-        </tbody>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan="12">
+                <div className="flex justify-center items-center py-5">
+                  <p className="text-gray-500 text-lg">No data found</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        )}
       </table>
 
       {/* Delete Modal  */}

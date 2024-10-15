@@ -1,51 +1,77 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
+import { useUpdateUserMutation } from "../../../features/api/admin/adminUserApi";
+import { toast } from "react-toastify";
+import { getUser } from "../../../features/auth/authSlice";
 
 const UserInformation = () => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch()
+  const [userImageSrc, setUserImageSrc] = useState("");
+  const [nidFileName, setNidFileName] = useState("No image found");
+  const [nidImageSrc, setNidImageSrc] = useState("");
+  const [loading, setLoading] = useState("");
+
+  const [updateUser] = useUpdateUserMutation();
+  const [addFile] = useAddFileMutation();
+  // console.log("User data", user);
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      phone_number: "01828632233",
-      image: "https://i.ibb.co/PC3rxMG/sabaria.png",
-      nidImage: "https://i.ibb.co/KrT7qK8/nid.png",
-      signatureImage: "https://i.ibb.co/zFt3338/signature.png",
-    },
-  });
-  const [imageSrc, setImageSrc] = useState(
-    "https://i.ibb.co/PC3rxMG/sabaria.png"
-  );
-  const [nidSrc, setNidSrc] = useState("https://i.ibb.co/KrT7qK8/nid.png");
-  const [signatureSrc, setSignatureSrc] = useState(
-    "https://i.ibb.co/zFt3338/signature.png"
-  );
-  const [nidFileName, setNidFileName] = useState("Sabariya NID.jpg");
-  const [signatureFileName, setSignatureFileName] =
-    useState("Sabariya Sign.PNG");
+  } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  useEffect(() => {
+    if (user) {
+      setValue("shop_owner_name", user?.shop_owner_name);
+      setValue("email", user?.email);
+      setValue("phone_number", user?.phone_number);
+      setValue("nidNumber", user?.nidNumber);
+      setValue("image", user?.image);
+      setValue("nid_image", user?.nid_image);
+    }
+  }, [user, setValue]);
+
+  const onSubmit = async (data) => {
+    setLoading("submit");
+    // console.log(data);
+    console.log({ id: user.id, ...data });
+    try {
+      const res = await updateUser({ id: user.id, ...data }).unwrap();
+      if (res.status) {
+        toast.success("Store updated successfully");
+        setLoading("");
+        dispatch(getUser(user?.email));
+      }
+    } catch (error) {
+      toast.error("Failed to update the store");
+      setLoading("");
+    }
   };
 
-  const handleImageUpload = (
-    e,
-    setImageSrcCallback,
-    fieldName,
-    setFileNameCallback
-  ) => {
+  // upload image or file
+  const handleFileUpload = async (e, setFileName, fieldName, setImageSrc) => {
+    setLoading(fieldName);
     const file = e.target.files[0];
-    if (file) {
-      setValue(fieldName, file);
-      setFileNameCallback(file.name);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrcCallback(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    setFileName(file.name);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await addFile(formData).unwrap();
+      setValue(fieldName, res?.file?.url);
+      setImageSrc(res?.file?.url);
+      toast.success("File uploaded successfully");
+      setLoading("");
+    } catch (error) {
+      toast.error("something went wrong");
+      setLoading("");
     }
   };
 
@@ -55,12 +81,22 @@ const UserInformation = () => {
         {/* user image  */}
         <div className="col-span-1 mx-auto">
           <div>
-            {imageSrc && (
+            {userImageSrc ? (
               <img
-                src={imageSrc}
+                src={userImageSrc}
+                alt="user"
+                className="mt-4 w-24 h-24 rounded-full"
+              />
+            ) : user?.image ? (
+              <img
+                src={user?.image}
                 alt="Uploaded"
                 className="mt-4 w-24 h-24 rounded-full"
               />
+            ) : (
+              <div className="mt-4 w-24 h-24 border rounded-full text-xs text-center flex items-center">
+                no image found
+              </div>
             )}
           </div>
           {/* image button  */}
@@ -70,16 +106,20 @@ const UserInformation = () => {
               accept="image/*"
               {...register("image")}
               onChange={(e) =>
-                handleImageUpload(e, setImageSrc, "image", setNidFileName)
+                handleFileUpload(e, undefined, "image", setUserImageSrc)
               }
               className="hidden"
-              id="file-upload"
+              id="user-image-upload"
             />
             <label
-              htmlFor="file-upload"
-              className="cursor-pointer bg-[#006E9E] text-white p-[10px] text-xs"
+              htmlFor="user-image-upload"
+              className={`${
+                loading === "image"
+                  ? "cursor-wait bg-[#c1c0c0] text-black"
+                  : "cursor-pointer bg-[#006E9E] text-white"
+              } p-[10px] text-xs`}
             >
-              Upload Image
+              {loading === "image" ? "Uploading..." : "Upload Image"}
             </label>
           </div>
         </div>
@@ -95,8 +135,8 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("full-name", { required: true })}
-                  defaultValue="Sabariya Muzumder"
+                  placeholder="Full name"
+                  {...register("shop_owner_name", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -107,8 +147,8 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="email"
+                  placeholder="E-mail"
                   {...register("email", { required: true })}
-                  defaultValue="sabariyamuzumder9921@gmail.com"
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
@@ -119,61 +159,13 @@ const UserInformation = () => {
                   Phone number
                 </label>
                 <input
-                  type="number"
+                  type="tel"
+                  placeholder="Phone number"
                   {...register("phone_number", { required: true })}
                   className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
-              {/* Gender and Date  */}
-              <div className="grid grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Gender
-                  </label>
-                  <select
-                    {...register("gender", { required: true })}
-                    className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                  >
-                    <option value="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    {...register("dob", { required: true })}
-                    className="mt-1 block w-full border outline-gray-300 text-gray-700 py-1 px-3 rounded-md"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Photos & Signature */}
-          <div>
-            <p className="border-b pb-2">Photos & Signature</p>
-            <div className="w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-              {/* Nationality */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Nationality
-                </label>
-                <select
-                  {...register("nationality", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="bangladeshi">Bangladeshi</option>
-                  <option value="indian">Indian</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
               {/* NID No. */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -181,91 +173,69 @@ const UserInformation = () => {
                 </label>
                 <input
                   type="number"
-                  {...register("nid-no", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                  placeholder="National Id No."
+                  {...register("nidNumber", { required: true })}
+                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
+
               {/* Upload NID Photo  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Upload NID
                 </label>
-                <div className="mt-1 flex items-center border p-2 rounded-md">
+                <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
                   <input
                     type="file"
                     accept="image/*"
-                    {...register("nidImage")}
+                    {...register("nid_image")}
+                    className="hidden"
+                    id="nid-image-upload"
                     onChange={(e) =>
-                      handleImageUpload(
+                      handleFileUpload(
                         e,
-                        setNidSrc,
-                        "nidImage",
-                        setNidFileName
+                        setNidFileName,
+                        "nid_image",
+                        setNidImageSrc
                       )
                     }
-                    className="hidden"
-                    id="nid-upload"
                   />
                   <label
-                    htmlFor="nid-upload"
-                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
+                    htmlFor="nid-image-upload"
+                    className={`${
+                      loading === "nid_image"
+                        ? "cursor-wait bg-[#c1c0c0] text-black"
+                        : "cursor-pointer bg-[#006E9E] text-white"
+                    } p-2.5 text-xs`}
                   >
-                    Upload
+                    {loading === "nid_image" ? "Uploading..." : "Upload"}
                   </label>
                   <span className="text-xs text-gray-700 ml-2">
-                    {nidFileName}
+                    {nidFileName
+                      ? nidFileName?.slice(0, 25)
+                      : "No file selected"}
                   </span>
                 </div>
-                {nidSrc && (
-                  <div>
+
+                <div>
+                  {nidImageSrc ? (
                     <img
-                      src={nidSrc}
-                      alt="NID"
+                      src={nidImageSrc}
+                      alt="nid_image"
                       className="mt-2 w-28 h-20 border"
                     />
-                  </div>
-                )}
-              </div>
-              {/* Upload Signature Photo  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Upload Signature
-                </label>
-                <div className="mt-1 flex items-center border p-2 rounded-md">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    {...register("signatureImage")}
-                    onChange={(e) =>
-                      handleImageUpload(
-                        e,
-                        setSignatureSrc,
-                        "signatureImage",
-                        setSignatureFileName
-                      )
-                    }
-                    className="hidden"
-                    id="signature-upload"
-                  />
-                  <label
-                    htmlFor="signature-upload"
-                    className="cursor-pointer bg-[#006E9E] text-white p-[6px] text-xs"
-                  >
-                    Upload
-                  </label>
-                  <span className="text-xs text-gray-700 ml-2">
-                    {signatureFileName}
-                  </span>
+                  ) : user?.nid_image ? (
+                    <img
+                      src={user?.nid_image}
+                      alt="nid_image"
+                      className="mt-2 w-28 h-20 border"
+                    />
+                  ) : (
+                    <div className="mt-2 w-28 h-20 border text-xs flex justify-center items-center">
+                      no image found
+                    </div>
+                  )}
                 </div>
-                {signatureSrc && (
-                  <div>
-                    <img
-                      src={signatureSrc}
-                      alt="Signature"
-                      className="mt-2 w-28 h-20 border"
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -329,9 +299,14 @@ const UserInformation = () => {
           {/* submit button  */}
           <button
             type="submit"
-            className="cursor-pointer bg-[#006E9E] text-white px-7 py-[10px] text-sm"
+            disabled={loading}
+            className={`${
+              loading
+                ? "cursor-wait bg-[#c1c0c0] text-black"
+                : "cursor-pointer bg-[#006E9E] text-white"
+            } px-7 py-[10px] text-sm`}
           >
-            Save
+            {loading ? "Wait" : "Save"}
           </button>
         </div>
       </form>

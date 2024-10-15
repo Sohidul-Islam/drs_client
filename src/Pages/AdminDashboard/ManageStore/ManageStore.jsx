@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlineReconciliation } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import StockAdjustmentTable from "../../../Components/DashboardComponent/Table/StockAdjustmentTable/StockAdjustmentTable";
+import ManageStoreTable from "../../../Components/DashboardComponent/Table/ManageStoreTable/ManageStoreTable";
 
 const ManageStore = () => {
   return (
@@ -21,7 +21,7 @@ const ManageStore = () => {
             <span className="text-3xl mr-2">+</span>Create new Store
           </Link>
         </div>
-        <StockAdjustmentTable />
+        <ManageStoreTable />
       </div>
     </div>
   );

@@ -1,7 +1,22 @@
 import React from "react";
-import { useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import {
+  useDeletePaymentMutation,
+  useGetAllPaymentQuery,
+} from "../../../../features/api/seller/paymentApi";
+import DeleteButton from "../../Common/DeleteButton/DeleteButton";
+import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  closeModal,
+  openModal,
+} from "../../../../features/deleteModal/deleteModalSlice";
+import { toast } from "react-toastify";
 
 const CreateSalesPaymentTable = () => {
+  const dispatch = useDispatch();
+  const { isModalOpen, selectedItemId } = useSelector(
+    (state) => state.deleteModal
+  );
   const { data: payments, isLoading } = useGetAllPaymentQuery({
     page: 1,
     pageSize: 20,
@@ -9,9 +24,37 @@ const CreateSalesPaymentTable = () => {
     type: "sales",
   });
 
+  const [deletePayment] = useDeletePaymentMutation();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  // Delete
+  // open delete modal
+  const handleDeleteClick = (id) => {
+    console.log("Payment id: ", id);
+    dispatch(openModal({ id }));
+  };
+
+  // delete confirm
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await deletePayment(selectedItemId).unwrap();
+      if (res.status) {
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete the item:", error);
+    } finally {
+      dispatch(closeModal());
+    }
+  };
+
+  // close delete modal
+  const handleCancelDelete = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div className="overflow-x-auto bg-white px-5 py-3">
@@ -23,6 +66,7 @@ const CreateSalesPaymentTable = () => {
               "Payment Method",
               "Due Amount",
               "Updater at",
+              "Action",
             ].map((heading) => (
               <th
                 key={heading}
@@ -34,9 +78,9 @@ const CreateSalesPaymentTable = () => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {payments?.data?.length > 0 ? (
-            payments?.data?.map((row, index) => (
+        {payments?.data?.length > 0 ? (
+          <tbody className="bg-white divide-y divide-gray-200">
+            {payments?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
                   {row.paidAmount} TK
@@ -50,13 +94,34 @@ const CreateSalesPaymentTable = () => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row.date}
                 </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  <DeleteButton
+                    id={row?.paymentId}
+                    onDelete={handleDeleteClick}
+                  />
+                </td>
               </tr>
-            ))
-          ) : (
-            <p className="text-sm py-1">No data available</p>
-          )}
-        </tbody>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan="12">
+                <div className="flex justify-center items-center py-5">
+                  <p className="text-gray-500 text-lg">No data found</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        )}
       </table>
+
+      {/* Delete Modal  */}
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   exportPDF,
 } from "../../../../features/export/exportSlice";
 import CommonDropdown from "../CommonDropdown/CommonDropdown";
+import DateFilter from "../DateFilter/DateFilter";
 
 const adjustments = [
   { name: "Income", value: "income" },
@@ -37,6 +38,26 @@ const dosagesForm = [
   { name: "Opening", value: "Opening" },
 ];
 
+const divisions = [
+  { name: "Dhaka", value: "Dhaka" },
+  { name: "Chittagong", value: "Chittagong" },
+  { name: "Khulna", value: "Khulna" },
+];
+
+const districts = [
+    { name: "Dhaka", value: "Dhaka" },
+    { name: "Gazipur", value: "Gazipur" },
+    { name: "Chittagong", value: "Chittagong" },
+    { name: "Comilla", value: "Comilla" },
+  ]
+
+const thanas = [
+    { name: "Dhaka", value: "Dhaka" },
+    { name: "Dhanmondi", value: "Dhanmondi" },
+    { name: "Uttara", value: "Uttara" },
+  ]
+
+
 const SearchAndExport = ({
   searchQuery,
   onSearchChange,
@@ -52,9 +73,9 @@ const SearchAndExport = ({
   // Export PDF and Excel File
   const handleExport = (type) => {
     if (type === "pdf") {
-      dispatch(exportPDF({ columns, data: data.data, title }));
+      dispatch(exportPDF({ columns, data: data?.data || data, title }));
     } else if (type === "excel") {
-      dispatch(exportExcel({ columns, data: data.data, title }));
+      dispatch(exportExcel({ columns, data: data?.data || data, title }));
     }
     setIsDropdownOpen(false);
   };
@@ -77,22 +98,17 @@ const SearchAndExport = ({
         <div>
           {advanceFilter && (
             <div className="flex items-center gap-2">
-              {/* For stock adjustment  */}
-              {name === "stock-adjustment" && (
+              {/* For purchase Product  */}
+              {name === "purchase" && (
                 <div className="flex items-center gap-2">
-                  <CommonDropdown
-                    dropdownData={adjustments}
-                    itemName="Transaction"
-                    level="true"
-                  />
-                  <CommonDropdown
-                    dropdownData={stockInOut}
-                    itemName="Stock In/Out"
-                  />
-                  <CommonDropdown
-                    dropdownData={events}
-                    itemName="Event"
-                  />
+                  <DateFilter name="Invoice Date" />
+                </div>
+              )}
+
+              {/* For Sales Product  */}
+              {name === "sales" && (
+                <div className="flex items-center gap-2">
+                  <DateFilter name="Order Date" />
                 </div>
               )}
 
@@ -106,6 +122,43 @@ const SearchAndExport = ({
                   />
                 </div>
               )}
+
+              {/* For stock adjustment  */}
+              {name === "stock-adjustment" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={adjustments}
+                    itemName="Transaction"
+                    level="true"
+                  />
+                  <CommonDropdown
+                    dropdownData={stockInOut}
+                    itemName="Stock In/Out"
+                  />
+                  <CommonDropdown dropdownData={events} itemName="Event" />
+                </div>
+              )}
+
+              {/* For Manage Store  */}
+              {/* manage-store */}
+              {name === "manage-store" && (
+                <div className="flex items-center gap-2">
+                  <CommonDropdown
+                    dropdownData={divisions}
+                    itemName="Division"
+                    level="true"
+                  />
+                  <CommonDropdown
+                    dropdownData={districts}
+                    itemName="District"
+                  />
+                  <CommonDropdown
+                    dropdownData={thanas}
+                    itemName="Upazilla/Thana"
+                  />
+                </div>
+              )}
+
             </div>
           )}
         </div>

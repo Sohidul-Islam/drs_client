@@ -10,12 +10,18 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, status, sellerId },
       }),
       transformResponse: (res) => {
+        // console.log("Purchase Product Api --> ", res.data);
         const data = res.data.map(
           ({
             id,
             product,
+            supplier,
             batchNo,
+            unit,
+            manufacturer,
             manufacturedDate,
+            invoiceDate,
+            invoiceNumber,
             expiryDate,
             quantity,
             tradePrice,
@@ -24,10 +30,16 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
             MRP,
           }) => ({
             id,
-            genericName: product.genericName,
+            product,
+            supplier,
+            genericName: product?.genericName,
             batchNo,
+            unit,
+            manufacturer,
             manufacturedDate: manufacturedDate?.split("T")[0],
+            invoiceDate: invoiceDate?.split("T")[0],
             expiryDate: expiryDate?.split("T")[0],
+            invoiceNumber,
             quantity,
             tradePrice,
             VAT,
@@ -35,11 +47,12 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
             MRP,
           })
         );
+
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {
@@ -53,7 +66,17 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
     // add purchase-product
     addPurchaseProduct: builder.mutation({
       query: (purchaseProduct) => ({
-        url: "/purchase-product/create",
+        url: "purchase-product/create",
+        method: "POST",
+        body: purchaseProduct,
+      }),
+      invalidatesTags: ["Purchase-product"],
+    }),
+
+    // update purchase-product
+    updatePurchaseProduct: builder.mutation({
+      query: (purchaseProduct) => ({
+        url: "purchase-product/update",
         method: "POST",
         body: purchaseProduct,
       }),
@@ -63,7 +86,7 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
     // delete purchase-product
     deletePurchaseProduct: builder.mutation({
       query: (id) => ({
-        url: `/purchase-product/delete?id=${id}`,
+        url: `purchase-product/delete?id=${id}`,
         method: "POST",
       }),
       invalidatesTags: ["Purchase-product"],
@@ -74,5 +97,6 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
 export const {
   useGetAllPurchaseProductQuery,
   useAddPurchaseProductMutation,
+  useUpdatePurchaseProductMutation,
   useDeletePurchaseProductMutation,
 } = purchaseProductApi;

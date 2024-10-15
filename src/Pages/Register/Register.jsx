@@ -323,13 +323,13 @@ const Register = () => {
               type="submit"
               disabled={loading}
             >
-              {loading ? <Spinner/> : "REGISTER"}
+              {loading ? <Spinner /> : "REGISTER"}
             </button>
 
             {/* Forgot password  */}
-            <span className="text-sm">
+            {/* <span className="text-sm">
               Forgot password? <Link className="underline">Click here</Link>
-            </span>
+            </span> */}
           </form>
           {/* end form  */}
 

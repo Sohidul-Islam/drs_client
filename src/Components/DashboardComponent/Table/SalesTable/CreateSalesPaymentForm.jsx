@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useGetAllSaleProductQuery } from "../../../../features/api/seller/saleProductApi";
 import { useAddPaymentMutation } from "../../../../features/api/seller/paymentApi";
 
-const CreateSalesPaymentForm = () => {
+const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
   const { user } = useSelector((state) => state.auth);
   const { register, handleSubmit, reset } = useForm();
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,9 @@ const CreateSalesPaymentForm = () => {
         reset();
         toast.success(res?.message);
         setLoading(false);
+        if (refetchSaleProducts) {
+          refetchSaleProducts();
+        }
       } else {
         toast.error(res?.message);
         setLoading(false);
@@ -83,7 +86,7 @@ const CreateSalesPaymentForm = () => {
               Paid Amount <span className="text-[#FF0027]">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               {...register("paidAmount", { required: true })}
               className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
             />

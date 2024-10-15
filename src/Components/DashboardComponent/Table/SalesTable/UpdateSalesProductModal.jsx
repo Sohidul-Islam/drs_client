@@ -1,65 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { FaFileMedical } from "react-icons/fa6";
-import { AiFillProduct } from "react-icons/ai";
-import { useGetAllManufactureQuery } from "../../../../features/api/admin/adminManufactureApi";
-import { useGetAllProductCategoryQuery } from "../../../../features/api/admin/adminProductCategoryApi";
-import { useUpdateProductMutation } from "../../../../features/api/admin/adminProductApi";
-import SearchableDropdown from "../../../DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
+import SearchableDropdown from "../../Common/SearchableDropdown/SearchableDropdown";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { AiFillProduct } from "react-icons/ai";
+import { FaFileMedical } from "react-icons/fa6";
+import { useGetAllCustomerQuery } from "../../../../features/api/admin/adminCustomerApi";
+import { useGetAllProductQuery } from "../../../../features/api/admin/adminProductApi";
+import { useUpdateSaleProductMutation } from "../../../../features/api/seller/saleProductApi";
 
-const UpdateProductModal = ({ isOpen, onClose, productData }) => {
+const UpdateSalesProductModal = ({ isOpen, onClose, productData }) => {
+  const { user } = useSelector((state) => state.auth);
   const { register, handleSubmit, control, setValue } = useForm();
   const [loading, setLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const { user } = useSelector((state) => state.auth);
 
-  const { data: manufactures } = useGetAllManufactureQuery({
+  const { data: customers } = useGetAllCustomerQuery({
     page: 1,
     pageSize: 15,
     searchKey: searchInputValue,
   });
 
-  const { data: categories } = useGetAllProductCategoryQuery({
+  const { data: products } = useGetAllProductQuery({
     page: 1,
     pageSize: 15,
     searchKey: searchInputValue,
   });
 
-  const [updateProduct] = useUpdateProductMutation();
+  console.log("Product data:35 ", productData);
+
+  const [updateSaleProduct] = useUpdateSaleProductMutation();
 
   useEffect(() => {
     if (productData) {
-      setValue("productName", productData.productName);
-      setValue("strength", productData.strength);
-      setValue("genericName", productData.genericName);
-      setValue("categoryId", {
-        value: productData.category.id,
-        label: productData.category.name,
+      // Set primitive fields
+      Object.keys(productData).forEach((key) => {
+        if (typeof productData[key] !== "object") {
+          setValue(key, productData[key]);
+        }
       });
-      setValue("manufacturerId", {
-        value: productData.menufacturer?.id,
-        label: productData.menufacturer?.name,
-      });
-      setValue("dosageForm", productData.dosageForm);
-      setValue("packBoxSize", productData.packBoxSize);
+
+      // Handle customer, product and manufacturer separately
+      if (productData.customer) {
+        setValue("customerId", {
+          value: productData.customer.id,
+          label: productData.customer.name,
+        });
+      }
+      
+      if (productData.product) {
+        setValue("productId", {
+          value: productData.product.id,
+          label: productData.product.productName,
+        });
+      }
     }
   }, [productData, setValue]);
 
   const onSubmit = async (data) => {
     setLoading(true);
-    data.id = productData.id;
-    data.manufacturerId = data.manufacturerId.value;
-    data.categoryId = data.categoryId.value;
-    data.sellerId = user.id;
-    data.status = "active";
-    // console.log("Updated product data: ",data)
+    data.customerId = data.customerId.value || productData.customerId;
+    data.productId = data.productId.value || productData.productId;
+    data.sellerId = user?.id || productData.sellerId;
+
     try {
-      const { data: res } = await updateProduct(data);
+      const { data: res } = await updateSaleProduct(data);
       if (res?.status) {
         toast.success(res?.message);
-        onClose(); // Close modal on success
+        onClose();
       } else {
         toast.error(res?.message);
       }
@@ -77,103 +85,102 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
       <div className="relative p-8 bg-white w-full">
         <div className="flex items-center gap-x-[10px] mb-5">
           <AiFillProduct className="text-lg" />
-          <p>Update Product</p>
+          <p>Update Sale Product</p>
         </div>
-
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-4 gap-x-4 gap-y-5">
-            {/* Product Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Product Name <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="text"
-                {...register("productName", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-
-            {/* Strength */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Strength <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="text"
-                {...register("strength", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-
-            {/* Generic Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Generic Name <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="text"
-                {...register("genericName", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-
-            {/* Category */}
+          <div className="grid grid-cols-4 gap-x-4 items-center gap-y-5 bg-white px-5 py-3">
+            {/* Customer */}
             <SearchableDropdown
-              labelText="Category"
-              name="categoryId"
+              labelText="Customer"
+              name="customerId"
               control={control}
-              data={categories}
-              placeholder="search a category"
-              required="true"
+              data={customers}
+              placeholder="customer"
+              required="false"
               propertyValue="id"
-              propertyName="category_name"
+              propertyName="name"
               setSearchInputValue={setSearchInputValue}
             />
-
-            {/* Manufacturer */}
-            <SearchableDropdown
-              labelText="Manufacturer"
-              name="manufacturerId"
-              control={control}
-              data={manufactures}
-              placeholder="search a manufacturer"
-              required="true"
-              propertyValue="id"
-              propertyName="manufacture_name"
-              setSearchInputValue={setSearchInputValue}
-            />
-
-            {/* Dosage Form */}
+            {/* Doctor Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Dosage Form <span className="text-[#FF0027]">*</span>
+                Doctor Name
               </label>
               <input
                 type="text"
-                {...register("dosageForm", { required: true })}
+                {...register("doctorName", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
-
-            {/* Pack/Box Size */}
+            {/*BMDC Registration No. */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Pack/Box Size
+                BMDC Registration No.
               </label>
               <input
-                type="number"
-                {...register("packBoxSize", { required: true })}
+                type="text"
+                {...register("BMDCRegistrationNo", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
+            </div>
+            {/* Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Date <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="date"
+                {...register("date", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
           </div>
 
-          {/* Buttons */}
-          <div className="mt-5 flex justify-end gap-x-5">
+          {/* Product Information */}
+          <div className="grid grid-cols-4 gap-x-4 items-center gap-y-5 bg-white px-5 py-3 mt-4">
+            {/*Product */}
+            <SearchableDropdown
+              labelText="Product"
+              name="productId"
+              control={control}
+              data={products}
+              placeholder="search a product..."
+              required="true"
+              propertyValue="id"
+              propertyName="productName"
+              setSearchInputValue={setSearchInputValue}
+            />
+            {/* Quantity */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Quantity <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="number"
+                {...register("quantity", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
+            </div>
+
+            {/* Discount (%) */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Discount (%)
+              </label>
+              <input
+                type="number"
+                {...register("discount", { required: true })}
+                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              />
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-end gap-4 mt-6">
             <button
+              type="button"
               onClick={onClose}
-              className="text-gray-500 border border-gray-500 rounded-md px-3 py-1"
+              className="px-4 py-2 bg-gray-400 text-white rounded-md"
             >
               Cancel
             </button>
@@ -189,7 +196,7 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
               <span className="mr-2">
                 <FaFileMedical />
               </span>
-              Update{" "}
+              Update Product
               {loading && (
                 <span className="ml-2 w-4 h-4 border-2 border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
               )}
@@ -201,4 +208,4 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
   );
 };
 
-export default UpdateProductModal;
+export default UpdateSalesProductModal;

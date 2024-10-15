@@ -10,32 +10,37 @@ const saleProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, status, sellerId },
       }),
       transformResponse: (res) => {
-        // console.log('res data from sale api:',res)
+        // console.log('sales api data:',res)
         const data = res.data.map(
           ({
             id,
             product,
+            customer,
             BMDCRegistrationNo,
+            date,
             doctorName,
             discount,
             quantity,
           }) => ({
             id,
-            name: product.productName,
-            genericName: product.genericName,
-            regNo: BMDCRegistrationNo,
+            name: product?.productName,
+            genericName: product?.genericName,
+            BMDCRegistrationNo,
+            date: date?.split('T')[0],
             doctorName,
             discount,
             quantity,
-            product
+            product,
+            customer
           })
         );
         const metadata = {
-          totalItems: res.metadata.totalItems,
-          totalPages: res.metadata.totalPages,
-          currentPage: res.metadata.currentPage,
-          pageSize: res.metadata.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
+
         return {
           data,
           metadata,
@@ -48,6 +53,16 @@ const saleProductApi = adminBaseApi.injectEndpoints({
     addSaleProduct: builder.mutation({
       query: (saleProduct) => ({
         url: "sales-order/create",
+        method: "POST",
+        body: saleProduct,
+      }),
+      invalidatesTags: ["Sale-product"],
+    }),
+
+    // update Sale-product
+    updateSaleProduct: builder.mutation({
+      query: (saleProduct) => ({
+        url: "sales-order/update",
         method: "POST",
         body: saleProduct,
       }),
@@ -68,5 +83,6 @@ const saleProductApi = adminBaseApi.injectEndpoints({
 export const {
   useGetAllSaleProductQuery,
   useAddSaleProductMutation,
+  useUpdateSaleProductMutation,
   useDeleteSaleProductMutation,
 } = saleProductApi;
