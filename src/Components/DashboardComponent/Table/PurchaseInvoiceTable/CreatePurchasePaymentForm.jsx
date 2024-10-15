@@ -5,7 +5,7 @@ import { useGetAllPurchaseProductQuery } from "../../../../features/api/seller/p
 import { toast } from "react-toastify";
 import { useAddPaymentMutation } from "../../../../features/api/seller/paymentApi";
 
-const CreatePurchasePaymentForm = () => {
+const CreatePurchasePaymentForm = ({refetchProducts}) => {
   const { user } = useSelector((state) => state.auth);
   const { register, handleSubmit, reset } = useForm();
   const [loading, setLoading] = useState(false);
@@ -29,14 +29,16 @@ const CreatePurchasePaymentForm = () => {
     data.paidAmount = Number(data.paidAmount)
     data.sellerId = user?.id;
     data.purchaseId = purchaseId && purchaseId
-    // console.log('Payment', data)
-    // console.log(typeof(Number(data.paidAmount)))
+
     try {
       const { data: res } = await addPayment(data);
       if (res?.status) {
         reset();
         toast.success(res?.message);
         setLoading(false);
+        if (refetchProducts) {
+          refetchProducts();
+        }
       } else {
         toast.error(res?.message);
         setLoading(false);

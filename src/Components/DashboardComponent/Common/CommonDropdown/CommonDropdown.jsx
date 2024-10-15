@@ -8,6 +8,7 @@ const CommonDropdown = ({ dropdownData, itemName, level }) => {
     dispatch(clearFilterQuery()); 
     dispatch(setFilterQuery(e.target.value));
   }
+  
   return (
     <div>
       {level && (

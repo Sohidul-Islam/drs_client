@@ -47,11 +47,41 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
 
     // All USER Subscription
     getAllUserSubscription: builder.query({
-      query: () => ({
+      query: ({ page, pageSize, searchKey }) => ({
         url: "subscription/user/all",
+        params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        return res.data;
+        const data = res.data.map(
+          ({
+            id,
+            user,
+            prevPlan,
+            subscription_plan,
+            price,
+            subscribed_date,
+          }) => ({
+            id,
+            storeName: user?.shop_name,
+            ownerName: user?.shop_owner_name,
+            mobileNumber: user?.phone_number,
+            prevPlan: prevPlan?.subscription_plan?.package,
+            currentPackage: subscription_plan?.package,
+            price,
+            updateOn: subscribed_date?.split("T")[0],
+          })
+        );
+        const metadata = {
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
+        };
+
+        return {
+          data,
+          metadata,
+        };
       },
       providesTags: ["User-Subscription"],
     }),
@@ -60,6 +90,16 @@ const subscriptionApi = adminBaseApi.injectEndpoints({
     addUserSubscription: builder.mutation({
       query: (userSubscription) => ({
         url: "subscription/user",
+        method: "POST",
+        body: userSubscription,
+      }),
+      invalidatesTags: ["User-Subscription"],
+    }),
+
+    // delete USER Subscription
+    deleteUserSubscription: builder.mutation({
+      query: (userSubscription) => ({
+        url: "subscription/user/delete",
         method: "POST",
         body: userSubscription,
       }),
@@ -75,4 +115,5 @@ export const {
   useDeleteSubscriptionMutation,
   useGetAllUserSubscriptionQuery,
   useAddUserSubscriptionMutation,
+  useDeleteUserSubscriptionMutation,
 } = subscriptionApi;

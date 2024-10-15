@@ -34,7 +34,6 @@ export const login = createAsyncThunk(
   }
 );
 
-
 // user thunk
 export const getUser = createAsyncThunk(
   "auth/getUser",
@@ -48,12 +47,29 @@ export const getUser = createAsyncThunk(
   }
 );
 
-// initial state 
+// Forget password thunk
+export const forgetPassword = createAsyncThunk(
+  "auth/forgetPassword",
+  async (emailData, thunkAPI) => {
+    try {
+      const { data } = await axiosInstance.post("/user/reset/password", emailData);
+      return data;
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Password reset failed";
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// initial state
 const initialState = {
   user: null,
   role: null,
-  token: Cookies.get('accessToken') || null,
-  email: Cookies.get('email') || null,
+  token: Cookies.get("accessToken") || null,
+  email: Cookies.get("email") || null,
   loading: false,
   error: null,
 };
@@ -67,13 +83,14 @@ const authSlice = createSlice({
       state.role = null;
       state.token = null;
       state.email = null;
-      Cookies.remove('accessToken');
-      Cookies.remove('email');
+      Cookies.remove("accessToken");
+      Cookies.remove("email");
     },
   },
 
   extraReducers: (builder) => {
     builder
+      // register case
       .addCase(registers.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -97,30 +114,45 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.user = action.payload;
-        state.token = Cookies.get('accessToken');
-        state.email = Cookies.get('email');
+        state.token = Cookies.get("accessToken");
+        state.email = Cookies.get("email");
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         // console.log(action, 'from login case rejected')
         state.error = action.error.message;
       })
-    
-     // User Details Case
-     .addCase(getUser.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(getUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.user = action.payload.data;
-      state.role = action.payload.data.accountType;
-    })
-    .addCase(getUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+
+      // User Details Case
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload.data;
+        state.role = action.payload.data.accountType;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      // Forget password cases
+      .addCase(forgetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        // handle password reset success (optional)
+      })
+      .addCase(forgetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

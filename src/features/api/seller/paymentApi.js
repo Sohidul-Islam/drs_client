@@ -5,15 +5,16 @@ const paymentApi = adminBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // all Payment
     getAllPayment: builder.query({
-      query: ({ page, pageSize, searchKey, type }) => ({
+      query: ({ page, pageSize, searchKey, type, startDate, endDate }) => ({
         url: "payment/all",
-        params: { page, pageSize, searchKey, type },
+        params: { page, pageSize, searchKey, type, startDate, endDate },
       }),
       transformResponse: (res) => {
-        // console.log(res.data);
+        // console.log("Payment api data: ", res.data);
         const data = res?.data?.map(
           ({ id, payment, updatedAt, purchase_product, sales_order }) => ({
             id,
+            paymentId: payment?.id,
             due: payment?.due?.toFixed(2),
             paidAmount: payment?.paidAmount?.toFixed(2),
             paymentMethod: payment?.paymentMethod,
@@ -21,19 +22,20 @@ const paymentApi = adminBaseApi.injectEndpoints({
             date: updatedAt?.split("T")[0],
             invoiceNumber: purchase_product?.invoiceNumber,
             invoiceDate: purchase_product?.invoiceDate?.split("T")[0],
-            manufacturer: "Missing",
+            manufacturer: purchase_product?.manufacturer?.name,
 
             // sales product
             customerName: sales_order?.customer?.name,
             phoneNumber: sales_order?.customer?.phoneNumber,
-            orderDate: sales_order?.createdAt?.split("T")[0]
+            updateOn: sales_order?.createdAt?.split("T")[0],
+            orderDate: sales_order?.date?.split("T")[0],
           })
         );
         const metadata = {
-          totalItems: res?.metadata?.totalItems,
-          totalPages: res?.metadata?.totalPages,
-          currentPage: res?.metadata?.currentPage,
-          pageSize: res?.metadata?.pageSize,
+          totalItems: res?.metadata?.totalItems || 0,
+          totalPages: res?.metadata?.totalPages || 0,
+          currentPage: res?.metadata?.currentPage || 0,
+          pageSize: res?.metadata?.pageSize || 0,
         };
 
         return {
@@ -56,10 +58,10 @@ const paymentApi = adminBaseApi.injectEndpoints({
 
     // delete Payment
     deletePayment: builder.mutation({
-      query: (id) => ({
-        url: `payment/delete?id=${id}`,
+      query: (paymentId) => ({
+        url: "payment/delete",
         method: "POST",
-        body: { id },
+        body: { paymentId },
       }),
       invalidatesTags: ["Payment"],
     }),

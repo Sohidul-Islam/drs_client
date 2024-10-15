@@ -14,9 +14,9 @@ const CreatePurchaseProductForm = () => {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const productQuantity = watch("quantity", 0); // default value of 0
-  const productTradePrice = watch("tradePrice", 0); // default value of 0
-  const productVat = watch("VAT", 0); // default value of 0
+  const productQuantity = watch("quantity", 0);
+  const productTradePrice = watch("tradePrice", 0); 
+  const productVat = watch("VAT", 0);
 
   useEffect(() => {
     const quantity = parseFloat(productQuantity) || 0;
