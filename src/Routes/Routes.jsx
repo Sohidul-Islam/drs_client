@@ -33,6 +33,8 @@ import CreateStore from "../Pages/AdminDashboard/ManageStore/CreateStore";
 import SubscriptionDetails from "../Pages/AdminDashboard/SubscriptionDetails/SubscriptionDetails";
 import CreateContent from "../Pages/AdminDashboard/ManageContent/CreateContent";
 import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
+import PaymentSuccess from "../Pages/PaymentMessage/PaymentSuccess";
+import PaymentError from "../Pages/PaymentMessage/PaymentError";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +56,22 @@ export const router = createBrowserRouter([
   {
     path: "/forget-password",
     element: <ForgetPassword />,
+  },
+  {
+    path: "/payment/success",
+    element: (
+      <ProtectedRoute>
+        <PaymentSuccess />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/payment/failed",
+    element: (
+      <ProtectedRoute>
+        <PaymentError />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/dashboard",
@@ -145,7 +163,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "expiring-stock",
-        element: <ExpiringStock/>,
+        element: <ExpiringStock />,
       },
       {
         path: "expired-stock",
@@ -156,7 +174,7 @@ export const router = createBrowserRouter([
         element: <Profile />,
       },
 
-      // Admin route 
+      // Admin route
       {
         path: "manage-content",
         element: <ManageContent />,
