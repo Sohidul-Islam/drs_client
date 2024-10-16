@@ -1,12 +1,11 @@
 import React from "react";
 import PlanCard from "../PlanCard/PlanCard";
 import { useGetAllSubscriptionQuery } from "../../features/api/admin/adminSubscriptionApi";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 const HomeSubscription = () => {
   const { data: subscriptions, isLoading } = useGetAllSubscriptionQuery();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return <LoadingAnimation />;
 
   return (
     <div className="">

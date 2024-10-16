@@ -3,12 +3,12 @@ import logo from "../../assets/logo.png";
 import PlanCard from "../../Components/PlanCard/PlanCard";
 import { Link } from "react-router-dom";
 import { useGetAllSubscriptionQuery } from "../../features/api/admin/adminSubscriptionApi";
+import LoadingAnimation from "../../Components/LoadingAnimation/LoadingAnimation";
 
 const SubscriptionPlans = () => {
   const { data: subscriptions, isLoading } = useGetAllSubscriptionQuery();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+
+  if (isLoading) return <LoadingAnimation />;
 
   return (
     <div className="container mx-auto p-5 md:p-10 ">
@@ -23,14 +23,20 @@ const SubscriptionPlans = () => {
           Choose your right plan!
         </h2>
         <p className="text-sm mt-2 md:mt-5">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry.
+          Explore our subscription plans and find the one that best fits your
+          needs. Whether you're just starting or looking for advanced features,
+          we've got you covered.
         </p>
       </div>
       <div className="mt-5 md:mt-10 md:flex justify-center gap-5 md:gap-10">
         {subscriptions?.map((subscription, index) => (
-          <PlanCard key={index} index={index} subscription={subscription} planeType="Free Trial" price="0.00" />
+          <PlanCard
+            key={index}
+            index={index}
+            subscription={subscription}
+            planeType="Free Trial"
+            price="0.00"
+          />
         ))}
       </div>
     </div>
