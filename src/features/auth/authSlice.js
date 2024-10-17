@@ -11,7 +11,9 @@ export const registers = createAsyncThunk(
       // console.log(data, "data from register thunk");
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || "Registration failed"
+      );
     }
   }
 );
@@ -24,12 +26,21 @@ export const login = createAsyncThunk(
       const { data } = await axiosInstance.post("/login", loginData);
       const token = data.accessToken;
       const email = loginData.email;
-      Cookies.set("accessToken", token, { expires: 7 });
-      Cookies.set("email", email, { expires: 7 });
-      // localStorage.setItem("accessToken", token);
+      Cookies.set("accessToken", token, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
+      Cookies.set("email", email, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || "Login failed"
+      );
     }
   }
 );
@@ -52,7 +63,10 @@ export const forgetPassword = createAsyncThunk(
   "auth/forgetPassword",
   async (emailData, thunkAPI) => {
     try {
-      const { data } = await axiosInstance.post("/user/reset/password", emailData);
+      const { data } = await axiosInstance.post(
+        "/user/reset/password",
+        emailData
+      );
       return data;
     } catch (error) {
       const message =
