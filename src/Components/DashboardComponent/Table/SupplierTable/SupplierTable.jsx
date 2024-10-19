@@ -16,6 +16,7 @@ import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import Pagination from "../../Common/Pagination/Pagination";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 
+
 const SupplierTable = () => {
   const dispatch = useDispatch();
   const { isModalOpen, selectedItemId } = useSelector(
@@ -35,6 +36,8 @@ const SupplierTable = () => {
   });
 
   const [deleteSupplier] = useDeleteSupplierMutation();
+
+  
 
   useEffect(() => {
     setCurrentPage(1);
