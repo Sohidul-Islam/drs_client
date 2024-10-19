@@ -27,8 +27,6 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
   const drugLicenseDocument = endPortion?.split("-")[1];
   const [fileName, setFileName] = useState(drugLicenseDocument);
 
-  console.log("user data", userData);
-
   // get division
   const divisions = getDivisions();
 

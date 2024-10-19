@@ -5,9 +5,9 @@ const adminUserApi = adminBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // all users
     getAllUsers: builder.query({
-      query: ({ page, pageSize, searchKey }) => ({
+      query: ({ page, pageSize, searchKey, division, district, upazila }) => ({
         url: "user/all",
-        params: { page, pageSize, searchKey },
+        params: { page, pageSize, searchKey, division, district, upazila },
       }),
       transformResponse: (res) => {
         // console.log(res, 'from api')

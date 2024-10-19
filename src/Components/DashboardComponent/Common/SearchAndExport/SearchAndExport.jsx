@@ -7,6 +7,7 @@ import {
 } from "../../../../features/export/exportSlice";
 import CommonDropdown from "../CommonDropdown/CommonDropdown";
 import DateFilter from "../DateFilter/DateFilter";
+import ManageStoreFilter from "../../Table/ManageStoreTable/ManageStoreFilter";
 
 const adjustments = [
   { name: "Income", value: "income" },
@@ -38,26 +39,6 @@ const dosagesForm = [
   { name: "Opening", value: "Opening" },
 ];
 
-const divisions = [
-  { name: "Dhaka", value: "Dhaka" },
-  { name: "Chittagong", value: "Chittagong" },
-  { name: "Khulna", value: "Khulna" },
-];
-
-const districts = [
-    { name: "Dhaka", value: "Dhaka" },
-    { name: "Gazipur", value: "Gazipur" },
-    { name: "Chittagong", value: "Chittagong" },
-    { name: "Comilla", value: "Comilla" },
-  ]
-
-const thanas = [
-    { name: "Dhaka", value: "Dhaka" },
-    { name: "Dhanmondi", value: "Dhanmondi" },
-    { name: "Uttara", value: "Uttara" },
-  ]
-
-
 const SearchAndExport = ({
   searchQuery,
   onSearchChange,
@@ -66,6 +47,9 @@ const SearchAndExport = ({
   title,
   advanceFilter,
   name,
+  setDivision,
+  setDistrict,
+  setUpazila,
 }) => {
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -140,25 +124,16 @@ const SearchAndExport = ({
               )}
 
               {/* For Manage Store  */}
-              {/* manage-store */}
               {name === "manage-store" && (
-                <div className="flex items-center gap-2">
-                  <CommonDropdown
-                    dropdownData={divisions}
-                    itemName="Division"
-                    level="true"
-                  />
-                  <CommonDropdown
-                    dropdownData={districts}
-                    itemName="District"
-                  />
-                  <CommonDropdown
-                    dropdownData={thanas}
-                    itemName="Upazilla/Thana"
+                <div className="flex items-center gap-x-1">
+                  Filter:{" "}
+                  <ManageStoreFilter
+                    setDivision={setDivision}
+                    setDistrict={setDistrict}
+                    setUpazila={setUpazila}
                   />
                 </div>
               )}
-
             </div>
           )}
         </div>
