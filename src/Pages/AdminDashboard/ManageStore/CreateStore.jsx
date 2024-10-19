@@ -1,48 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineReconciliation } from "react-icons/ai";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
 import { useAddUserMutation } from "../../../features/api/admin/adminUserApi";
-
-const divisions = [
-  { value: "Dhaka", label: "Dhaka" },
-  { value: "Chittagong", label: "Chittagong" },
-  { value: "Khulna", label: "Khulna" },
-];
-
-const districts = {
-  Dhaka: [
-    { value: "Dhaka", label: "Dhaka" },
-    { value: "Gazipur", label: "Gazipur" },
-  ],
-  Chittagong: [
-    { value: "Chittagong", label: "Chittagong" },
-    { value: "Comilla", label: "Comilla" },
-  ],
-};
-
-const thanas = {
-  Dhaka: [
-    { value: "Dhanmondi", label: "Dhanmondi" },
-    { value: "Uttara", label: "Uttara" },
-  ],
-  Gazipur: [
-    { value: "Tongi", label: "Tongi" },
-    { value: "Kaliakoir", label: "Kaliakoir" },
-  ],
-};
+import { getDivisions, getDistrictsByDivision, getUpazilasByDistrict   } from 'bd-geodata';
 
 const CreateStore = () => {
   const { register, handleSubmit, reset, setValue, watch } = useForm();
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState("No image found");
+  const [districts, setDistricts] = useState([])
+  const [upazilas, setUpazilas] = useState([])
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
 
   const [addUser] = useAddUserMutation();
   const [addFile] = useAddFileMutation();
+
+  const divisions = getDivisions()
+
+  // get district by division 
+  useEffect(() => {
+    const districts = getDistrictsByDivision(selectedDivision)
+    setDistricts(districts)
+  }, [selectedDivision, setDistricts])
+
+  // get upazila by district 
+  useEffect(() => {
+    const upazilas = getUpazilasByDistrict(selectedDistrict)
+    setUpazilas(upazilas)
+  }, [selectedDistrict, setUpazilas])
+  
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -78,6 +68,8 @@ const CreateStore = () => {
       console.error("Failed to upload file:", error);
     }
   };
+
+  
 
   return (
     <div className="relative h-screen">
@@ -123,9 +115,9 @@ const CreateStore = () => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select Division</option>
-                {divisions.map((division) => (
-                  <option key={division.value} value={division.value}>
-                    {division.label}
+                {divisions.map((division, index) => (
+                  <option key={index} value={division.id}>
+                    {division.name}
                   </option>
                 ))}
               </select>
@@ -143,9 +135,9 @@ const CreateStore = () => {
               >
                 <option value="">Select District</option>
                 {selectedDivision &&
-                  districts[selectedDivision]?.map((district) => (
-                    <option key={district.value} value={district.value}>
-                      {district.label}
+                  districts?.map((district, index) => (
+                    <option key={index} value={district.id}>
+                      {district.name}
                     </option>
                   ))}
               </select>
@@ -163,9 +155,9 @@ const CreateStore = () => {
               >
                 <option value="">Select Upazila</option>
                 {selectedDistrict &&
-                  thanas[selectedDistrict]?.map((thana) => (
-                    <option key={thana.value} value={thana.value}>
-                      {thana.label}
+                  upazilas?.map((upazila, index) => (
+                    <option key={index} value={upazila.id}>
+                      {upazila.name}
                     </option>
                   ))}
               </select>

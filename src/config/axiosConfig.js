@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-    baseURL: 'https://dra-server.onrender.com/api',
+    baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
 // Function to get the token from cookies

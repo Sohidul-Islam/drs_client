@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../features/auth/authSlice";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 const ProtectedRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -27,13 +28,7 @@ const ProtectedRoute = ({ children }) => {
     fetchUserData();
   }, [dispatch, userEmail]);
 
-  if (loading) {
-    return (
-      <p className="text-center mt-5">
-        Loading...
-      </p>
-    );
-  }
+  if (loading) return <LoadingAnimation />;
 
   if (!user) {
     return <Navigate to="/login" state={{ from: pathname }} />;

@@ -34,6 +34,9 @@ const ManageStoreTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [division, setDivision] = useState("");
+  const [district, setDistrict] = useState("");
+  const [upazila, setUpazila] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [userToEdit, setUserToEdit] = useState(null);
 
@@ -41,6 +44,9 @@ const ManageStoreTable = () => {
     page: currentPage,
     pageSize: pageSize,
     searchKey: searchQuery || filterQuery,
+    division: division,
+    district: district,
+    upazila: upazila,
   });
 
   const [deleteUser] = useDeleteUserMutation();
@@ -48,8 +54,6 @@ const ManageStoreTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  // console.log("searchQuery", searchQuery, filterQuery)
 
   const { totalPages } = users?.metadata || 1;
 
@@ -108,6 +112,9 @@ const ManageStoreTable = () => {
         advanceFilter={true}
         title="Manage Store Report"
         name="manage-store"
+        setDivision={setDivision}
+        setDistrict={setDistrict}
+        setUpazila={setUpazila}
       />
 
       {/* Manage Store table */}
