@@ -4,57 +4,49 @@ import { AiOutlineReconciliation } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useUpdateUserMutation } from "../../../../features/api/admin/adminUserApi";
 import { useAddFileMutation } from "../../../../features/api/admin/adminFileUploadApi";
-
-const divisions = [
-  { value: "Dhaka", label: "Dhaka" },
-  { value: "Chittagong", label: "Chittagong" },
-  { value: "Khulna", label: "Khulna" },
-];
-
-const districts = {
-  Dhaka: [
-    { value: "Dhaka", label: "Dhaka" },
-    { value: "Gazipur", label: "Gazipur" },
-  ],
-  Chittagong: [
-    { value: "Chittagong", label: "Chittagong" },
-    { value: "Comilla", label: "Comilla" },
-  ],
-};
-
-const thanas = {
-  Dhaka: [
-    { value: "Dhanmondi", label: "Dhanmondi" },
-    { value: "Uttara", label: "Uttara" },
-  ],
-  Gazipur: [
-    { value: "Tongi", label: "Tongi" },
-    { value: "Kaliakoir", label: "Kaliakoir" },
-  ],
-};
+import {
+  getDivisions,
+  getDistrictsByDivision,
+  getUpazilasByDistrict,
+} from "bd-geodata";
 
 const UpdateUserModal = ({ isOpen, onClose, userData }) => {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
   const [updateUser] = useUpdateUserMutation();
   const [addFile] = useAddFileMutation();
   const [loading, setLoading] = useState("");
 
-  const url = userData?.drugLicenseDocument || "https://example.com/1122-no image";
+  const url =
+    userData?.drugLicenseDocument || "https://example.com/1122-no image";
   const parts = url?.split("/");
   const endPortion = parts[parts?.length - 1];
-  const drugLicenseDocument = endPortion?.split('-')[1];
+  const drugLicenseDocument = endPortion?.split("-")[1];
   const [fileName, setFileName] = useState(drugLicenseDocument);
+
+  // get division
+  const divisions = getDivisions();
+
+  // get district by division
+  useEffect(() => {
+    const districts = getDistrictsByDivision(selectedDivision);
+    setDistricts(districts);
+  }, [selectedDivision, setDistricts]);
+
+  // get upazila by district
+  useEffect(() => {
+    const upazilas = getUpazilasByDistrict(selectedDistrict);
+    setUpazilas(upazilas);
+  }, [selectedDistrict, setUpazilas]);
 
   useEffect(() => {
     if (userData) {
+      // Set shop name to status fields
       setValue("shop_name", userData?.shop_name);
       setValue("shop_owner_name", userData?.shop_owner_name);
-      setValue("division", userData?.division);
-      setTimeout(() => {
-        setValue("district", userData?.district);
-      }, 100);
       setValue("email", userData?.email);
       setValue("phone_number", userData?.phone_number);
       setValue("pharmacistName", userData?.pharmacistName);
@@ -63,30 +55,73 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
       setValue("drugLicenseDocument", userData?.drugLicenseDocument);
       setValue("establishMentData", userData?.date);
       setValue("status", userData?.status);
-    }
-  }, [userData, setValue]);
 
-  useEffect(() => {
-    if (userData?.district) {
-      setTimeout(() => {
-        setValue("upazila", userData?.upazila);
-      }, 200);
+      // Match the division name to the division id
+      const divisionMatch = divisions.find(
+        (division) => division.name === userData?.division
+      );
+      if (divisionMatch) {
+        setValue("division", divisionMatch.id);
+      }
+
+      // Match the district name to the district id once division is set
+      if (userData?.division) {
+        const districts = getDistrictsByDivision(divisionMatch?.id);
+        setDistricts(districts);
+        const districtMatch = districts.find(
+          (district) => district.name === userData?.district
+        );
+        if (districtMatch) {
+          setTimeout(() => {
+            setValue("district", districtMatch?.id);
+          }, 100);
+        }
+      }
+
+      // Fetch upazilas once district is set
+      if (userData?.district) {
+        const upazilas = getUpazilasByDistrict(userData?.district);
+        setUpazilas(upazilas);
+      }
     }
-  }, [userData, setValue]);
+  }, [userData, setValue, divisions]);
+
+  // Setting default upazila after upazilas are loaded
+  useEffect(() => {
+    if (userData?.upazila && upazilas.length > 0) {
+      const upazilaMatch = upazilas.find(
+        (upazila) => upazila.name === userData?.upazila
+      );
+      if (upazilaMatch) {
+        setValue("upazila", upazilaMatch?.id);
+      }
+    }
+  }, [userData?.upazila, upazilas, setValue]);
 
   const onSubmit = async (data) => {
-      setLoading("submit")
+    const divisionName = divisions.find(
+      (div) => div.id === data.division
+    )?.name;
+    const districtName = districts.find(
+      (dis) => dis.id === data.district
+    )?.name;
+    const upazilaName = upazilas.find((upa) => upa.id === data.upazila)?.name;
+    data.division = divisionName;
+    data.district = districtName;
+    data.upazila = upazilaName;
+    // console.log(data)
+    setLoading("submit");
     try {
       const res = await updateUser({ id: userData.id, ...data }).unwrap();
       if (res.status) {
         toast.success("Store updated successfully");
         onClose();
         reset();
-        setLoading("")
+        setLoading("");
       }
     } catch (error) {
       toast.error("Failed to update the store");
-      setLoading("")
+      setLoading("");
     }
   };
 
@@ -153,9 +188,9 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select Division</option>
-                {divisions.map((division) => (
-                  <option key={division.value} value={division.value}>
-                    {division.label}
+                {divisions.map((division, index) => (
+                  <option key={index} value={division.id}>
+                    {division.name}
                   </option>
                 ))}
               </select>
@@ -173,9 +208,9 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
               >
                 <option value="">Select District</option>
                 {selectedDivision &&
-                  districts[selectedDivision]?.map((district) => (
-                    <option key={district.value} value={district.value}>
-                      {district.label}
+                  districts?.map((district, index) => (
+                    <option key={index} value={district.id}>
+                      {district.name}
                     </option>
                   ))}
               </select>
@@ -193,9 +228,9 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
               >
                 <option value="">Select Upazila</option>
                 {selectedDistrict &&
-                  thanas[selectedDistrict]?.map((thana) => (
-                    <option key={thana.value} value={thana.value}>
-                      {thana.label}
+                  upazilas?.map((upazila, index) => (
+                    <option key={index} value={upazila.id}>
+                      {upazila.name}
                     </option>
                   ))}
               </select>
@@ -231,7 +266,7 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
                 Phone Number <span className="text-[#FF0027]">*</span>
               </label>
               <input
-                type="number"
+                type="tel"
                 {...register("phone_number", { required: true })}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
@@ -295,7 +330,9 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
                       : "cursor-pointer bg-[#006E9E] text-white"
                   } p-[10px] text-xs`}
                 >
-                  {loading === "drugLicenseDocument" ? "Uploading..." : "Upload"}
+                  {loading === "drugLicenseDocument"
+                    ? "Uploading..."
+                    : "Upload"}
                 </label>
                 <span className="text-xs text-gray-700 ml-2">
                   {fileName ? fileName : "No file selected"}
@@ -355,9 +392,11 @@ const UpdateUserModal = ({ isOpen, onClose, userData }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`${loading? "bg-[#c1c0c0] text-black":"bg-blue-600 text-white"} px-4 py-2 rounded-md`}
+              className={`${
+                loading ? "bg-[#c1c0c0] text-black" : "bg-blue-600 text-white"
+              } px-4 py-2 rounded-md`}
             >
-               {loading === "submit" ? "Wait..." : "Save"}
+              {loading === "submit" ? "Wait..." : "Save"}
             </button>
           </div>
         </form>

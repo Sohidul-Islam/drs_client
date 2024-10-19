@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
@@ -10,23 +10,59 @@ import { useDispatch, useSelector } from "react-redux";
 import { registers } from "../../features/auth/authSlice";
 import Spinner from "../../Components/Spinner/Spinner";
 import { toast } from "react-toastify";
+import {
+  getDivisions,
+  getDistrictsByDivision,
+  getUpazilasByDistrict,
+} from "bd-geodata";
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { loading } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     control,
     getValues,
+    watch,
     formState: { errors },
   } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
+  const { loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const selectedDivision = watch("division");
+  const selectedDistrict = watch("district");
+
+  const divisions = getDivisions();
+
+  // get district by division
+  useEffect(() => {
+    const districts = getDistrictsByDivision(selectedDivision);
+    setDistricts(districts);
+  }, [selectedDivision, setDistricts]);
+
+  // get upazila by district
+  useEffect(() => {
+    const upazilas = getUpazilasByDistrict(selectedDistrict);
+    setUpazilas(upazilas);
+  }, [selectedDistrict, setUpazilas]);
 
   const onSubmit = async (data) => {
+    // Find selected division, district, and upazila names
+    const divisionName = divisions.find(
+      (div) => div.id === data.division
+    )?.name;
+    const districtName = districts.find(
+      (dis) => dis.id === data.district
+    )?.name;
+    const upazilaName = upazilas.find((upa) => upa.id === data.upazila)?.name;
+    data.division = divisionName;
+    data.district = districtName;
+    data.upazila = upazilaName;
+
+    console.log(data);
     try {
       await dispatch(registers(data)).unwrap();
       navigate("/dashboard");
@@ -122,7 +158,11 @@ const Register = () => {
                   } outline-none block p-1`}
                 >
                   <option value="">------</option>
-                  <option value="Dhaka">Dhaka</option>
+                  {divisions.map((division, index) => (
+                    <option key={index} value={division.id}>
+                      {division.name}
+                    </option>
+                  ))}
                 </select>
                 {errors.division && (
                   <p className="text-red-500 text-xs">
@@ -143,9 +183,13 @@ const Register = () => {
                       : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
-                  <option value="">...</option>
-                  {/* Add options for districts here */}
-                  <option value="Dhaka">Dhaka</option>
+                  <option>------</option>
+                  {selectedDivision &&
+                    districts?.map((district, index) => (
+                      <option key={index} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
                 </select>
                 {errors.district && (
                   <p className="text-red-500 text-xs">
@@ -168,9 +212,13 @@ const Register = () => {
                       : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
-                  <option value="">...</option>
-                  {/* Add options for Upazila/Thana here */}
-                  <option value="Dhaka">Dhaka</option>
+                  <option>------</option>
+                  {selectedDistrict &&
+                    upazilas?.map((upazila, index) => (
+                      <option key={index} value={upazila.id}>
+                        {upazila.name}
+                      </option>
+                    ))}
                 </select>
                 {errors.upazila && (
                   <p className="text-red-500 text-xs">
