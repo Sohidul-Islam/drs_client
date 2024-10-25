@@ -39,7 +39,7 @@ const ProductsTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata;
 
   // Delete
   // open delete modal
