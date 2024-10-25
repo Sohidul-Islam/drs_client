@@ -262,15 +262,15 @@ const Register = () => {
                     validate: {
                       isNumeric: (value) =>
                         /^\d+$/.test(value) ||
-                        "Mobile number must contain only numbers",
+                        "Mobile number should be digits only",
                       minLength: (value) =>
                         value.length >= 10 ||
-                        "Mobile number must be at least 10 digits",
+                        "Mobile number at least 10 digits",
                       maxLength: (value) =>
                         value.length <= 15 ||
-                        "Mobile number must not exceed 15 digits",
+                        "Too long mobile number",
                       validFormat: (value) =>
-                        /^(?:88)?01[3-9]\d{8}$/.test(value) || "invalid number",
+                        /^(?:88)?01[3-9]\d{8}$/.test(value) || "Invalid mobile number",
                     },
                   }}
                   render={({ field }) => (
