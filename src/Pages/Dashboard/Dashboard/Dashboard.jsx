@@ -53,19 +53,27 @@ const Dashboard = () => {
           title="Sale Order"
           color="#006E9E"
           path="sales/create-sales"
+          createBtn={true}
         />
         <ShopCard
           title="Purchase Order"
           color="#955176"
           path="purchase-overview/create-purchase"
+          createBtn={true}
         />
-        <ShopCard title="Total Products" color="#E79C25" path="products/create-product"/>
-        <ShopCard title="Stock Items" color="#AE463B" />
+        <ShopCard
+          title="Total Products"
+          color="#E79C25"
+          path="products/create-product"
+          createBtn={true}
+        />
         <ShopCard
           title="Stock Adjustment"
           color="#009F8E"
           path="stock-adjustment/create-adjustment"
+          createBtn={true}
         />
+        <ShopCard title="Stock Items" color="#AE463B" />
       </div>
       <div className="mt-4 grid grid-cols-3 gap-x-8">
         <div className="col-span-1 grid grid-cols-1 gap-y-3">
