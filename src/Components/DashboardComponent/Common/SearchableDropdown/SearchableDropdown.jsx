@@ -11,6 +11,7 @@ const SearchableDropdown = ({
   propertyValue,
   propertyName,
   setSearchInputValue,
+  errors,
 }) => {
   const options = data?.data?.map((item) => ({
     value: item[propertyValue],
@@ -26,6 +27,7 @@ const SearchableDropdown = ({
       <Controller
         name={name}
         control={control}
+        rules={{ required: required === "true" ? true : false }}
         render={({ field }) => (
           <CreatableSelect
             {...field}
@@ -39,6 +41,12 @@ const SearchableDropdown = ({
             }}
             onInputChange={(value) => {
               setSearchInputValue(value); // Capture typed text
+            }}
+            styles={{
+              control: (base) => ({
+                ...base,
+                borderColor: errors ? "#FF0027" : base.borderColor,
+              }),
             }}
           />
         )}
