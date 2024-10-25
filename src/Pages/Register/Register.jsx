@@ -37,20 +37,27 @@ const Register = () => {
 
   const divisions = getDivisions();
 
-  // get district by division
+  // Fetch districts based on division selection
   useEffect(() => {
-    const districts = getDistrictsByDivision(selectedDivision);
-    setDistricts(districts);
-  }, [selectedDivision, setDistricts]);
+    if (selectedDivision) {
+      const districts = getDistrictsByDivision(selectedDivision);
+      setDistricts(districts);
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedDivision]);
 
-  // get upazila by district
+  // Fetch upazilas based on district selection
   useEffect(() => {
-    const upazilas = getUpazilasByDistrict(selectedDistrict);
-    setUpazilas(upazilas);
-  }, [selectedDistrict, setUpazilas]);
+    if (selectedDistrict) {
+      const upazilas = getUpazilasByDistrict(selectedDistrict);
+      setUpazilas(upazilas);
+    } else {
+      setUpazilas([]);
+    }
+  }, [selectedDistrict]);
 
   const onSubmit = async (data) => {
-    // Find selected division, district, and upazila names
     const divisionName = divisions.find(
       (div) => div.id === data.division
     )?.name;
@@ -62,14 +69,12 @@ const Register = () => {
     data.district = districtName;
     data.upazila = upazilaName;
 
-    console.log(data);
     try {
       await dispatch(registers(data)).unwrap();
       navigate("/dashboard");
       toast.success("successfully created an account");
     } catch (error) {
       toast.error("something went wrong");
-      // console.error("Failed to register: ", error.message);
     }
   };
 
@@ -183,7 +188,7 @@ const Register = () => {
                       : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
-                  <option>------</option>
+                  <option value="">------</option>
                   {selectedDivision &&
                     districts?.map((district, index) => (
                       <option key={index} value={district.id}>
@@ -204,7 +209,7 @@ const Register = () => {
                 </label>
                 <select
                   {...register("upazila", {
-                    required: "Upazila/Thana is required",
+                    required: "Upazila is required",
                   })}
                   className={`w-full border-b-2 ${
                     errors.upazila
@@ -212,7 +217,7 @@ const Register = () => {
                       : "border-[#989898] mb-5"
                   } outline-none block p-1`}
                 >
-                  <option>------</option>
+                  <option value="">------</option>
                   {selectedDistrict &&
                     upazilas?.map((upazila, index) => (
                       <option key={index} value={upazila.id}>
@@ -252,7 +257,22 @@ const Register = () => {
                 <Controller
                   name="phone_number"
                   control={control}
-                  rules={{ required: "Mobile number is required" }}
+                  rules={{
+                    required: "Mobile number is required",
+                    validate: {
+                      isNumeric: (value) =>
+                        /^\d+$/.test(value) ||
+                        "Mobile number must contain only numbers",
+                      minLength: (value) =>
+                        value.length >= 10 ||
+                        "Mobile number must be at least 10 digits",
+                      maxLength: (value) =>
+                        value.length <= 15 ||
+                        "Mobile number must not exceed 15 digits",
+                      validFormat: (value) =>
+                        /^(?:88)?01[3-9]\d{8}$/.test(value) || "invalid number",
+                    },
+                  }}
                   render={({ field }) => (
                     <PhoneInput
                       {...field}

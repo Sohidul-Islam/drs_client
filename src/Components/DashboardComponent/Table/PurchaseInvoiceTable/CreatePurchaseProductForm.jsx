@@ -10,12 +10,20 @@ import { toast } from "react-toastify";
 
 const CreatePurchaseProductForm = () => {
   const { user } = useSelector((state) => state.auth);
-  const { register, handleSubmit, control, reset, watch, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const [searchInputValue, setSearchInputValue] = useState("");
   const [loading, setLoading] = useState(false);
 
   const productQuantity = watch("quantity", 0);
-  const productTradePrice = watch("tradePrice", 0); 
+  const productTradePrice = watch("tradePrice", 0);
   const productVat = watch("VAT", 0);
 
   useEffect(() => {
@@ -111,7 +119,7 @@ const CreatePurchaseProductForm = () => {
           <input
             type="date"
             {...register("invoiceDate", { required: true })}
-            className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+            className={`mt-1 block w-full border border-gray-300 text-gray-700 py-[6px] px-3 rounded-md outline-none`}
           />
         </div>
 
@@ -123,7 +131,7 @@ const CreatePurchaseProductForm = () => {
           <input
             type="text"
             {...register("invoiceNumber", { required: true })}
-            className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+            className={`mt-1 block w-full border border-gray-300 text-gray-700 py-[6px] px-3 rounded-md outline-none`}
           />
         </div>
       </div>
@@ -142,6 +150,7 @@ const CreatePurchaseProductForm = () => {
             propertyValue="id"
             propertyName="productName"
             setSearchInputValue={setSearchInputValue}
+            errors={errors.productId}
           />
           {/* Manufactured Date */}
           <div>
@@ -151,7 +160,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="date"
               {...register("manufacturedDate", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.manufacturedDate ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* Expiry Date */}
@@ -162,7 +173,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="date"
               {...register("expiryDate", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.expiryDate ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* Batch/LOT No */}
@@ -173,7 +186,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="text"
               {...register("batchNo", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.batchNo ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* Quantity (Pieces) */}
@@ -184,7 +199,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="number"
               {...register("quantity", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.quantity ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* Unit */}
@@ -195,7 +212,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="text"
               {...register("unit", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.unit ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* Trade Price*/}
@@ -206,7 +225,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="number"
               {...register("tradePrice", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.tradePrice ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* VAT*/}
@@ -217,7 +238,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="number"
               {...register("VAT", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.VAT ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* Total Trade Price */}
@@ -229,7 +252,9 @@ const CreatePurchaseProductForm = () => {
               type="text"
               readOnly
               {...register("totalTradePrice", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.totalTradePrice ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
           {/* MRP (Per unit) */}
@@ -240,7 +265,9 @@ const CreatePurchaseProductForm = () => {
             <input
               type="number"
               {...register("MRP", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors.MRP ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
         </div>
