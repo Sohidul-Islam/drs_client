@@ -35,6 +35,7 @@ import CreateContent from "../Pages/AdminDashboard/ManageContent/CreateContent";
 import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
 import PaymentSuccess from "../Pages/PaymentMessage/PaymentSuccess";
 import PaymentError from "../Pages/PaymentMessage/PaymentError";
+import EmailVerification from "../Pages/EmailVerification/EmailVerification";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/email-verification",
+    element: <EmailVerification />,
   },
   {
     path: "/login",
