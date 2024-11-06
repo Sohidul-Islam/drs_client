@@ -7,7 +7,7 @@ const StockItem = () => {
     <div>
       <div className="flex items-center gap-x-[10px]">
         <PiRowsPlusTop className="text-lg" />
-        <p>Stock Adjustment</p>
+        <p>Stock Item</p>
       </div>
 
       {/*Stock Item Table  */}

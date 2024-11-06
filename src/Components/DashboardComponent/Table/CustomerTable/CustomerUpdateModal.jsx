@@ -4,20 +4,29 @@ import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { GiDiscussion } from "react-icons/gi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useAddCustomerMutation } from "../../../../features/api/admin/adminCustomerApi";
+import { useUpdateCustomerMutation } from "../../../../features/api/admin/adminCustomerApi";
 
-const CustomerModal = ({ isOpen, onClose }) => {
+const CustomerUpdateModal = ({ isOpen, onClose, customerData }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: customerData?.name || "",
+      phoneNumber: customerData?.phoneNumber || "",
+      address: customerData?.address || "",
+    },
+  });
   const { user } = useSelector((state) => state.auth);
-  const [addCustomer] = useAddCustomerMutation();
+  const [updateCustomer] = useUpdateCustomerMutation();
+
+  // console.log("customer data", customerData);
 
   const onSubmit = async (data) => {
     const customer = {
+      id: customerData?.id,
       name: data?.name,
       phoneNumber: data?.phoneNumber,
       userId: user?.id,
@@ -26,7 +35,7 @@ const CustomerModal = ({ isOpen, onClose }) => {
     };
 
     try {
-      const { data } = await addCustomer(customer);
+      const { data } = await updateCustomer(customer);
       if (data?.status) {
         reset();
         toast.success(data?.message);
@@ -46,10 +55,10 @@ const CustomerModal = ({ isOpen, onClose }) => {
   return (
     <div className="relative z-10">
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-        <div className="relative top-20 mx-auto p-5 border w-96 h-3/4 shadow-lg rounded-md bg-white">
+        <div className="relative top-20 mx-auto p-5 border w-[500px] h-3/4 shadow-lg rounded-md bg-white">
           <div className="flex items-center gap-x-[10px] mb-5">
             <GiDiscussion className="text-lg" />
-            <p>Create New Customer</p>
+            <p>Update Customer</p>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-white hover:bg-red-700 border border-gray-500 hover:border-white rounded-md px-3 py-1 ml-auto"
@@ -141,4 +150,4 @@ const CustomerModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default CustomerModal;
+export default CustomerUpdateModal;

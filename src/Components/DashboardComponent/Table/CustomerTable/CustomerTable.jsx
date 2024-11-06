@@ -9,6 +9,7 @@ import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/Delete
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, openModal } from "../../../../features/deleteModal/deleteModalSlice";
 import CustomerModal from "../SalesTable/CustomerModal";
+import CustomerUpdateModal from "./CustomerUpdateModal";
 
 const CustomerTable = () => {
   const dispatch = useDispatch();
@@ -157,7 +158,7 @@ const CustomerTable = () => {
 
       {/* Update/Edit Modal */}
       {isEditModalOpen && (
-        <CustomerModal
+        <CustomerUpdateModal
           isOpen={isEditModalOpen}
           onClose={handleCloseEditModal}
           customerData={customerToEdit}

@@ -21,6 +21,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
             dosageForm,
             packBoxSize,
             updatedAt,
+            stockQuantity
           }) => ({
             id,
             productName,
@@ -31,6 +32,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
             dosageForm,
             packBoxSize,
             date: updatedAt?.split("T")[0],
+            stockQuantity
           })
         );
         const metadata = {
