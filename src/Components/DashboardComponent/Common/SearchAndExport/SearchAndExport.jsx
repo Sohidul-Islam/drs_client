@@ -29,16 +29,6 @@ const events = [
   { name: "Opening", value: "Opening" },
 ];
 
-const dosagesForm = [
-  { name: "Purchase", value: "Purchase" },
-  { name: "Sale Returned", value: "Sale Returned" },
-  { name: "Sale Order", value: "Sale Order" },
-  { name: "Purchase Returned", value: "Purchase Returned" },
-  { name: "Damage", value: "Damage" },
-  { name: "Correction", value: "Correction" },
-  { name: "Opening", value: "Opening" },
-];
-
 const SearchAndExport = ({
   searchQuery,
   onSearchChange,
@@ -53,6 +43,12 @@ const SearchAndExport = ({
 }) => {
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const dosageForm =
+    data?.data.map((product) => ({
+      name: product?.dosageForm,
+      value: product?.dosageForm,
+    })) || [];
 
   // Export PDF and Excel File
   const handleExport = (type) => {
@@ -100,7 +96,7 @@ const SearchAndExport = ({
               {name === "product" && (
                 <div className="flex items-center gap-2">
                   <CommonDropdown
-                    dropdownData={dosagesForm}
+                    dropdownData={dosageForm}
                     itemName="Dosage Form"
                     level="true"
                   />
