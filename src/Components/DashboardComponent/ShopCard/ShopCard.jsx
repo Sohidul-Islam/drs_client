@@ -2,7 +2,7 @@ import React from "react";
 import { GoChecklist } from "react-icons/go";
 import { Link } from "react-router-dom";
 
-const ShopCard = ({ title, color, path }) => {
+const ShopCard = ({ title, color, path, createBtn }) => {
   return (
     <div
       className="h-[116px] rounded-md text-white px-4 py-4"
@@ -17,11 +17,13 @@ const ShopCard = ({ title, color, path }) => {
           <p className="text-2xl font-semibold mt-1">120</p>
         </div>
       </div>
-      <div className="text-end mt-3 text-[15px]">
-        <Link to={path}>
-          +<span className="underline">Create New</span>
-        </Link>
-      </div>
+      {createBtn && (
+        <div className="text-end mt-3 text-[15px]">
+          <Link to={path}>
+            +<span className="underline">Create New</span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

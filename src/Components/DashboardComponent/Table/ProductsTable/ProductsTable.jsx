@@ -39,7 +39,9 @@ const ProductsTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata;
+
+  // console.log("product data", data?.data)
 
   // Delete
   // open delete modal
@@ -68,14 +70,14 @@ const ProductsTable = () => {
 
   // Open update modal and set selected product
   const handleEditClick = (product) => {
-    setSelectedProduct(product); // Set the product to be edited
-    setUpdateModalOpen(true); // Open the update modal
+    setSelectedProduct(product); 
+    setUpdateModalOpen(true); 
   };
 
   // Close update modal
   const handleCloseUpdateModal = () => {
     setUpdateModalOpen(false);
-    setSelectedProduct(null); // Clear the selected product
+    setSelectedProduct(null); 
   };
 
   return (
@@ -154,7 +156,7 @@ const ProductsTable = () => {
                     {row?.packBoxSize} Pack's
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row?.id} temp-data
+                    {row?.stockQuantity}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row?.date}

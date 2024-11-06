@@ -48,7 +48,7 @@ const CreateCustomer = () => {
             {/* Customer Name */}
             <div className='relative'>
               <label className="block text-sm font-medium text-gray-700">
-                Customer Name
+                Customer Name <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
