@@ -45,7 +45,7 @@ const SearchAndExport = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dosageForm =
-    data?.data.map((product) => ({
+    data?.data?.map((product) => ({
       name: product?.dosageForm,
       value: product?.dosageForm,
     })) || [];
