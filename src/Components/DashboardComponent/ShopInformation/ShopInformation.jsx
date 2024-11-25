@@ -5,35 +5,11 @@ import { useUpdateUserMutation } from "../../../features/api/admin/adminUserApi"
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
 import { toast } from "react-toastify";
 import { getUser } from "../../../features/auth/authSlice";
-
-const divisions = [
-  { value: "Dhaka", label: "Dhaka" },
-  { value: "Chittagong", label: "Chittagong" },
-  { value: "Khulna", label: "Khulna" },
-];
-
-const districts = {
-  Dhaka: [
-    { value: "Dhaka", label: "Dhaka" },
-    { value: "Gazipur", label: "Gazipur" },
-  ],
-  Chittagong: [
-    { value: "Chittagong", label: "Chittagong" },
-    { value: "Comilla", label: "Comilla" },
-  ],
-};
-
-const thanas = {
-  Dhaka: [
-    { value: "Dhaka", label: "Dhaka" },
-    { value: "Dhanmondi", label: "Dhanmondi" },
-    { value: "Uttara", label: "Uttara" },
-  ],
-  Gazipur: [
-    { value: "Tongi", label: "Tongi" },
-    { value: "Kaliakoir", label: "Kaliakoir" },
-  ],
-};
+import {
+  getDivisions,
+  getDistrictsByDivision,
+  getUpazilasByDistrict,
+} from "bd-geodata";
 
 const ShopInformation = () => {
   const { user } = useSelector((state) => state.auth);
@@ -42,6 +18,8 @@ const ShopInformation = () => {
   const [nidFileName, setNidFileName] = useState("No image found");
   const [dragLicFileName, setDragLicFileName] = useState("No image found");
   const [loading, setLoading] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
 
   const [updateUser] = useUpdateUserMutation();
   const [addFile] = useAddFileMutation();
@@ -55,9 +33,31 @@ const ShopInformation = () => {
     formState: { errors },
   } = useForm();
 
-  const establishMentDate = user && user?.establishMentData.split('T')[0];
+  const establishMentDate = user && user?.establishMentData?.split('T')[0];
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
+
+  const divisions = getDivisions();
+
+  // Fetch districts based on division selection
+  useEffect(() => {
+    if (selectedDivision) {
+      const districts = getDistrictsByDivision(selectedDivision);
+      setDistricts(districts);
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedDivision]);
+
+  // Fetch upazilas based on district selection
+  useEffect(() => {
+    if (selectedDistrict) {
+      const upazilas = getUpazilasByDistrict(selectedDistrict);
+      setUpazilas(upazilas);
+    } else {
+      setUpazilas([]);
+    }
+  }, [selectedDistrict]);
 
   useEffect(() => {
     if (user) {
@@ -94,8 +94,9 @@ const ShopInformation = () => {
         dispatch(getUser(user?.email));
       }
     } catch (error) {
-      toast.error("Failed to update the store");
+      toast.error(error?.data?.message || "Failed to update the store");
       setLoading("");
+      console.log(error)
     }
   };
 
@@ -185,7 +186,7 @@ const ShopInformation = () => {
                   type="text"
                   placeholder="Shop name"
                   {...register("shop_name", { required: true })}
-                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.shop_name && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -198,7 +199,7 @@ const ShopInformation = () => {
                   type="email"
                   placeholder="E-mail"
                   {...register("email", { required: true })}
-                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.email && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -211,7 +212,7 @@ const ShopInformation = () => {
                   type="tel"
                   placeholder="Phone number"
                   {...register("phone_number", { required: true })}
-                  className="mt-1 block w-full bg-gray-200 outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.phone_number && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -224,7 +225,7 @@ const ShopInformation = () => {
                   type="text"
                   placeholder="License no."
                   {...register("drugLicenseNo", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.drugLicenseNo && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -236,7 +237,7 @@ const ShopInformation = () => {
                 <input
                   type="date"
                   {...register("establishMentData", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.establishMentData && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
             </div>
@@ -253,12 +254,12 @@ const ShopInformation = () => {
                 </label>
                 <select
                   {...register("division")}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.division && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
                 >
                   <option value="">Select Division</option>
-                  {divisions.map((division) => (
-                    <option key={division.value} value={division.value}>
-                      {division.label}
+                  {divisions?.map((division) => (
+                    <option key={division.value} value={division.id}>
+                      {division.name}
                     </option>
                   ))}
                 </select>
@@ -270,14 +271,14 @@ const ShopInformation = () => {
                 </label>
                 <select
                   {...register("district")}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.district && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
                   disabled={!selectedDivision}
                 >
                   <option value="">Select District</option>
                   {selectedDivision &&
-                    districts[selectedDivision]?.map((district) => (
-                      <option key={district.value} value={district.value}>
-                        {district.label}
+                    districts?.map((district, index) => (
+                      <option key={index} value={district.id}>
+                        {district.name}
                       </option>
                     ))}
                 </select>
@@ -290,14 +291,14 @@ const ShopInformation = () => {
                 </label>
                 <select
                   {...register("upazila")}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.upazila && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
                   disabled={!selectedDistrict}
                 >
                   <option value="">Select Upazila</option>
                   {selectedDistrict &&
-                    thanas[selectedDistrict]?.map((thana) => (
-                      <option key={thana.value} value={thana.value}>
-                        {thana.label}
+                    upazilas?.map((upazila, index) => (
+                      <option key={index} value={upazila.id}>
+                        {upazila.name}
                       </option>
                     ))}
                 </select>
@@ -310,7 +311,7 @@ const ShopInformation = () => {
                 </label>
                 <textarea
                   placeholder="Address..."
-                  {...register("address-line", { required: true })}
+                  {...register("address-line")}
                   className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
                 />
               </div>
@@ -465,7 +466,7 @@ const ShopInformation = () => {
                 <input
                   type="password"
                   {...register("password", {
-                    required: true,
+                    // required: true,
                     pattern: {
                       value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
                       message:
@@ -493,7 +494,7 @@ const ShopInformation = () => {
                 <input
                   type="password"
                   {...register("confirm_password", {
-                    required: true,
+                    // required: true,
                     validate: (value) =>
                       value === getValues("password") ||
                       "Passwords do not match",
