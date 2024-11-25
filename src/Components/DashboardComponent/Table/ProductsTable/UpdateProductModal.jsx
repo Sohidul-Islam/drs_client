@@ -73,8 +73,8 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full">
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+      <div className={`${isOpen ? "animate-slide-in" : "animate-slide-out"} relative top-14 mx-auto p-5 border w-[80%] h-[70%] shadow-lg rounded-md bg-white`}>
         <div className="flex items-center gap-x-[10px] mb-5">
           <AiFillProduct className="text-lg" />
           <p>Update Product</p>
