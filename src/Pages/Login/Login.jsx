@@ -33,7 +33,7 @@ const Login = () => {
       }
       // console.log(res, 'res')
     } catch (error) {
-      toast.error("incorrect email or password");
+      toast.error(error);
       // console.log("login error: ", error);
     }
   };
