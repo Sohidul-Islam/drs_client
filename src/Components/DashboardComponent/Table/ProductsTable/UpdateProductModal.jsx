@@ -74,7 +74,7 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full">
+      <div className="relative p-8 bg-white w-1/2">
         <div className="flex items-center gap-x-[10px] mb-5">
           <AiFillProduct className="text-lg" />
           <p>Update Product</p>
