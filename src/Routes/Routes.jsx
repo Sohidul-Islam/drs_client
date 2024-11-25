@@ -36,31 +36,38 @@ import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
 import PaymentSuccess from "../Pages/PaymentMessage/PaymentSuccess";
 import PaymentError from "../Pages/PaymentMessage/PaymentError";
 import EmailVerification from "../Pages/EmailVerification/EmailVerification";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/register",
     element: <Register />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/email-verification",
     element: <EmailVerification />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/login",
     element: <Login />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/subscription-plan",
     element: <SubscriptionPlans />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/forget-password",
     element: <ForgetPassword />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/payment/success",
@@ -69,6 +76,7 @@ export const router = createBrowserRouter([
         <PaymentSuccess />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorPage />,
   },
   {
     path: "/payment/failed",
@@ -77,6 +85,7 @@ export const router = createBrowserRouter([
         <PaymentError />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorPage />,
   },
   {
     path: "/dashboard",
@@ -85,6 +94,7 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
