@@ -36,6 +36,7 @@ const ShopInformation = () => {
   const establishMentDate = user && user?.establishMentData?.split('T')[0];
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
+  const selectedUpozila = watch("upazila");
 
   const divisions = getDivisions();
 
@@ -59,7 +60,7 @@ const ShopInformation = () => {
     }
   }, [selectedDistrict]);
 
-  console.log("user data", user)
+  // console.log("user data", user)
 
   useEffect(() => {
     if (user) {
@@ -70,12 +71,8 @@ const ShopInformation = () => {
       setValue("drugLicenseNo", user?.drugLicenseNo);
       setValue("establishMentData", establishMentDate);
       setValue("division", user?.division);
-      setTimeout(() => {
-        setValue("district", user?.district);
-      }, 100);
-      setTimeout(() => {
-        setValue("upazila", user?.upazila);
-      }, 100);
+      setValue("district", user?.district);
+      setValue("upazila", user?.upazila);
       setValue("shop_owner_name", user?.shop_owner_name);
       setValue("pharmacistName", user?.pharmacistName);
       setValue("pharmacistRegNo", user?.pharmacistRegNo);
