@@ -216,19 +216,6 @@ const ShopInformation = () => {
                 />
               </div>
 
-              {/* drag license no  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Drug license No
-                </label>
-                <input
-                  type="text"
-                  placeholder="License no."
-                  {...register("drugLicenseNo", { required: true })}
-                  className={`${errors?.drugLicenseNo && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
-                />
-              </div>
-
               {/* Establishment Date  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -413,6 +400,19 @@ const ShopInformation = () => {
                 </div>
               </div>
 
+              {/* drag license no  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Drug license No
+                </label>
+                <input
+                  type="text"
+                  placeholder="License no."
+                  {...register("drugLicenseNo", { required: true })}
+                  className={`${errors?.drugLicenseNo && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
+                />
+              </div>
+
               {/* Upload Drug License  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -457,7 +457,33 @@ const ShopInformation = () => {
           {/* Privacy Settings */}
           <div>
             <p className="border-b pb-2">Privacy Settings</p>
-            <div className="w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+            <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+              {/* Old password  */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Old password
+                </label>
+                <input
+                  type="password"
+                  {...register("old_password", {
+                    // required: true,
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/},
+                  })}
+                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                />
+                {errors.password ? (
+                  <p className="text-red-500 text-[10px]">
+                    {errors.password.message}
+                  </p>
+                ) : (
+                  <p className="text-[10px] text-[#989898]">
+                    Password (Minimum 6 characters with combination of letter &
+                    number)
+                  </p>
+                )}
+              </div>
+
               {/* New password  */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
