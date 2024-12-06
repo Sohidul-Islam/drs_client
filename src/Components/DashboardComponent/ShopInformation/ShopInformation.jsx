@@ -60,7 +60,7 @@ const ShopInformation = () => {
     }
   }, [selectedDistrict]);
 
-  // console.log("user data", user)
+  console.log("user data", user)
 
   useEffect(() => {
     if (user) {
@@ -71,8 +71,12 @@ const ShopInformation = () => {
       setValue("drugLicenseNo", user?.drugLicenseNo);
       setValue("establishMentData", establishMentDate);
       setValue("division", user?.division);
-      setValue("district", user?.district);
-      setValue("upazila", user?.upazila);
+      setTimeout(() => {
+        setValue("district", user?.district);
+      }, 100);
+      setTimeout(() => {
+        setValue("upazila", user?.upazila);
+      }, 200);
       setValue("shop_owner_name", user?.shop_owner_name);
       setValue("pharmacistName", user?.pharmacistName);
       setValue("pharmacistRegNo", user?.pharmacistRegNo);
