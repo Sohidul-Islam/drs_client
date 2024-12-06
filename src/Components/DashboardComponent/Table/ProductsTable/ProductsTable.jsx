@@ -156,7 +156,7 @@ const ProductsTable = () => {
                     {row?.packBoxSize} Pack's
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
-                    {row?.stockQuantity}
+                    {row?.stockQuantity === 0 ? "---" : row?.stockQuantity}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs">
                     {row?.date}
