@@ -9,7 +9,13 @@ import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManu
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
 
 const CreateProduct = () => {
-  const { register, handleSubmit, reset, control, formState: {errors} , clearErrors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm();
   const [loading, setLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
 
@@ -49,6 +55,7 @@ const CreateProduct = () => {
     } catch (error) {
       setLoading(false);
       console.log(error);
+      toast.error(error?.message);
     }
   };
 
@@ -72,7 +79,9 @@ const CreateProduct = () => {
                 type="text"
                 {...register("productName", { required: true })}
                 placeholder="Product name"
-                className={`${errors?.productName && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
+                className={`${
+                  errors?.productName && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -98,7 +107,9 @@ const CreateProduct = () => {
                 type="text"
                 {...register("strength", { required: true })}
                 placeholder="strength"
-                className={`${errors?.strength && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
+                className={`${
+                  errors?.strength && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -111,7 +122,9 @@ const CreateProduct = () => {
                 type="text"
                 {...register("genericName", { required: true })}
                 placeholder="Generic name"
-                className={`${errors?.genericName && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
+                className={`${
+                  errors?.genericName && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -164,7 +177,9 @@ const CreateProduct = () => {
                 type="text"
                 {...register("dosageForm", { required: true })}
                 placeholder="Dosage form"
-                className={`${errors?.dosageForm && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
+                className={`${
+                  errors?.dosageForm && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -216,6 +231,7 @@ const CreateProduct = () => {
                 )}
               </button>
               <button
+                type="button"
                 onClick={() => reset()}
                 className="text-[#FF0027] hover:text-white border hover:bg-[#FF0027] border-[#FF0027] rounded-md px-3 py-1 flex items-center font-medium"
               >
