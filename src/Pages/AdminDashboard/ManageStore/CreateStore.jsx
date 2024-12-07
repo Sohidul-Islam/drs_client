@@ -5,34 +5,44 @@ import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { useAddFileMutation } from "../../../features/api/admin/adminFileUploadApi";
 import { useAddUserMutation } from "../../../features/api/admin/adminUserApi";
-import { getDivisions, getDistrictsByDivision, getUpazilasByDistrict   } from 'bd-geodata';
+import {
+  getDivisions,
+  getDistrictsByDivision,
+  getUpazilasByDistrict,
+} from "bd-geodata";
 
 const CreateStore = () => {
-  const { register, handleSubmit, reset, setValue, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm();
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState("No image found");
-  const [districts, setDistricts] = useState([])
-  const [upazilas, setUpazilas] = useState([])
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
 
   const [addUser] = useAddUserMutation();
   const [addFile] = useAddFileMutation();
 
-  const divisions = getDivisions()
+  const divisions = getDivisions();
 
-  // get district by division 
+  // get district by division
   useEffect(() => {
-    const districts = getDistrictsByDivision(selectedDivision)
-    setDistricts(districts)
-  }, [selectedDivision, setDistricts])
+    const districts = getDistrictsByDivision(selectedDivision);
+    setDistricts(districts);
+  }, [selectedDivision, setDistricts]);
 
-  // get upazila by district 
+  // get upazila by district
   useEffect(() => {
-    const upazilas = getUpazilasByDistrict(selectedDistrict)
-    setUpazilas(upazilas)
-  }, [selectedDistrict, setUpazilas])
-  
+    const upazilas = getUpazilasByDistrict(selectedDistrict);
+    setUpazilas(upazilas);
+  }, [selectedDistrict, setUpazilas]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -45,7 +55,7 @@ const CreateStore = () => {
         reset();
       }
     } catch (error) {
-      toast.error("something went wrong");
+      toast.error(error?.message);
       setLoading(false);
       reset();
     }
@@ -69,8 +79,6 @@ const CreateStore = () => {
     }
   };
 
-  
-
   return (
     <div className="relative h-screen">
       <div className="flex items-center gap-x-[10px]">
@@ -89,7 +97,10 @@ const CreateStore = () => {
               <input
                 type="text"
                 {...register("shop_name", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Store name"
+                className={`${
+                  errors?.shop_name && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -101,7 +112,10 @@ const CreateStore = () => {
               <input
                 type="text"
                 {...register("shop_owner_name", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Owner name"
+                className={`${
+                  errors?.shop_owner_name && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -112,7 +126,9 @@ const CreateStore = () => {
               </label>
               <select
                 {...register("division", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                className={`${
+                  errors?.division && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               >
                 <option value="">Select Division</option>
                 {divisions.map((division, index) => (
@@ -130,7 +146,9 @@ const CreateStore = () => {
               </label>
               <select
                 {...register("district", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                className={`${
+                  errors?.district && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
                 disabled={!selectedDivision}
               >
                 <option value="">Select District</option>
@@ -150,7 +168,9 @@ const CreateStore = () => {
               </label>
               <select
                 {...register("upazila", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                className={`${
+                  errors?.upazila && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
                 disabled={!selectedDistrict}
               >
                 <option value="">Select Upazila</option>
@@ -163,18 +183,6 @@ const CreateStore = () => {
               </select>
             </div>
 
-            {/* Address Line */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Address Line
-              </label>
-              <input
-                type="text"
-                {...register("address", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
-
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -183,7 +191,10 @@ const CreateStore = () => {
               <input
                 type="email"
                 {...register("email", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="E-mail"
+                className={`${
+                  errors?.email && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -195,6 +206,21 @@ const CreateStore = () => {
               <input
                 type="number"
                 {...register("phone_number", { required: true })}
+                placeholder="Phone number"
+                className={`${
+                  errors?.phone_number && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
+              />
+            </div>
+
+            {/* Address Line */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Address Line
+              </label>
+              <input
+                type="text"
+                {...register("address")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -207,7 +233,7 @@ const CreateStore = () => {
               <input
                 type="text"
                 // readOnly
-                {...register("pharmacistName", { required: true })}
+                {...register("pharmacistName")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -219,7 +245,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                {...register("pharmacistRegNo", { required: true })}
+                {...register("pharmacistRegNo")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -231,7 +257,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="text"
-                {...register("drugLicenseNo", { required: true })}
+                {...register("drugLicenseNo")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -269,7 +295,7 @@ const CreateStore = () => {
               </label>
               <input
                 type="date"
-                {...register("establishMentData", { required: true })}
+                {...register("establishMentData")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -280,7 +306,7 @@ const CreateStore = () => {
                 Status
               </label>
               <select
-                {...register("status", { required: true })}
+                {...register("status")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
@@ -296,37 +322,36 @@ const CreateStore = () => {
               </label>
               <input
                 type="password"
-                {...register("password", { required: true })}
+                {...register("password")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
           </div>
 
           {/* button  */}
-          <div className="absolute bottom-0">
+          <div className="fixed bottom-5">
             <div className="flex gap-x-5">
-              {/* Save button */}
               <button
                 type="submit"
                 disabled={loading}
                 className={`${
                   loading
                     ? "text-gray-400 border-gray-400 cursor-no-drop"
-                    : "text-[#139238] border-[#139238]"
+                    : "text-[#139238] hover:text-white hover:bg-[#139238] border-[#139238]"
                 } border rounded-md px-3 py-1 flex items-center font-medium`}
               >
                 <span className="mr-2">
                   <FaFileMedical />
                 </span>
-                Save{" "}
+                Save
                 {loading && (
                   <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
                 )}
               </button>
-              {/* Clear button */}
               <button
+                type="button"
                 onClick={() => reset()}
-                className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
+                className="text-[#FF0027] hover:text-white border hover:bg-[#FF0027] border-[#FF0027] rounded-md px-3 py-1 flex items-center font-medium"
               >
                 <span className="mr-2">
                   <FaRegTrashCan />
