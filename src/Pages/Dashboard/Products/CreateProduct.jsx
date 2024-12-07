@@ -9,7 +9,7 @@ import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManu
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
 
 const CreateProduct = () => {
-  const { register, handleSubmit, reset, control } = useForm();
+  const { register, handleSubmit, reset, control, formState: {errors} , clearErrors } = useForm();
   const [loading, setLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
 
@@ -71,7 +71,8 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("productName", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Product name"
+                className={`${errors?.productName && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -96,7 +97,8 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("strength", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="strength"
+                className={`${errors?.strength && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -108,7 +110,8 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("genericName", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Generic name"
+                className={`${errors?.genericName && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -123,6 +126,7 @@ const CreateProduct = () => {
               propertyValue="id"
               propertyName="category_name"
               setSearchInputValue={setSearchInputValue}
+              errors={errors.categoryId}
             />
 
             {/* Manufacturer */}
@@ -136,6 +140,7 @@ const CreateProduct = () => {
               propertyValue="id"
               propertyName="manufacture_name"
               setSearchInputValue={setSearchInputValue}
+              errors={errors.manufacturerId}
             />
             {/* Dosage Form */}
             {/* <div>
@@ -158,7 +163,8 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("dosageForm", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Dosage form"
+                className={`${errors?.dosageForm && "border-[#FF0027]"} mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -182,14 +188,15 @@ const CreateProduct = () => {
               </label>
               <input
                 type="number"
-                {...register("packBoxSize", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                {...register("packBoxSize")}
+                placeholder="Box size"
+                className="mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
           </div>
 
           {/* button  */}
-          <div className="absolute bottom-0">
+          <div className="fixed bottom-5">
             <div className="flex gap-x-5">
               <button
                 type="submit"
@@ -197,20 +204,20 @@ const CreateProduct = () => {
                 className={`${
                   loading
                     ? "text-gray-400 border-gray-400 cursor-no-drop"
-                    : "text-[#139238] border-[#139238]"
+                    : "text-[#139238] hover:text-white hover:bg-[#139238] border-[#139238]"
                 } border rounded-md px-3 py-1 flex items-center font-medium`}
               >
                 <span className="mr-2">
                   <FaFileMedical />
                 </span>
-                Save{" "}
+                Save
                 {loading && (
                   <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
                 )}
               </button>
               <button
                 onClick={() => reset()}
-                className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
+                className="text-[#FF0027] hover:text-white border hover:bg-[#FF0027] border-[#FF0027] rounded-md px-3 py-1 flex items-center font-medium"
               >
                 <span className="mr-2">
                   <FaRegTrashCan />

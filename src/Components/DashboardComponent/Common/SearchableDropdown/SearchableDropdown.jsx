@@ -20,7 +20,7 @@ const SearchableDropdown = ({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         {labelText}
         {required === "true" && <span className="text-[#FF0027]">*</span>}
       </label>
@@ -37,10 +37,10 @@ const SearchableDropdown = ({
             isValidNewOption={() => false} // Disable option creation
             onChange={(selectedOption) => {
               field.onChange(selectedOption); // Update react-hook-form
-              setSearchInputValue(selectedOption ? selectedOption.value : ""); // Update local state with the value
+              setSearchInputValue(selectedOption ? selectedOption.value : "");
             }}
             onInputChange={(value) => {
-              setSearchInputValue(value); // Capture typed text
+              setSearchInputValue(value);
             }}
             styles={{
               control: (base) => ({
