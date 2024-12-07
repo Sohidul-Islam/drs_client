@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { GoCpu } from "react-icons/go";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
@@ -7,13 +7,20 @@ import { useAddManufacturerMutation } from "../../../features/api/admin/adminMan
 import { toast } from "react-toastify";
 
 const CreateManufacturer = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const { user } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
   // console.log('user from manufacturer', user);
 
   const [addManufacturer] = useAddManufacturerMutation();
 
   const onSubmit = async (data) => {
+    setLoading(true);
     const manufacture = {
       name: data?.name,
       status: "active",
@@ -21,20 +28,22 @@ const CreateManufacturer = () => {
       contactPerson: data?.contactPerson,
       phoneNumber: data?.phone,
     };
-    // console.log('Manufacture' ,manufacture)
+
     try {
       const { data } = await addManufacturer(manufacture);
       if (data?.status) {
         reset();
         toast.success(data?.message);
+        setLoading(false);
       } else {
         toast.error(data?.message);
         reset();
+        setLoading(false);
       }
-
-      // console.log("response", data);
     } catch (error) {
       console.log(error);
+      toast.error(error?.message);
+      setLoading(false);
     }
   };
 
@@ -56,7 +65,10 @@ const CreateManufacturer = () => {
               <input
                 type="text"
                 {...register("name", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Manufacturer name"
+                className={`${
+                  errors?.name && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -68,7 +80,10 @@ const CreateManufacturer = () => {
               <input
                 type="text"
                 {...register("contactPerson", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Person name"
+                className={`${
+                  errors?.contactPerson && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -80,26 +95,38 @@ const CreateManufacturer = () => {
               <input
                 type="text"
                 {...register("phone", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Phone number"
+                className={`${
+                  errors?.phone && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
           </div>
 
           {/* button  */}
-          <div className="absolute bottom-0">
+          <div className="fixed bottom-5">
             <div className="flex gap-x-5">
               <button
                 type="submit"
-                className="text-[#139238] border border-[#139238] rounded-md px-3 py-1 flex items-center font-medium"
+                disabled={loading}
+                className={`${
+                  loading
+                    ? "text-gray-400 border-gray-400 cursor-no-drop"
+                    : "text-[#139238] hover:text-white hover:bg-[#139238] border-[#139238]"
+                } border rounded-md px-3 py-1 flex items-center font-medium`}
               >
                 <span className="mr-2">
                   <FaFileMedical />
                 </span>
                 Save
+                {loading && (
+                  <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
+                )}
               </button>
               <button
+                type="button"
                 onClick={() => reset()}
-                className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
+                className="text-[#FF0027] hover:text-white border hover:bg-[#FF0027] border-[#FF0027] rounded-md px-3 py-1 flex items-center font-medium"
               >
                 <span className="mr-2">
                   <FaRegTrashCan />
