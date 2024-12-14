@@ -40,7 +40,7 @@ const CategoryTable = () => {
     return <div>Loading...</div>;
   }
   // console.log(data, "category");
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata || {};
 
   // Delete
   // open delete modal

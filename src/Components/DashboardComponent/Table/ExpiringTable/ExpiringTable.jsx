@@ -22,7 +22,7 @@ const ExpiringTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata || {};
   // console.log('Expiring Product Data',data)
 
   return (

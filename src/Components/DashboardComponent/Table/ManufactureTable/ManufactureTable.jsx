@@ -50,7 +50,7 @@ const ManufactureTable = () => {
 
   // console.log("manufac data",data)
 
-  const { totalPages } = data?.metadata;
+  const { totalPages } = data?.metadata || {};
 
   // Delete
   // open delete modal
