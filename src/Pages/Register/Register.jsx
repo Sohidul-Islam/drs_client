@@ -72,8 +72,9 @@ const Register = () => {
     try {
       const res = await dispatch(registers(data)).unwrap();
       if (res?.status) {
-        console.log("res", res);
-        navigate("/dashboard");
+        // console.log("res", res);
+        // navigate("/dashboard");
+        navigate("/email-verification", { state: { fromRegister: true } });
         toast.success(res?.message || "successfully created an account");
       } else {
         toast.error(res?.message || "something went wrong");
