@@ -9,17 +9,17 @@ const EmailVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // useEffect(() => {
-  //   if (!location.state?.fromRegister) {
-  //     navigate("/");
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, [location.state, navigate]);
+  useEffect(() => {
+    if (!location.state?.fromRegister) {
+      navigate("/");
+    } else {
+      setLoading(false);
+    }
+  }, [location.state, navigate]);
 
-  // if (loading) {
-  //   return <LoadingAnimation />;
-  // }
+  if (loading) {
+    return <LoadingAnimation />;
+  }
   // const [code, setCode] = useState(["", "", "", "", "", ""]);
   // const [timer, setTimer] = useState(60);
   // const [canResend, setCanResend] = useState(false);
@@ -80,9 +80,7 @@ const EmailVerification = () => {
           </div>
           <p className="font-semibold mb-3">Account Verification</p>
           <p className="text-sm">
-            We've sent a verification link to your email address. Please check
-            your inbox (and your spam/junk folder, just in case) and click on
-            the link to complete your registration.
+          We've sent a verification link to your email address. Please check your inbox (and your spam/junk folder, just in case) and click on the link to complete your registration.
           </p>
 
           <button
