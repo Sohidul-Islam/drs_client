@@ -10,11 +10,7 @@ import { AiFillProduct } from "react-icons/ai";
 import { useUpdatePurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import { FaFileMedical } from "react-icons/fa6";
 
-const UpdatePurchaseProductModal = ({
-  isOpen,
-  onClose,
-  productData,
-}) => {
+const UpdatePurchaseProductModal = ({ isOpen, onClose, productData }) => {
   const { user } = useSelector((state) => state.auth);
   const { register, handleSubmit, control, setValue, watch } = useForm();
   const [loading, setLoading] = useState(false);
@@ -90,7 +86,7 @@ const UpdatePurchaseProductModal = ({
   const onSubmit = async (data) => {
     setLoading(true);
     data.manufacturerId =
-    data.manufacturerId.value || productData.manufacturerId;
+      data.manufacturerId.value || productData.manufacturerId;
     data.productId = data.productId.value || productData.productId;
     data.supplierId = data.supplierId.value || productData.supplierId;
     data.sellerId = user?.id || productData.sellerId;
@@ -114,14 +110,18 @@ const UpdatePurchaseProductModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full">
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+      <div
+        className={`${
+          isOpen ? "animate-slide-in" : "animate-slide-out"
+        } relative top-14 mx-auto p-5 border w-[80%] h-[80%] shadow-lg rounded-md bg-white`}
+      >
         <div className="flex items-center gap-x-[10px] mb-5">
           <AiFillProduct className="text-lg" />
           <p>Update Purchase Product</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-4 gap-x-4 items-center gap-y-5 bg-white px-5 py-3">
+          <div className="grid grid-cols-4 gap-x-4 gap-y-5">
             {/* Manufacturer */}
             <SearchableDropdown
               labelText="Manufacturer"
@@ -169,10 +169,8 @@ const UpdatePurchaseProductModal = ({
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
-          </div>
 
-          {/* Product Information */}
-          <div className="grid grid-cols-4 gap-x-4 items-center gap-y-5 bg-white px-5 py-3 mt-4">
+            {/* Product Information */}
             <SearchableDropdown
               labelText="Product"
               name="productId"
@@ -184,6 +182,7 @@ const UpdatePurchaseProductModal = ({
               propertyName="productName"
               setSearchInputValue={setSearchInputValue}
             />
+
             {/* Manufactured Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -287,7 +286,7 @@ const UpdatePurchaseProductModal = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end gap-4 mt-6">
+          <div className="flex justify-end gap-4">
             <button
               type="button"
               onClick={onClose}

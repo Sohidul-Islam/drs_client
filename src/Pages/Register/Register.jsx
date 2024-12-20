@@ -58,29 +58,35 @@ const Register = () => {
   }, [selectedDistrict]);
 
   const onSubmit = async (data) => {
-    const divisionName = divisions.find(
-      (div) => div.id === data.division
-    )?.name;
-    const districtName = districts.find(
-      (dis) => dis.id === data.district
-    )?.name;
-    const upazilaName = upazilas.find((upa) => upa.id === data.upazila)?.name;
-    data.division = divisionName;
-    data.district = districtName;
-    data.upazila = upazilaName;
+    // const divisionName = divisions.find(
+    //   (div) => div.id === data.division
+    // )?.name;
+    // const districtName = districts.find(
+    //   (dis) => dis.id === data.district
+    // )?.name;
+    // const upazilaName = upazilas.find((upa) => upa.id === data.upazila)?.name;
+    // data.division = divisionName;
+    // data.district = districtName;
+    // data.upazila = upazilaName;\
 
     try {
-      await dispatch(registers(data)).unwrap();
-      navigate("/dashboard");
-      toast.success("successfully created an account");
+      const res = await dispatch(registers(data)).unwrap();
+      if (res?.status) {
+        // console.log("res", res);
+        // navigate("/dashboard");
+        navigate("/email-verification", { state: { fromRegister: true } });
+        toast.success(res?.message || "successfully created an account");
+      } else {
+        toast.error(res?.message || "something went wrong");
+      }
     } catch (error) {
-      toast.error("something went wrong");
+      toast.error(error || "something went wrong");
     }
   };
 
   return (
     <div className="bg-bgRegister bg-cover bg-no-repeat">
-      <div className="px-5 py-5 md:py-14 flex items-center justify-center h-full bg-[#1F23A8]/50 ">
+      <div className="px-5 py-5 md:py-14 flex items-center justify-center h-full bg-[#1F23A8]/50">
         <div className="p-5 md:p-10 w-full md:max-w-[536px] bg-white rounded-lg">
           <div className="flex items-center gap-3 mb-5 md:mb-10">
             <img className="w-10 h-8" src={logo} alt="DRA Solution logo" />
@@ -267,10 +273,10 @@ const Register = () => {
                         value.length >= 10 ||
                         "Mobile number at least 10 digits",
                       maxLength: (value) =>
-                        value.length <= 15 ||
-                        "Too long mobile number",
+                        value.length <= 15 || "Too long mobile number",
                       validFormat: (value) =>
-                        /^(?:88)?01[3-9]\d{8}$/.test(value) || "Invalid mobile number",
+                        /^(?:88)?01[3-9]\d{8}$/.test(value) ||
+                        "Invalid mobile number",
                     },
                   }}
                   render={({ field }) => (

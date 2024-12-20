@@ -29,6 +29,7 @@ export const adminBaseApi = createApi({
     "Stock-Item",
     "Expiring",
     "Expired",
+    "DosageForm",
   ],
   endpoints: () => ({}),
 });

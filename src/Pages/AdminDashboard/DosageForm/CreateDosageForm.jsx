@@ -2,48 +2,38 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { GoCpu } from "react-icons/go";
 import { FaFileMedical, FaRegTrashCan } from "react-icons/fa6";
-import { useSelector } from "react-redux";
-import { useAddManufacturerMutation } from "../../../features/api/admin/adminManufactureApi";
 import { toast } from "react-toastify";
+import { useAddDosageFormMutation } from "../../../features/api/admin/adminDosageFormApi";
 
-const CreateManufacturer = () => {
+const CreateDosageForm = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const { user } = useSelector((state) => state.auth);
-  const [loading, setLoading] = useState(false);
-  // console.log('user from manufacturer', user);
 
-  const [addManufacturer] = useAddManufacturerMutation();
+  const [loading, setLoading] = useState(false);
+
+  const [addDosageForm] = useAddDosageFormMutation();
 
   const onSubmit = async (data) => {
     setLoading(true);
-    const manufacture = {
-      name: data?.name,
-      status: "active",
-      sellerId: user?.id,
-      contactPerson: data?.contactPerson,
-      phoneNumber: data?.phone,
-    };
 
     try {
-      const { data } = await addManufacturer(manufacture);
-      if (data?.status) {
+      const { data: res } = await addDosageForm(data);
+      if (res?.status) {
         reset();
-        toast.success(data?.message);
+        toast.success(res?.message);
         setLoading(false);
       } else {
-        toast.error(data?.message);
+        toast.error(res?.message);
         reset();
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error?.message);
       setLoading(false);
+      toast.error(error?.message);
     }
   };
 
@@ -51,53 +41,23 @@ const CreateManufacturer = () => {
     <div className="relative h-screen">
       <div className="flex items-center gap-x-[10px]">
         <GoCpu className="text-lg" />
-        <p>Create New Manufacturer</p>
+        <p>Create Dosage Form</p>
       </div>
 
       <div className="px-5 py-3 mt-3 bg-white ">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-3 gap-x-12">
-            {/* Manufacturer Name */}
+            {/* Category Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Manufacturer Name <span className="text-[#FF0027]">*</span>
+                Dosage Form <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
                 {...register("name", { required: true })}
-                placeholder="Manufacturer name"
+                placeholder="Dosage form"
                 className={`${
                   errors?.name && "border-[#FF0027]"
-                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
-              />
-            </div>
-
-            {/* Contact Person Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Contact Person Name <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="text"
-                {...register("contactPerson", { required: true })}
-                placeholder="Person name"
-                className={`${
-                  errors?.contactPerson && "border-[#FF0027]"
-                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
-              />
-            </div>
-
-            {/* Mobile Number */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Mobile Number <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="text"
-                {...register("phone", { required: true })}
-                placeholder="Phone number"
-                className={`${
-                  errors?.phone && "border-[#FF0027]"
                 } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
@@ -141,4 +101,4 @@ const CreateManufacturer = () => {
   );
 };
 
-export default CreateManufacturer;
+export default CreateDosageForm;

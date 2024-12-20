@@ -34,7 +34,7 @@ const CustomerTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata || {};
   // console.log('from customer table: ', data.data)
 
     // Delete 

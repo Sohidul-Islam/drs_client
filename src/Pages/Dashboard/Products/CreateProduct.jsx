@@ -7,9 +7,16 @@ import { useAddProductMutation } from "../../../features/api/admin/adminProductA
 import { useGetAllProductCategoryQuery } from "../../../features/api/admin/adminProductCategoryApi";
 import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
+import { useGetAllDosageFormQuery } from "../../../features/api/admin/adminDosageFormApi";
 
 const CreateProduct = () => {
-  const { register, handleSubmit, reset, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm();
   const [loading, setLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
 
@@ -25,6 +32,12 @@ const CreateProduct = () => {
     searchKey: searchInputValue,
   });
 
+  const { data: dosageData } = useGetAllDosageFormQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: searchInputValue,
+  });
+
   const [addProduct] = useAddProductMutation();
 
   if (isLoading) {
@@ -35,6 +48,8 @@ const CreateProduct = () => {
     setLoading(true);
     data.manufacturerId = data.manufacturerId.value;
     data.categoryId = data.categoryId.value;
+    data.dosageId = data.dosageForm.value;
+    console.log("first", data)
     try {
       const { data: res } = await addProduct(data);
       if (res?.status) {
@@ -49,6 +64,7 @@ const CreateProduct = () => {
     } catch (error) {
       setLoading(false);
       console.log(error);
+      toast.error(error?.message);
     }
   };
 
@@ -71,7 +87,10 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("productName", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Product name"
+                className={`${
+                  errors?.productName && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -96,7 +115,10 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("strength", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="strength"
+                className={`${
+                  errors?.strength && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -108,7 +130,10 @@ const CreateProduct = () => {
               <input
                 type="text"
                 {...register("genericName", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Generic name"
+                className={`${
+                  errors?.genericName && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -123,6 +148,7 @@ const CreateProduct = () => {
               propertyValue="id"
               propertyName="category_name"
               setSearchInputValue={setSearchInputValue}
+              errors={errors.categoryId}
             />
 
             {/* Manufacturer */}
@@ -136,31 +162,34 @@ const CreateProduct = () => {
               propertyValue="id"
               propertyName="manufacture_name"
               setSearchInputValue={setSearchInputValue}
+              errors={errors.manufacturerId}
             />
             {/* Dosage Form */}
+            <SearchableDropdown
+              labelText="Dosage Form"
+              name="dosageForm"
+              control={control}
+              data={dosageData}
+              placeholder="search dosage form"
+              required="true"
+              propertyValue="id"
+              propertyName="dosageName"
+              setSearchInputValue={setSearchInputValue}
+              errors={errors.dosageForm}
+            />
             {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Dosage Form <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("dosageForm", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Dosage Form-1</option>
-                <option value="inactive">Dosage Form-2</option>
-              </select>
-            </div> */}
-            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Dosage Form <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="text"
                 {...register("dosageForm", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Dosage form"
+                className={`${
+                  errors?.dosageForm && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
-            </div>
+            </div> */}
 
             {/* Pack/Box Size */}
             {/* <div>
@@ -182,14 +211,15 @@ const CreateProduct = () => {
               </label>
               <input
                 type="number"
-                {...register("packBoxSize", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                {...register("packBoxSize")}
+                placeholder="Box size"
+                className="mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
           </div>
 
           {/* button  */}
-          <div className="absolute bottom-0">
+          <div className="fixed bottom-5">
             <div className="flex gap-x-5">
               <button
                 type="submit"
@@ -197,20 +227,21 @@ const CreateProduct = () => {
                 className={`${
                   loading
                     ? "text-gray-400 border-gray-400 cursor-no-drop"
-                    : "text-[#139238] border-[#139238]"
+                    : "text-[#139238] hover:text-white hover:bg-[#139238] border-[#139238]"
                 } border rounded-md px-3 py-1 flex items-center font-medium`}
               >
                 <span className="mr-2">
                   <FaFileMedical />
                 </span>
-                Save{" "}
+                Save
                 {loading && (
                   <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
                 )}
               </button>
               <button
+                type="button"
                 onClick={() => reset()}
-                className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
+                className="text-[#FF0027] hover:text-white border hover:bg-[#FF0027] border-[#FF0027] rounded-md px-3 py-1 flex items-center font-medium"
               >
                 <span className="mr-2">
                   <FaRegTrashCan />

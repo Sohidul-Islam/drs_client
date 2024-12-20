@@ -37,6 +37,8 @@ import PaymentSuccess from "../Pages/PaymentMessage/PaymentSuccess";
 import PaymentError from "../Pages/PaymentMessage/PaymentError";
 import EmailVerification from "../Pages/EmailVerification/EmailVerification";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import DosageForm from "../Pages/AdminDashboard/DosageForm/DosageForm";
+import CreateDosageForm from "../Pages/AdminDashboard/DosageForm/CreateDosageForm";
 
 export const router = createBrowserRouter([
   {
@@ -123,6 +125,22 @@ export const router = createBrowserRouter([
       {
         path: "products/create-product",
         element: <CreateProduct />,
+      },
+      {
+        path: "dosage-form",
+        element: (
+          <AdminProtectedRoute>
+            <DosageForm />
+          </AdminProtectedRoute>
+        ),
+      },
+      {
+        path: "dosage-form/create-dosage-form",
+        element: (
+          <AdminProtectedRoute>
+            <CreateDosageForm />
+          </AdminProtectedRoute>
+        ),
       },
       {
         path: "product-categories",

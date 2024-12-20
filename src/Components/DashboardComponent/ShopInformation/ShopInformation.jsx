@@ -36,6 +36,7 @@ const ShopInformation = () => {
   const establishMentDate = user && user?.establishMentData?.split('T')[0];
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
+  const selectedUpozila = watch("upazila");
 
   const divisions = getDivisions();
 
@@ -59,6 +60,8 @@ const ShopInformation = () => {
     }
   }, [selectedDistrict]);
 
+  console.log("user data", user)
+
   useEffect(() => {
     if (user) {
       setValue("image", user?.image);
@@ -73,7 +76,7 @@ const ShopInformation = () => {
       }, 100);
       setTimeout(() => {
         setValue("upazila", user?.upazila);
-      }, 100);
+      }, 200);
       setValue("shop_owner_name", user?.shop_owner_name);
       setValue("pharmacistName", user?.pharmacistName);
       setValue("pharmacistRegNo", user?.pharmacistRegNo);
@@ -179,65 +182,52 @@ const ShopInformation = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
               {/* shop name  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Shop name
                 </label>
                 <input
                   type="text"
                   placeholder="Shop name"
                   {...register("shop_name", { required: true })}
-                  className={`${errors?.shop_name && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${errors?.shop_name && "outline-red-600"} mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
               {/*shop email  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Email
                 </label>
                 <input
                   type="email"
                   placeholder="E-mail"
                   {...register("email", { required: true })}
-                  className={`${errors?.email && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${errors?.email && "outline-red-600"} mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
               {/*shop phone number  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Phone number
                 </label>
                 <input
                   type="tel"
                   placeholder="Phone number"
                   {...register("phone_number", { required: true })}
-                  className={`${errors?.phone_number && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
-                />
-              </div>
-
-              {/* drag license no  */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Drug license No
-                </label>
-                <input
-                  type="text"
-                  placeholder="License no."
-                  {...register("drugLicenseNo", { required: true })}
-                  className={`${errors?.drugLicenseNo && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${errors?.phone_number && "outline-red-600"} mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
               {/* Establishment Date  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Establishment Date
                 </label>
                 <input
                   type="date"
-                  {...register("establishMentData", { required: true })}
-                  className={`${errors?.establishMentData && "outline-red-600"} mt-1 block w-full bg-gray-200 outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  {...register("establishMentData")}
+                  className={`mt-1 block w-full  border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
             </div>
@@ -245,16 +235,16 @@ const ShopInformation = () => {
 
           {/* Address */}
           <div>
-            <p className="border-b pb-2">Address</p>
+            <p className="border-b pb-2 text-sm">Address</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
               {/* Division */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Division <span className="text-[#FF0027]">*</span>
                 </label>
                 <select
                   {...register("division")}
-                  className={`${errors?.division && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${errors?.division && "outline-red-600"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 >
                   <option value="">Select Division</option>
                   {divisions?.map((division) => (
@@ -264,14 +254,15 @@ const ShopInformation = () => {
                   ))}
                 </select>
               </div>
+
               {/* District  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   District <span className="text-[#FF0027]">*</span>
                 </label>
                 <select
                   {...register("district")}
-                  className={`${errors?.district && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${errors?.district && "outline-red-600"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                   disabled={!selectedDivision}
                 >
                   <option value="">Select District</option>
@@ -286,12 +277,12 @@ const ShopInformation = () => {
 
               {/* Thana  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Upozilla/Thana <span className="text-[#FF0027]">*</span>
                 </label>
                 <select
                   {...register("upazila")}
-                  className={`${errors?.upazila && "outline-red-600"} mt-1 block w-full border outline-none text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${errors?.upazila && "outline-red-600"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                   disabled={!selectedDistrict}
                 >
                   <option value="">Select Upazila</option>
@@ -306,13 +297,13 @@ const ShopInformation = () => {
 
               {/* Address Line */}
               <div className="md:col-span-">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Address Line
                 </label>
                 <textarea
                   placeholder="Address..."
                   {...register("address-line")}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md resize-none"
+                  className="mt-1 block w-full border outline-gray-300 text-xs text-gray-700 py-2 px-3 rounded-md resize-none"
                 />
               </div>
             </div>
@@ -320,63 +311,63 @@ const ShopInformation = () => {
 
           {/* Owner Information */}
           <div>
-            <p className="border-b pb-2">Owner Information</p>
+            <p className="border-b pb-2 text-sm">Owner Information</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
               {/* Owner Name  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Owner Name
                 </label>
                 <input
                   type="text"
-                  {...register("shop_owner_name", { required: true })}
+                  {...register("shop_owner_name")}
                   placeholder="Name"
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className="mt-1 block w-full border outline-gray-300 text-xs text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
               {/* Pharmacist Name  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Pharmacist Name
                 </label>
                 <input
                   type="text"
                   placeholder="Pharmacist name"
-                  {...register("pharmacistName", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  {...register("pharmacistName")}
+                  className="mt-1 block w-full border outline-gray-300 text-xs text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
               {/* Pharmacist Registration No. */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Pharmacist Registration No
+                <label className="block text-xs font-medium text-gray-700">
+                  Pharmacist Registration No <span className="text-[6px] text-gray-500">(Mandatory Reg. No)</span>
                 </label>
                 <input
                   type="text"
                   placeholder="Registration No"
                   {...register("pharmacistRegNo", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  className={`${errors?.pharmacistRegNo && " border-red-700"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
               {/* NID No. */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   NID No.
                 </label>
                 <input
                   type="number"
                   placeholder="National Id No."
-                  {...register("nidNumber", { required: true })}
-                  className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                  {...register("nidNumber")}
+                  className="mt-1 block w-full border outline-gray-300 text-xs text-gray-700 py-2 px-3 rounded-md"
                 />
               </div>
 
               {/* Upload NID Photo  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Upload NID
                 </label>
                 <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
@@ -401,7 +392,7 @@ const ShopInformation = () => {
                       loading === "nid_image"
                         ? "cursor-wait bg-[#c1c0c0] text-black"
                         : "cursor-pointer bg-[#006E9E] text-white"
-                    } p-2.5 text-xs`}
+                    } p-1 text-xs`}
                   >
                     {loading === "nid_image" ? "Uploading..." : "Upload"}
                   </label>
@@ -413,9 +404,22 @@ const ShopInformation = () => {
                 </div>
               </div>
 
+              {/* drag license no  */}
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Drug license No <span className="text-[6px] text-gray-500">(Mandatory drug license)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="License no."
+                  {...register("drugLicenseNo", { required: true })}
+                  className={`${errors?.drugLicenseNo && " border-red-700"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                />
+              </div>
+
               {/* Upload Drug License  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Upload Drug License
                 </label>
                 <div className="mt-1 flex items-center border px-2 py-1 rounded-md">
@@ -440,7 +444,7 @@ const ShopInformation = () => {
                       loading === "drugLicenseDocument"
                         ? "cursor-wait bg-[#c1c0c0] text-black"
                         : "cursor-pointer bg-[#006E9E] text-white"
-                    } p-2.5 text-xs`}
+                    } p-1 text-xs`}
                   >
                     {loading === "drugLicenseDocument"
                       ? "Uploading..."
@@ -456,11 +460,38 @@ const ShopInformation = () => {
 
           {/* Privacy Settings */}
           <div>
-            <p className="border-b pb-2">Privacy Settings</p>
-            <div className="w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+            <p className="border-b pb-2 text-sm">Privacy Settings</p>
+            <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+              {/* Old password  */}
+              <div>
+                <label className="block text-xs font-medium text-gray-700">
+                  Old password
+                </label>
+                <input
+                  type="password"
+                  {...register("old_password", {
+                    // required: true,
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/},
+                  })}
+                  placeholder="Enter old password"
+                  className="my-1 block w-full border outline-gray-300 text-xs text-gray-700 py-[5px] px-3 rounded-md"
+                />
+                {errors.password ? (
+                  <p className="text-red-500 text-[10px]">
+                    {errors.password.message}
+                  </p>
+                ) : (
+                  <p className="text-[10px] text-[#989898]">
+                    Password (Minimum 6 characters with combination of letter &
+                    number)
+                  </p>
+                )}
+              </div>
+
               {/* New password  */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   New password
                 </label>
                 <input
@@ -473,7 +504,8 @@ const ShopInformation = () => {
                         "Password must be at least 6 characters long and contain both letters and numbers",
                     },
                   })}
-                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                  placeholder="Enter new password"
+                  className="my-1 block w-full border outline-gray-300 text-xs text-gray-700 py-[5px] px-3 rounded-md"
                 />
                 {errors.password ? (
                   <p className="text-red-500 text-[10px]">
@@ -488,18 +520,18 @@ const ShopInformation = () => {
               </div>
               {/* Confirm new password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Confirm new password
                 </label>
                 <input
                   type="password"
                   {...register("confirm_password", {
-                    // required: true,
                     validate: (value) =>
                       value === getValues("password") ||
                       "Passwords do not match",
                   })}
-                  className="my-1 block w-full border outline-gray-300 text-gray-700 py-[5px] px-3 rounded-md"
+                  placeholder="Enter confirm password"
+                  className="my-1 block w-full border outline-gray-300 text-xs text-gray-700 py-[5px] px-3 rounded-md"
                 />
                 {errors.confirm_password && (
                   <p className="text-red-500 text-[10px]">

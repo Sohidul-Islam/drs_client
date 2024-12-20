@@ -46,7 +46,7 @@ const SupplierTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata || {};
 
   // Delete supplier - open modal
   const handleDeleteClick = (id) => {

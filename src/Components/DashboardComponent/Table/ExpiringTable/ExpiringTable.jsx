@@ -22,7 +22,7 @@ const ExpiringTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = data.metadata;
+  const { totalPages } = data?.metadata || {};
   // console.log('Expiring Product Data',data)
 
   return (
@@ -36,7 +36,7 @@ const ExpiringTable = () => {
         title="Expiring Product Report"
       />
       {/* Table and Pagination  */}
-      <div className="overflow-x-auto">
+      <div>
         {/* Table  */}
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -58,7 +58,7 @@ const ExpiringTable = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200 overflow-x-auto">
             {data?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
