@@ -7,6 +7,7 @@ import { useAddProductMutation } from "../../../features/api/admin/adminProductA
 import { useGetAllProductCategoryQuery } from "../../../features/api/admin/adminProductCategoryApi";
 import { useGetAllManufactureQuery } from "../../../features/api/admin/adminManufactureApi";
 import SearchableDropdown from "../../../Components/DashboardComponent/Common/SearchableDropdown/SearchableDropdown";
+import { useGetAllDosageFormQuery } from "../../../features/api/admin/adminDosageFormApi";
 
 const CreateProduct = () => {
   const {
@@ -31,6 +32,12 @@ const CreateProduct = () => {
     searchKey: searchInputValue,
   });
 
+  const { data: dosageData } = useGetAllDosageFormQuery({
+    page: 1,
+    pageSize: 15,
+    searchKey: searchInputValue,
+  });
+
   const [addProduct] = useAddProductMutation();
 
   if (isLoading) {
@@ -41,6 +48,8 @@ const CreateProduct = () => {
     setLoading(true);
     data.manufacturerId = data.manufacturerId.value;
     data.categoryId = data.categoryId.value;
+    data.dosageId = data.dosageForm.value;
+    console.log("first", data)
     try {
       const { data: res } = await addProduct(data);
       if (res?.status) {
@@ -156,20 +165,19 @@ const CreateProduct = () => {
               errors={errors.manufacturerId}
             />
             {/* Dosage Form */}
+            <SearchableDropdown
+              labelText="Dosage Form"
+              name="dosageForm"
+              control={control}
+              data={dosageData}
+              placeholder="search dosage form"
+              required="true"
+              propertyValue="id"
+              propertyName="dosageName"
+              setSearchInputValue={setSearchInputValue}
+              errors={errors.dosageForm}
+            />
             {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Dosage Form <span className="text-[#FF0027]">*</span>
-              </label>
-              <select
-                {...register("dosageForm", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="active">Dosage Form-1</option>
-                <option value="inactive">Dosage Form-2</option>
-              </select>
-            </div> */}
-            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Dosage Form <span className="text-[#FF0027]">*</span>
               </label>
@@ -181,7 +189,7 @@ const CreateProduct = () => {
                   errors?.dosageForm && "border-[#FF0027]"
                 } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
-            </div>
+            </div> */}
 
             {/* Pack/Box Size */}
             {/* <div>
