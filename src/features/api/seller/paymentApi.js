@@ -6,23 +6,33 @@ const paymentApi = adminBaseApi.injectEndpoints({
     // all Payment
     getAllPayment: builder.query({
       query: ({ page, pageSize, searchKey, type, startDate, endDate }) => ({
-        url: "payment/all",
+        url: "payment/all/final",
         params: { page, pageSize, searchKey, type, startDate, endDate },
       }),
       transformResponse: (res) => {
-        // console.log("Payment api data: ", res.data);
+        console.log("Payment api data: ", res.data);
         const data = res?.data?.map(
-          ({ id, payment, updatedAt, purchase_product, sales_order }) => ({
+          ({
             id,
+            paymentMethod,
+            total,
+            paidAmount,
+            due,
+            invoices,
+            payment,
+            updatedAt,
+            sales_order,
+          }) => ({
+            id,
+            paymentMethod,
+            total,
+            paidAmount,
+            due,
             paymentId: payment?.id,
-            due: payment?.due?.toFixed(2),
-            paidAmount: payment?.paidAmount?.toFixed(2),
-            paymentMethod: payment?.paymentMethod,
-            total: payment?.total?.toFixed(2),
             date: updatedAt?.split("T")[0],
-            invoiceNumber: purchase_product?.invoiceNumber,
-            invoiceDate: purchase_product?.invoiceDate?.split("T")[0],
-            manufacturer: purchase_product?.manufacturer?.name,
+            invoiceNumber: invoices[0]?.purchase_product?.invoiceNumber,
+            invoiceDate: invoices[0]?.purchase_product?.invoiceDate?.split("T")[0],
+            manufacturer: invoices[0]?.purchase_product?.manufacturer?.name,
 
             // sales product
             customerName: sales_order?.customer?.name,
@@ -39,7 +49,7 @@ const paymentApi = adminBaseApi.injectEndpoints({
         };
 
         return {
-          data,
+          data: data,
           metadata,
         };
       },

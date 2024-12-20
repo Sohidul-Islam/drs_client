@@ -23,11 +23,12 @@ const CreatePurchasePaymentTable = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  console.log("payment data: ", payments.data)
   
   // Delete
   // open delete modal
   const handleDeleteClick = (id) => {
-    console.log("Payment id: ", id)
     dispatch(openModal({ id }));
   };
 
@@ -56,8 +57,9 @@ const CreatePurchasePaymentTable = () => {
         <thead className="bg-gray-50">
           <tr>
             {[
-              "Paid Amount",
               "Payment Method",
+              "Total Amount",
+              "Paid Amount",
               "Due Amount",
               "Updater at",
               "Action",
@@ -78,10 +80,13 @@ const CreatePurchasePaymentTable = () => {
             {payments?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row?.paidAmount} TK
+                  {row?.paymentMethod?.toUpperCase()}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.paymentMethod}
+                  {row?.total} TK
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row?.paidAmount} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.due} TK
