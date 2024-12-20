@@ -10,7 +10,8 @@ const adminProductApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey },
       }),
       transformResponse: (res) => {
-        const data = res.data.map(
+      
+        const data = res?.data?.map(
           ({
             id,
             productName,

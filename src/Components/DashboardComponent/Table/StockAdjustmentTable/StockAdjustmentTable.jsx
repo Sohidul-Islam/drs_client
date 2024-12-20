@@ -43,7 +43,7 @@ const StockAdjustmentTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = data?.metadata;
+  const { totalPages } = data?.metadata || {};
   // console.log("stock data", data);
 
   // Delete

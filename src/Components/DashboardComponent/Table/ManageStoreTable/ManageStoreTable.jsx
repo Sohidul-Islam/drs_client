@@ -55,7 +55,7 @@ const ManageStoreTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = users?.metadata || 1;
+  const { totalPages } = users?.metadata || {};
 
   // console.log("users data --> ", users?.data)
 

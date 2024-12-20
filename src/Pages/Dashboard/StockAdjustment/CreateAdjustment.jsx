@@ -9,7 +9,7 @@ import SearchableDropdown from "../../../Components/DashboardComponent/Common/Se
 import { useAddAdjustmentMutation } from "../../../features/api/seller/stockAdjustmentApi";
 
 const CreateAdjustment = () => {
-  const { register, handleSubmit, reset, watch, control, setValue } = useForm();
+  const { register, handleSubmit, reset, watch, control, setValue, formState: { errors } } = useForm();
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -36,8 +36,6 @@ const CreateAdjustment = () => {
     return <div>Loading...</div>;
   }
 
-  // console.log(products, 'product from crate adjustment')
-
   const onSubmit = async (data) => {
     const adjustment = {
       ...data,
@@ -48,8 +46,6 @@ const CreateAdjustment = () => {
     delete adjustment.product;
     setLoading(true);
 
-    console.log("Sending data:", adjustment);
-
     try {
       const { data: res } = await addAdjustment(adjustment);
       if (res?.status) {
@@ -59,9 +55,12 @@ const CreateAdjustment = () => {
       } else {
         toast.error(res?.message);
         reset();
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      toast.error(error?.message);
+      setLoading(false);
     }
   };
 
@@ -82,7 +81,9 @@ const CreateAdjustment = () => {
               </label>
               <select
                 {...register("adjustmentType", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                className={`${
+                  errors?.adjustmentType && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[7.5px] px-3 rounded-md`}
               >
                 <option value="">Select</option>
                 <option value="in">In</option>
@@ -96,7 +97,9 @@ const CreateAdjustment = () => {
               </label>
               <select
                 {...register("eventType", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+                className={`${
+                  errors?.eventType && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[7.5px] px-3 rounded-md`}
               >
                 <option value="">Select</option>
                 <option value="Purchase">Purchase</option>
@@ -108,6 +111,22 @@ const CreateAdjustment = () => {
                 <option value="Opening">Opening</option>
               </select>
             </div>
+
+            {/* Batch No */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Batch No <span className="text-[#FF0027]">*</span>
+              </label>
+              <input
+                type="text"
+                {...register("batchNo", { required: true })}
+                placeholder="Batch no"
+                className={`${
+                  errors?.batchNo && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
+              />
+            </div>
+
             {/* Product - searchable dropdown */}
             <SearchableDropdown
               labelText="Product"
@@ -120,17 +139,7 @@ const CreateAdjustment = () => {
               propertyName="productName"
               setSearchInputValue={setSearchInputValue}
             />
-            {/* Batch No */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Batch No <span className="text-[#FF0027]">*</span>
-              </label>
-              <input
-                type="text"
-                {...register("batchNo", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
-              />
-            </div>
+            
             {/*Product Quantity (To be adjusted) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -141,7 +150,10 @@ const CreateAdjustment = () => {
               <input
                 type="text"
                 {...register("adjustedProductQuantity", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Product quantity"
+                className={`${
+                  errors?.adjustedProductQuantity && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -153,7 +165,10 @@ const CreateAdjustment = () => {
               <input
                 type="number"
                 {...register("productUnitPrice", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="Product unit price"
+                className={`${
+                  errors?.productUnitPrice && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -168,7 +183,9 @@ const CreateAdjustment = () => {
                 type="text"
                 readOnly
                 {...register("productTotalPrice", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                className={`${
+                  errors?.productTotalPrice && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
 
@@ -180,7 +197,10 @@ const CreateAdjustment = () => {
               <input
                 type="number"
                 {...register("mrpPerUnit", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                placeholder="M.R.P"
+                className={`${
+                  errors?.mrpPerUnit && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 py-[6px] px-3 rounded-md`}
               />
             </div>
             {/* Transaction Type */}
@@ -189,7 +209,7 @@ const CreateAdjustment = () => {
                 Transaction Type
               </label>
               <select
-                {...register("transactionType", { required: true })}
+                {...register("transactionType")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
               >
                 <option value="">Select</option>
@@ -205,7 +225,7 @@ const CreateAdjustment = () => {
               </label>
               <input
                 type="date"
-                {...register("expiryDate", { required: true })}
+                {...register("expiryDate")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
@@ -216,37 +236,36 @@ const CreateAdjustment = () => {
               </label>
               <input
                 type="date"
-                {...register("eventDate", { required: true })}
+                {...register("eventDate")}
                 className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
               />
             </div>
           </div>
 
           {/* button  */}
-          <div className="absolute bottom-0">
+          <div className="fixed bottom-5">
             <div className="flex gap-x-5">
-              {/* Save button */}
               <button
                 type="submit"
                 disabled={loading}
                 className={`${
                   loading
                     ? "text-gray-400 border-gray-400 cursor-no-drop"
-                    : "text-[#139238] border-[#139238]"
+                    : "text-[#139238] hover:text-white hover:bg-[#139238] border-[#139238]"
                 } border rounded-md px-3 py-1 flex items-center font-medium`}
               >
                 <span className="mr-2">
                   <FaFileMedical />
                 </span>
-                Save{" "}
+                Save
                 {loading && (
                   <span className="ml-2 w-4 h-4 border-2 items-center justify-center border-gray-400 border-b-transparent rounded-full inline-block animate-spin"></span>
                 )}
               </button>
-              {/* Clear button */}
               <button
+                type="button"
                 onClick={() => reset()}
-                className="text-[#880015] border border-[#880015] rounded-md px-3 py-1 flex items-center font-medium"
+                className="text-[#FF0027] hover:text-white border hover:bg-[#FF0027] border-[#FF0027] rounded-md px-3 py-1 flex items-center font-medium"
               >
                 <span className="mr-2">
                   <FaRegTrashCan />

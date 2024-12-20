@@ -36,7 +36,7 @@ const PurchaseInvoiceTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = payments?.metadata || '';
+  const { totalPages } = payments?.metadata || {};
 
   // Delete
   // open delete modal

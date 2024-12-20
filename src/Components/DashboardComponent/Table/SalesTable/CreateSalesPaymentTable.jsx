@@ -62,8 +62,9 @@ const CreateSalesPaymentTable = () => {
         <thead className="bg-gray-50">
           <tr>
             {[
-              "Paid Amount",
               "Payment Method",
+              "Total Amount",
+              "Paid Amount",
               "Due Amount",
               "Updater at",
               "Action",
@@ -83,16 +84,19 @@ const CreateSalesPaymentTable = () => {
             {payments?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.paidAmount} TK
+                {row?.paymentMethod?.toUpperCase()}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.paymentMethod}
+                {row?.total} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.due} TK
+                {row?.paidAmount} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row.date}
+                {row?.due} TK
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs">
+                  {row?.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   <DeleteButton

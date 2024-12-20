@@ -32,7 +32,7 @@ const SubscriptionDetailsTable = () => {
     return <div>Loading...</div>;
   }
 
-  const { totalPages } = subscriptions?.metadata;
+  const { totalPages } = subscriptions?.metadata || {};
 
   return (
     <div className="bg-white px-5">
