@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineDatabase } from "react-icons/ai";
-import CategoryTable from "../../../Components/DashboardComponent/Table/CategoryTable/CategoryTable";
 import { useSelector } from "react-redux";
 import DosageFormTable from "../../../Components/DashboardComponent/Table/DosageFormTable/DosageFormTable";
 
