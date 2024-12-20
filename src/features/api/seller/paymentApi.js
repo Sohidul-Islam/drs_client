@@ -21,7 +21,6 @@ const paymentApi = adminBaseApi.injectEndpoints({
             invoices,
             payment,
             updatedAt,
-            sales_order,
           }) => ({
             id,
             paymentMethod,
@@ -31,14 +30,16 @@ const paymentApi = adminBaseApi.injectEndpoints({
             paymentId: payment?.id,
             date: updatedAt?.split("T")[0],
             invoiceNumber: invoices[0]?.purchase_product?.invoiceNumber,
-            invoiceDate: invoices[0]?.purchase_product?.invoiceDate?.split("T")[0],
+            invoiceDate:
+              invoices[0]?.purchase_product?.invoiceDate?.split("T")[0],
             manufacturer: invoices[0]?.purchase_product?.manufacturer?.name,
 
             // sales product
-            customerName: sales_order?.customer?.name,
-            phoneNumber: sales_order?.customer?.phoneNumber,
-            updateOn: sales_order?.createdAt?.split("T")[0],
-            orderDate: sales_order?.date?.split("T")[0],
+            customerName: invoices[0]?.sales_order?.customer?.name,
+            phoneNumber: invoices[0]?.sales_order?.customer?.phoneNumber,
+            updateOn: invoices[0]?.sales_order?.createdAt?.split("T")[0],
+            orderDate: invoices[0]?.sales_order?.date?.split("T")[0],
+            invoices
           })
         );
         const metadata = {
