@@ -19,17 +19,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
-  // -------------------------------------------------------------------------------
-  //     I have moved this code to it's parent for refetch data after payment
-  // -------------------------------------------------------------------------------
-  // const { data: purchaseProducts } = useGetAllPurchaseProductQuery({
-  //   page: 1,
-  //   pageSize: 15,
-  //   searchKey: "",
-  //   status: "inactive",
-  //   sellerId: user?.id || 1,
-  // });
-
+ 
   const [deletePurchaseProduct] = useDeletePurchaseProductMutation();
 
   // if (isLoading) {
@@ -44,6 +34,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
 
   // delete confirm
   const handleConfirmDelete = async () => {
+    console.log("ishrafil")
     try {
       const res = await deletePurchaseProduct(selectedItemId).unwrap();
       if (res.status) {
@@ -123,6 +114,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.unit}
                 </td>
+              
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.manufacturedDate}
                 </td>
@@ -146,7 +138,7 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton handleEditClick={handleEditClick} item={row} />
-                  <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                  <DeleteButton id={row?.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}

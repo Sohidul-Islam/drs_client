@@ -24,7 +24,7 @@ const CreatePurchasePaymentTable = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("payment data: ", payments.data)
+  // console.log("payment data: ", payments.data)
   
   // Delete
   // open delete modal
@@ -95,7 +95,7 @@ const CreatePurchasePaymentTable = () => {
                   {row?.date}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs text-center">
-                  <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />
+                  <DeleteButton id={row?.id} onDelete={handleDeleteClick} />
                 </td>
               </tr>
             ))}

@@ -33,7 +33,7 @@ const CreateSalesPaymentTable = () => {
   // Delete
   // open delete modal
   const handleDeleteClick = (id) => {
-    console.log("Payment id: ", id);
+    // console.log("Payment id: ", id);
     dispatch(openModal({ id }));
   };
 
