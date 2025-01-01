@@ -200,7 +200,7 @@ const PurchaseInvoiceTable = () => {
           onCancel={handleCancelDelete}
         />
 
-        {/* Update Modal  */}
+        {/* product details Modal  */}
         {productDetails && (
           <PurchaseProductDetailsModal
             isOpen={isDetailsModalOpen}

@@ -19,17 +19,6 @@ const CreateSalesProductTable = ({ saleProducts }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
-  // -------------------------------------------------------------------------------
-  //     I have moved this code to it's parent for refetch data after payment
-  // -------------------------------------------------------------------------------
-  // const { data: saleProducts } = useGetAllSaleProductQuery({
-  //   page: 1,
-  //   pageSize: 15,
-  //   searchKey: "",
-  //   status: "inactive",
-  //   sellerId: user?.id || 1,
-  // });
-
   const [deleteSaleProduct] = useDeleteSaleProductMutation();
 
   // Delete
