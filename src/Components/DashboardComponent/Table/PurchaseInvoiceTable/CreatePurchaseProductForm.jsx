@@ -59,11 +59,11 @@ const CreatePurchaseProductForm = () => {
   }
 
   const onSubmit = async (data) => {
-    data.manufacturerId = data.manufacturerId.value;
-    data.productId = data.productId.value;
-    data.supplierId = data.supplierId.value;
+    data.manufacturerId = data?.manufacturerId?.value || null;
+    data.productId = data?.productId?.value || null;
+    data.supplierId = data?.supplierId?.value || null;
     data.status = "inactive";
-    data.sellerId = user?.id;
+    data.sellerId = user?.id || null;
 
     setLoading(true);
 

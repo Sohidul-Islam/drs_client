@@ -86,8 +86,10 @@ const purchaseProductApi = adminBaseApi.injectEndpoints({
     // delete purchase-product
     deletePurchaseProduct: builder.mutation({
       query: (id) => ({
-        url: `purchase-product/delete?id=${id}`,
+        // url: purchase-product/delete?id=${id},
+        url: `purchase-product/delete`,
         method: "POST",
+        body: { id },
       }),
       invalidatesTags: ["Purchase-product"],
     }),

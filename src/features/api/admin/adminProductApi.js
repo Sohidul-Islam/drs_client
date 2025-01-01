@@ -19,7 +19,7 @@ const adminProductApi = adminBaseApi.injectEndpoints({
             genericName,
             menufacturer,
             strength,
-            dosageForm,
+            dosage,
             packBoxSize,
             updatedAt,
             stockQuantity
@@ -30,7 +30,8 @@ const adminProductApi = adminBaseApi.injectEndpoints({
             genericName,
             menufacturer,
             strength,
-            dosageForm,
+            dosage,
+            dosageForm: dosage?.name,
             packBoxSize,
             date: updatedAt?.split("T")[0],
             stockQuantity

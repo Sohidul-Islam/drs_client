@@ -77,7 +77,7 @@ const CreateSalesProductForm = () => {
                 setSearchInputValue={setSearchInputValue}
               />
             </div>
-            <div className="absolute bottom-[5.5px] right-0 z-10">
+            <div className="absolute bottom-[1.1px] right-0 z-10">
               <button
                 type="button"
                 className="w-9 h-[38px] p-3 bg-[#0085FF] text-white text-3xl flex items-center justify-center"

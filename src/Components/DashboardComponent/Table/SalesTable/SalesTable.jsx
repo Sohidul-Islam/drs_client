@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useDeletePaymentMutation, useGetAllPaymentQuery } from "../../../../features/api/seller/paymentApi";
+import {
+  useDeletePaymentMutation,
+  useGetAllPaymentQuery,
+} from "../../../../features/api/seller/paymentApi";
 import {
   closeModal,
   openModal,
@@ -10,6 +13,8 @@ import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import Pagination from "../../Common/Pagination/Pagination";
 import DeleteConfirmationModal from "../../Common/DeleteConfirmationModal/DeleteConfirmationModal";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
+import SalesProductDetailsModal from "./SalesProductDetailsModal";
+import { IoEyeOutline } from "react-icons/io5";
 
 const SalesTable = () => {
   const dispatch = useDispatch();
@@ -20,6 +25,8 @@ const SalesTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [productDetails, setProductDetails] = useState(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const { data: payments, isLoading } = useGetAllPaymentQuery({
     page: currentPage,
@@ -61,6 +68,18 @@ const SalesTable = () => {
   // close delete modal
   const handleCancelDelete = () => {
     dispatch(closeModal());
+  };
+
+  // show product details button
+  const handleShowDetails = (product) => {
+    setProductDetails(product);
+    setIsDetailsModalOpen(true);
+  };
+
+  // Close product details modal
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setProductDetails(null);
   };
 
   return (
@@ -141,7 +160,16 @@ const SalesTable = () => {
                     {row?.updateOn}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
-                    <DeleteButton id={row?.paymentId} onDelete={handleDeleteClick} />
+                    <button
+                      onClick={() => handleShowDetails(row)}
+                      className="bg-[#27BD02] w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm"
+                    >
+                      <IoEyeOutline />
+                    </button>
+                    <DeleteButton
+                      id={row?.paymentId}
+                      onDelete={handleDeleteClick}
+                    />
                   </td>
                 </tr>
               ))}
@@ -174,6 +202,15 @@ const SalesTable = () => {
           onConfirm={handleConfirmDelete}
           onCancel={handleCancelDelete}
         />
+
+        {/* product details Modal  */}
+        {productDetails && (
+          <SalesProductDetailsModal
+            isOpen={isDetailsModalOpen}
+            onClose={handleCloseDetailsModal}
+            productDetails={productDetails}
+          />
+        )}
       </div>
     </div>
   );
