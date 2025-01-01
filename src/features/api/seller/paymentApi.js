@@ -10,7 +10,7 @@ const paymentApi = adminBaseApi.injectEndpoints({
         params: { page, pageSize, searchKey, type, startDate, endDate },
       }),
       transformResponse: (res) => {
-        console.log("Payment api data: ", res.data);
+        // console.log("Payment api data: ", res.data);
         const data = res?.data?.map(
           ({
             id,
