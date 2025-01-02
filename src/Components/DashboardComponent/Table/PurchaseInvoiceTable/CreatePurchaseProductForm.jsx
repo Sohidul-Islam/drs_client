@@ -147,10 +147,10 @@ const CreatePurchaseProductForm = () => {
             data={products}
             placeholder="search a product..."
             required="true"
+            errors={errors.productId}
             propertyValue="id"
             propertyName="productName"
             setSearchInputValue={setSearchInputValue}
-            errors={errors.productId}
           />
           {/* Manufactured Date */}
           <div>
