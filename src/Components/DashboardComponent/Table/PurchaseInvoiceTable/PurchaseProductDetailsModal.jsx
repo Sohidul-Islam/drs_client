@@ -34,7 +34,8 @@ const PurchaseProductDetailsModal = ({ isOpen, onClose, productDetails }) => {
                   "Manufacturer",
                   "Products",
                   "Quantity",
-                  "Total",
+                  "Trade Price",
+                  "Total Price",
                   "Paid",
                   "Due",
                   "Updater On",
@@ -78,11 +79,22 @@ const PurchaseProductDetailsModal = ({ isOpen, onClose, productDetails }) => {
                   <div className="max-h-24 overflow-y-auto flex flex-col justify-center items-center">
                     {productDetails?.invoices?.map((item, index) => (
                       <p key={index} className="mb-2 whitespace-nowrap">
-                        {item?.purchase_product?.quantity}
+                        {item?.purchase_product?.quantity} Pieces
                       </p>
                     ))}
                   </div>
                 </td>
+
+                <td className="px-4 py-2 text-xs max-h-24">
+                  <div className="max-h-24 overflow-y-auto flex flex-col justify-center items-center">
+                    {productDetails?.invoices?.map((item, index) => (
+                      <p key={index} className="mb-2 whitespace-nowrap">
+                        {item?.purchase_product?.tradePrice} TK
+                      </p>
+                    ))}
+                  </div>
+                </td>
+                
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {productDetails?.total} TK
                 </td>
