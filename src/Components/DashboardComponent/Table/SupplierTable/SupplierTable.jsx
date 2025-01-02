@@ -14,7 +14,6 @@ import { toast } from "react-toastify";
 import UpdateSupplierModal from "./UpdateSupplierModal";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import Pagination from "../../Common/Pagination/Pagination";
-import DeleteButton from "../../Common/DeleteButton/DeleteButton";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const SupplierTable = () => {
@@ -151,7 +150,6 @@ const SupplierTable = () => {
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                     <EditButton handleEditClick={handleEditClick} item={row} />
-                    {/* <DeleteButton id={row.id} onDelete={handleDeleteClick} /> */}
                     <button
                       disabled={row?.Seller?.accountType === "admin"}
                       onClick={() => handleDeleteClick(row?.id)}
