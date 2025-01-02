@@ -79,8 +79,8 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
               "Manufactured Date",
               "Expiry Date",
               "Quantity (Pieces)",
-              "Trade Price",
-              "VAT",
+              "Trade Price (Per Unit)",
+              "VAT (%)",
               "Total Trade Price (TP+VAT)",
               "MRP (Per Unit)",
               "Action",
@@ -122,19 +122,19 @@ const CreatePurchaseProductTable = ({ purchaseProducts }) => {
                   {row?.expiryDate}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.quantity}
+                  {row?.quantity} Pieces
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.tradePrice}
+                  {row?.tradePrice} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.VAT}
+                  {row?.VAT} %
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.totalTradePrice}
+                  {row?.totalTradePrice} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
-                  {row?.MRP}
+                  {row?.MRP} TK
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                   <EditButton handleEditClick={handleEditClick} item={row} />

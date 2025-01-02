@@ -7,7 +7,12 @@ import { useAddPaymentMutation } from "../../../../features/api/seller/paymentAp
 
 const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
   const { user } = useSelector((state) => state.auth);
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const [loading, setLoading] = useState(false);
 
   const { data: saleProducts } = useGetAllSaleProductQuery({
@@ -57,11 +62,13 @@ const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
           {/*Payment method */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Payment method
+              Payment method <span className="text-[#FF0027]">*</span>
             </label>
             <select
               {...register("paymentMethod", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-2 px-3 rounded-md"
+              className={`${
+                errors?.paymentMethod && "border-[#FF0027]"
+              } mt-1 block w-full border outline-none text-gray-700 px-3 py-2 rounded-md`}
             >
               <option value="">Select</option>
               <option value="card">Card</option>
@@ -76,7 +83,7 @@ const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
             </label>
             <input
               type="text"
-              {...register("note", { required: true })}
+              {...register("note")}
               className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
             />
           </div>
@@ -88,11 +95,13 @@ const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
             <input
               type="number"
               {...register("paidAmount", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors?.paidAmount && "border-[#FF0027]"
+              } mt-1 block w-full border outline-none text-gray-700 px-3 py-2 rounded-md`}
             />
           </div>
           {/*Status (Confirm & Approve order) */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700">
               Status <span className="text-xs">(Confirm & Approve order)</span>
             </label>
@@ -104,7 +113,7 @@ const CreateSalesPaymentForm = ({ refetchSaleProducts }) => {
               <option value="approve">Approve</option>
               <option value="reject">Reject</option>
             </select>
-          </div>
+          </div> */}
         </div>
 
         {/* Button  */}

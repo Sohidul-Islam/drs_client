@@ -10,7 +10,13 @@ import CustomerModal from "./CustomerModal";
 
 const CreateSalesProductForm = () => {
   const { user } = useSelector((state) => state.auth);
-  const { register, control, reset, handleSubmit } = useForm();
+  const {
+    register,
+    control,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [searchInputValue, setSearchInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -56,7 +62,6 @@ const CreateSalesProductForm = () => {
       console.log(error);
     }
   };
-  
 
   return (
     <div>
@@ -94,7 +99,7 @@ const CreateSalesProductForm = () => {
             </label>
             <input
               type="text"
-              {...register("doctorName", { required: true })}
+              {...register("doctorName")}
               className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
             />
           </div>
@@ -105,7 +110,7 @@ const CreateSalesProductForm = () => {
             </label>
             <input
               type="text"
-              {...register("BMDCRegistrationNo", { required: true })}
+              {...register("BMDCRegistrationNo")}
               className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
             />
           </div>
@@ -117,7 +122,9 @@ const CreateSalesProductForm = () => {
             <input
               type="date"
               {...register("date", { required: true })}
-              className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+              className={`${
+                errors?.date && "border-[#FF0027]"
+              } mt-1 block w-full border outline-none text-gray-700 px-3 py-[6px] rounded-md`}
             />
           </div>
         </div>
@@ -134,6 +141,7 @@ const CreateSalesProductForm = () => {
               data={products}
               placeholder="search a product..."
               required="true"
+              errors={errors.productId}
               propertyValue="id"
               propertyName="productName"
               setSearchInputValue={setSearchInputValue}
@@ -146,7 +154,9 @@ const CreateSalesProductForm = () => {
               <input
                 type="number"
                 {...register("quantity", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                className={`${
+                  errors?.quantity && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 px-3 py-[6px] rounded-md`}
               />
             </div>
             {/* Unit Price */}
@@ -157,7 +167,9 @@ const CreateSalesProductForm = () => {
               <input
                 type="number"
                 {...register("unitPrice", { required: true })}
-                className="mt-1 block w-full border outline-gray-300 text-gray-700 py-[6px] px-3 rounded-md"
+                className={`${
+                  errors?.unitPrice && "border-[#FF0027]"
+                } mt-1 block w-full border outline-none text-gray-700 px-3 py-[6px] rounded-md`}
               />
             </div>
             {/* Discount (%) */}

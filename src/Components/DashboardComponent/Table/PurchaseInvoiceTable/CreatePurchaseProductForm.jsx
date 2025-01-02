@@ -147,10 +147,10 @@ const CreatePurchaseProductForm = () => {
             data={products}
             placeholder="search a product..."
             required="true"
+            errors={errors.productId}
             propertyValue="id"
             propertyName="productName"
             setSearchInputValue={setSearchInputValue}
-            errors={errors.productId}
           />
           {/* Manufactured Date */}
           <div>
@@ -191,19 +191,6 @@ const CreatePurchaseProductForm = () => {
               } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
-          {/* Quantity (Pieces) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Quantity (Pieces) <span className="text-[#FF0027]">*</span>
-            </label>
-            <input
-              type="number"
-              {...register("quantity", { required: true })}
-              className={`${
-                errors.quantity ? "border-red-500" : "border-gray-300"
-              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
-            />
-          </div>
           {/* Unit */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -217,6 +204,20 @@ const CreatePurchaseProductForm = () => {
               } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
+          {/* Quantity (Pieces) */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Quantity (Pieces) <span className="text-[#FF0027]">*</span>
+            </label>
+            <input
+              type="number"
+              {...register("quantity", { required: true })}
+              className={`${
+                errors.quantity ? "border-red-500" : "border-gray-300"
+              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
+            />
+          </div>
+          
           {/* Trade Price*/}
           <div>
             <label className="block text-sm font-medium text-gray-700">

@@ -323,11 +323,28 @@ const Register = () => {
                     type={showPassword ? "text" : "password"}
                     {...register("password", {
                       required: "Password is required",
-                      pattern: {
-                        value:
-                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                        message:
-                          "Password must be at least 8 characters, include one uppercase letter, one lowercase letter, one number, and one special character",
+                      // pattern: {
+                      //   value:
+                      //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      //   message:
+                      //     "Password must be at least 8 characters, include one uppercase letter, one lowercase letter, one number, and one special character",
+                      // },
+                      validate: {
+                        hasLowercase: (value) =>
+                          /[a-z]/.test(value) ||
+                          "Password must include at least one lowercase letter",
+                        hasUppercase: (value) =>
+                          /[A-Z]/.test(value) ||
+                          "Password must include at least one uppercase letter",
+                        hasNumber: (value) =>
+                          /\d/.test(value) ||
+                          "Password must include at least one number",
+                        hasSpecialCharacter: (value) =>
+                          /[@$!%*?&]/.test(value) ||
+                          "Password must include at least one special character",
+                        hasMinimumLength: (value) =>
+                          value.length >= 8 ||
+                          "Password must be at least 8 characters long",
                       },
                     })}
                     className={`w-full border-b-2 ${
@@ -345,7 +362,7 @@ const Register = () => {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-red-500 text-xs">
+                  <p className="text-red-500 text-xs h-6">
                     {errors.password.message}
                   </p>
                 )}
