@@ -15,7 +15,7 @@ import UpdateSupplierModal from "./UpdateSupplierModal";
 import SearchAndExport from "../../Common/SearchAndExport/SearchAndExport";
 import Pagination from "../../Common/Pagination/Pagination";
 import DeleteButton from "../../Common/DeleteButton/DeleteButton";
-
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const SupplierTable = () => {
   const dispatch = useDispatch();
@@ -36,8 +36,6 @@ const SupplierTable = () => {
   });
 
   const [deleteSupplier] = useDeleteSupplierMutation();
-
-  
 
   useEffect(() => {
     setCurrentPage(1);
@@ -153,7 +151,14 @@ const SupplierTable = () => {
                   {/* update and delete button  */}
                   <td className="px-4 py-4 whitespace-nowrap text-xs flex gap-3">
                     <EditButton handleEditClick={handleEditClick} item={row} />
-                    <DeleteButton id={row.id} onDelete={handleDeleteClick} />
+                    {/* <DeleteButton id={row.id} onDelete={handleDeleteClick} /> */}
+                    <button
+                      disabled={row?.Seller?.accountType === "admin"}
+                      onClick={() => handleDeleteClick(row?.id)}
+                      className={`${row?.Seller?.accountType === "admin" ? "bg-[#f99fa8] cursor-not-allowed" : "bg-[#CE1124] cursor-pointer"} w-5 h-5 px-1 py-[6px] text-white flex justify-center items-center rounded-sm`}
+                    >
+                      <RiDeleteBinLine />
+                    </button>
                   </td>
                 </tr>
               ))}
