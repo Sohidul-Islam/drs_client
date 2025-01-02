@@ -13,7 +13,7 @@ import {
 
 const ShopInformation = () => {
   const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [imageSrc, setImageSrc] = useState("");
   const [nidFileName, setNidFileName] = useState("No image found");
   const [dragLicFileName, setDragLicFileName] = useState("No image found");
@@ -33,7 +33,7 @@ const ShopInformation = () => {
     formState: { errors },
   } = useForm();
 
-  const establishMentDate = user && user?.establishMentData?.split('T')[0];
+  const establishMentDate = user && user?.establishMentData?.split("T")[0];
   const selectedDivision = watch("division");
   const selectedDistrict = watch("district");
   const selectedUpozila = watch("upazila");
@@ -60,7 +60,7 @@ const ShopInformation = () => {
     }
   }, [selectedDistrict]);
 
-  console.log("user data", user)
+  console.log("user data", user);
 
   useEffect(() => {
     if (user) {
@@ -99,7 +99,7 @@ const ShopInformation = () => {
     } catch (error) {
       toast.error(error?.data?.message || "Failed to update the store");
       setLoading("");
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -175,7 +175,7 @@ const ShopInformation = () => {
             </label>
           </div>
         </div>
-        <div className="col-span-5 border-l px-11 my-5 space-y-11">
+        <div className="col-span-5 border-l px-5 my-5 space-y-11">
           {/* Shop Information  */}
           <div>
             <p className="border-b pb-2">Shop Information</p>
@@ -189,7 +189,9 @@ const ShopInformation = () => {
                   type="text"
                   placeholder="Shop name"
                   {...register("shop_name", { required: true })}
-                  className={`${errors?.shop_name && "outline-red-600"} mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.shop_name && "outline-red-600"
+                  } mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -202,7 +204,9 @@ const ShopInformation = () => {
                   type="email"
                   placeholder="E-mail"
                   {...register("email", { required: true })}
-                  className={`${errors?.email && "outline-red-600"} mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.email && "outline-red-600"
+                  } mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -215,7 +219,9 @@ const ShopInformation = () => {
                   type="tel"
                   placeholder="Phone number"
                   {...register("phone_number", { required: true })}
-                  className={`${errors?.phone_number && "outline-red-600"} mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.phone_number && "outline-red-600"
+                  } mt-1 block w-full bg-gray-100 outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -244,7 +250,9 @@ const ShopInformation = () => {
                 </label>
                 <select
                   {...register("division")}
-                  className={`${errors?.division && "outline-red-600"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.division && "outline-red-600"
+                  } mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 >
                   <option value="">Select Division</option>
                   {divisions?.map((division) => (
@@ -262,7 +270,9 @@ const ShopInformation = () => {
                 </label>
                 <select
                   {...register("district")}
-                  className={`${errors?.district && "outline-red-600"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.district && "outline-red-600"
+                  } mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                   disabled={!selectedDivision}
                 >
                   <option value="">Select District</option>
@@ -282,7 +292,9 @@ const ShopInformation = () => {
                 </label>
                 <select
                   {...register("upazila")}
-                  className={`${errors?.upazila && "outline-red-600"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.upazila && "outline-red-600"
+                  } mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                   disabled={!selectedDistrict}
                 >
                   <option value="">Select Upazila</option>
@@ -342,13 +354,18 @@ const ShopInformation = () => {
               {/* Pharmacist Registration No. */}
               <div>
                 <label className="block text-xs font-medium text-gray-700">
-                  Pharmacist Registration No <span className="text-[6px] text-gray-500">(Mandatory Reg. No)</span>
+                  Pharmacist Registration No{" "}
+                  <span className="text-[8px] text-gray-500">
+                    (Mandatory Reg. No)
+                  </span>
                 </label>
                 <input
                   type="text"
                   placeholder="Registration No"
                   {...register("pharmacistRegNo", { required: true })}
-                  className={`${errors?.pharmacistRegNo && " border-red-700"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.pharmacistRegNo && " border-red-700"
+                  } mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -407,13 +424,18 @@ const ShopInformation = () => {
               {/* drag license no  */}
               <div>
                 <label className="block text-xs font-medium text-gray-700">
-                  Drug license No <span className="text-[6px] text-gray-500">(Mandatory drug license)</span>
+                  Drug license No{" "}
+                  <span className="text-[8px] text-gray-500">
+                    (Mandatory drug license)
+                  </span>
                 </label>
                 <input
                   type="text"
                   placeholder="License no."
                   {...register("drugLicenseNo", { required: true })}
-                  className={`${errors?.drugLicenseNo && " border-red-700"} mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
+                  className={`${
+                    errors?.drugLicenseNo && " border-red-700"
+                  } mt-1 block w-full border outline-none text-xs text-gray-700 py-2 px-3 rounded-md`}
                 />
               </div>
 
@@ -471,20 +493,16 @@ const ShopInformation = () => {
                   type="password"
                   {...register("old_password", {
                     // required: true,
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/},
+                    // pattern: {
+                    //   value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+                    // },
                   })}
                   placeholder="Enter old password"
                   className="my-1 block w-full border outline-gray-300 text-xs text-gray-700 py-[5px] px-3 rounded-md"
                 />
-                {errors.password ? (
+                {errors.old_password && (
                   <p className="text-red-500 text-[10px]">
-                    {errors.password.message}
-                  </p>
-                ) : (
-                  <p className="text-[10px] text-[#989898]">
-                    Password (Minimum 6 characters with combination of letter &
-                    number)
+                    {errors.old_password.message}
                   </p>
                 )}
               </div>
@@ -498,26 +516,47 @@ const ShopInformation = () => {
                   type="password"
                   {...register("password", {
                     // required: true,
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
-                      message:
-                        "Password must be at least 6 characters long and contain both letters and numbers",
+                    validate: (value) => {
+                      if (!value) return true; // Skip validation if the field is empty
+                      const validations = {
+                        hasLowercase:
+                          /[a-z]/.test(value) ||
+                          "Password must include at least one lowercase letter",
+                        hasUppercase:
+                          /[A-Z]/.test(value) ||
+                          "Password must include at least one uppercase letter",
+                        hasNumber:
+                          /\d/.test(value) ||
+                          "Password must include at least one number",
+                        hasSpecialCharacter:
+                          /[@$!%*?&]/.test(value) ||
+                          "Password must include at least one special character",
+                        hasMinimumLength:
+                          value.length >= 8 ||
+                          "Password must be at least 8 characters long",
+                      };
+                      return (
+                        Object.values(validations).find((v) => v !== true) ||
+                        true
+                      );
                     },
                   })}
                   placeholder="Enter new password"
                   className="my-1 block w-full border outline-gray-300 text-xs text-gray-700 py-[5px] px-3 rounded-md"
                 />
                 {errors.password ? (
-                  <p className="text-red-500 text-[10px]">
+                  <p className="text-red-500 text-[10px] h-[45px]">
                     {errors.password.message}
                   </p>
                 ) : (
                   <p className="text-[10px] text-[#989898]">
-                    Password (Minimum 6 characters with combination of letter &
-                    number)
+                    Password must be at least 8 characters, include one
+                    uppercase letter, one lowercase letter, one number, and one
+                    special character
                   </p>
                 )}
               </div>
+
               {/* Confirm new password */}
               <div>
                 <label className="block text-xs font-medium text-gray-700">
