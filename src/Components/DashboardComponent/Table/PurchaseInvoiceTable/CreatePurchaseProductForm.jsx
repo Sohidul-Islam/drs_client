@@ -8,6 +8,24 @@ import { useSelector } from "react-redux";
 import { useAddPurchaseProductMutation } from "../../../../features/api/seller/purchaseProductApi";
 import { toast } from "react-toastify";
 
+// tempprary data 
+const units = {
+  data: [
+    { unitName: "Mg", unitValue: "mg" },
+    { unitName: "G", unitValue: "g" },
+    { unitName: "Mcg", unitValue: "mcg" },
+    { unitName: "Ml", unitValue: "ml" },
+    { unitName: "L", unitValue: "l" },
+    { unitName: "Units", unitValue: "units" },
+    { unitName: "Drops", unitValue: "drops" },
+    { unitName: "Puffs", unitValue: "puffs" },
+    { unitName: "Tsp", unitValue: "tsp" },
+    { unitName: "Tbsp", unitValue: "tbsp" },
+  ],
+};
+
+
+
 const CreatePurchaseProductForm = () => {
   const { user } = useSelector((state) => state.auth);
   const {
@@ -62,6 +80,7 @@ const CreatePurchaseProductForm = () => {
     data.manufacturerId = data?.manufacturerId?.value || null;
     data.productId = data?.productId?.value || null;
     data.supplierId = data?.supplierId?.value || null;
+    data.unit = data?.unit?.value || null;
     data.status = "inactive";
     data.sellerId = user?.id || null;
 
@@ -192,7 +211,7 @@ const CreatePurchaseProductForm = () => {
             />
           </div>
           {/* Unit */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700">
               Unit <span className="text-[#FF0027]">*</span>
             </label>
@@ -203,7 +222,19 @@ const CreatePurchaseProductForm = () => {
                 errors.unit ? "border-red-500" : "border-gray-300"
               } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
-          </div>
+          </div> */}
+        
+          <SearchableDropdown
+            labelText="Unit"
+            name="unit"
+            control={control}
+            data={units}
+            placeholder="search a Unit"
+            required="true"
+            propertyValue="unitValue"
+            propertyName="unitName"
+            setSearchInputValue={setSearchInputValue}
+          />
           {/* Quantity (Pieces) */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -217,7 +248,7 @@ const CreatePurchaseProductForm = () => {
               } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
             />
           </div>
-          
+
           {/* Trade Price*/}
           <div>
             <label className="block text-sm font-medium text-gray-700">
