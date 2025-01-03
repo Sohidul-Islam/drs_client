@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   setFilterQuery,
@@ -7,8 +7,13 @@ import {
 
 const CommonDropdown = ({ dropdownData, itemName, level }) => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearFilterQuery()); // Reset the filter on unmount
+    };
+  }, [dispatch]);
   const handleFilterChange = (e) => {
-    dispatch(clearFilterQuery());
     dispatch(setFilterQuery(e.target.value));
   };
 
