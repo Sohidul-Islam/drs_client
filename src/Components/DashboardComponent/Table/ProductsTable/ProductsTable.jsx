@@ -31,7 +31,8 @@ const ProductsTable = () => {
   const { data, isLoading } = useGetAllProductQuery({
     page: currentPage,
     pageSize: pageSize,
-    searchKey: searchQuery || filterQuery,
+    searchKey: searchQuery,
+    dosageId: filterQuery
   });
 
   const [deleteProduct] = useDeleteProductMutation();

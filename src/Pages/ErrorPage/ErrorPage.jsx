@@ -12,7 +12,7 @@ const ErrorPage = () => {
           <p className="text-red-500 mb-4 text-center">{error.statusText || error.message}</p>
 
           <Link
-            to="/"
+            to="/dashboard"
             className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Go Home

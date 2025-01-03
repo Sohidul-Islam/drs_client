@@ -31,19 +31,19 @@ const UpdateProductModal = ({ isOpen, onClose, productData }) => {
 
   useEffect(() => {
     if (productData) {
-      setValue("productName", productData.productName);
-      setValue("strength", productData.strength);
-      setValue("genericName", productData.genericName);
+      setValue("productName", productData?.productName);
+      setValue("strength", productData?.strength);
+      setValue("genericName", productData?.genericName);
       setValue("categoryId", {
-        value: productData.category.id,
-        label: productData.category.name,
+        value: productData?.category?.id,
+        label: productData?.category?.name,
       });
       setValue("manufacturerId", {
         value: productData.menufacturer?.id,
         label: productData.menufacturer?.name,
       });
-      setValue("dosageForm", productData.dosageForm);
-      setValue("packBoxSize", productData.packBoxSize);
+      setValue("dosageForm", productData?.dosageForm);
+      setValue("packBoxSize", productData?.packBoxSize);
     }
   }, [productData, setValue]);
 

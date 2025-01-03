@@ -5,9 +5,9 @@ const adminProductApi = adminBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // all product
     getAllProduct: builder.query({
-      query: ({ page, pageSize, searchKey }) => ({
+      query: ({ page, pageSize, searchKey, dosageId }) => ({
         url: "product/all",
-        params: { page, pageSize, searchKey },
+        params: { page, pageSize, searchKey, dosageId },
       }),
       transformResponse: (res) => {
       

@@ -8,6 +8,7 @@ import {
 import CommonDropdown from "../CommonDropdown/CommonDropdown";
 import DateFilter from "../DateFilter/DateFilter";
 import ManageStoreFilter from "../../Table/ManageStoreTable/ManageStoreFilter";
+import { useGetAllProductQuery } from "../../../../features/api/admin/adminProductApi";
 
 const adjustments = [
   { name: "Income", value: "income" },
@@ -44,10 +45,19 @@ const SearchAndExport = ({
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const { data: dosage, isLoading } = useGetAllProductQuery({
+    page: 1,
+    pageSize: 1000,
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const dosageForm =
-    data?.data?.map((product) => ({
-      name: product?.dosageForm,
-      value: product?.dosageForm,
+    dosage?.data?.map((product) => ({
+      name: product?.dosage?.name,
+      value: product?.dosage?.id,
     })) || [];
 
   // Export PDF and Excel File

@@ -1,14 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setFilterQuery , clearFilterQuery } from '../../../../features/advanceFilter/advanceFilterSlice';
+import {
+  setFilterQuery,
+  clearFilterQuery,
+} from "../../../../features/advanceFilter/advanceFilterSlice";
 
 const CommonDropdown = ({ dropdownData, itemName, level }) => {
   const dispatch = useDispatch();
   const handleFilterChange = (e) => {
-    dispatch(clearFilterQuery()); 
+    dispatch(clearFilterQuery());
     dispatch(setFilterQuery(e.target.value));
-  }
-  
+  };
+
   return (
     <div>
       {level && (
