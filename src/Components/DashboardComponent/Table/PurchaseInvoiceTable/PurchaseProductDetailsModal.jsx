@@ -2,7 +2,7 @@ import React from "react";
 import { GoTag } from "react-icons/go";
 
 const PurchaseProductDetailsModal = ({ isOpen, onClose, productDetails }) => {
-  console.log("if you follow", productDetails?.invoices);
+  
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div

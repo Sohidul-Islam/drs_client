@@ -22,7 +22,7 @@ const SearchableDropdown = ({
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
         {labelText}
-        {required === "true" && <span className="text-[#FF0027]">*</span>}
+        {required === "true" && <span className="text-[#FF0027]"> *</span>}
       </label>
       <Controller
         name={name}

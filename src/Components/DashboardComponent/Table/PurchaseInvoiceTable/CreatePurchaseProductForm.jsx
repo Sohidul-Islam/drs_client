@@ -200,7 +200,7 @@ const CreatePurchaseProductForm = () => {
           {/* Batch/LOT No */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Batch/LOT No.
+              Batch/LOT No. <span className="text-[#FF0027]">*</span>
             </label>
             <input
               type="text"
@@ -211,19 +211,6 @@ const CreatePurchaseProductForm = () => {
             />
           </div>
           {/* Unit */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Unit <span className="text-[#FF0027]">*</span>
-            </label>
-            <input
-              type="text"
-              {...register("unit", { required: true })}
-              className={`${
-                errors.unit ? "border-red-500" : "border-gray-300"
-              } mt-1 block w-full border text-gray-700 py-[6px] px-3 rounded-md outline-none`}
-            />
-          </div> */}
-        
           <SearchableDropdown
             labelText="Unit"
             name="unit"
@@ -231,6 +218,7 @@ const CreatePurchaseProductForm = () => {
             data={units}
             placeholder="search a Unit"
             required="true"
+            errors={errors.unit}
             propertyValue="unitValue"
             propertyName="unitName"
             setSearchInputValue={setSearchInputValue}

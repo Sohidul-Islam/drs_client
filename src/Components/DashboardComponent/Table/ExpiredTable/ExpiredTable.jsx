@@ -31,7 +31,7 @@ const ExpiredTable = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         data={data}
-        columns={["productId", "batchNo", "expiryDate", "stockQuantity", "mrp"]}
+        columns={["productId", "productName", "batchNo", "expiryDate", "stockQuantity", "mrp"]}
         title="Expired Product Report"
       />
       {/* Table and Pagination  */}
@@ -42,6 +42,7 @@ const ExpiredTable = () => {
             <tr>
               {[
                 "ID",
+                "Product Name",
                 "Batch",
                 "Expired Date",
                 "Quantity",
@@ -61,7 +62,10 @@ const ExpiredTable = () => {
             {data?.data?.map((row, index) => (
               <tr key={index}>
                 <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
-                  {row.productId}
+                  {row?.productId}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-xs font-medium text-[#0085FF]">
+                  {row?.productName}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-xs">
                   {row?.batchNo}

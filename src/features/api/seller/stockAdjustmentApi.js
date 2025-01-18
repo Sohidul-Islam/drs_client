@@ -125,8 +125,9 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       }),
       transformResponse: (res) => {
         const data = res.data.map(
-          ({ productId, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
+          ({ productId, product, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
             productId,
+            productName: product?.productName,
             batchNo,
             expiryDate: expiryDate?.split("T")[0],
             stockQuantity,
@@ -156,8 +157,9 @@ const stockAdjustmentApi = adminBaseApi.injectEndpoints({
       }),
       transformResponse: (res) => {
         const data = res.data.map(
-          ({ productId, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
+          ({ productId, product, batchNo, expiryDate, stockQuantity, mrpPerUnit }) => ({
             productId,
+            productName: product?.productName,
             batchNo,
             expiryDate: expiryDate?.split("T")[0],
             stockQuantity,
