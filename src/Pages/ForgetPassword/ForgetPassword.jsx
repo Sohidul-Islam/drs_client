@@ -64,7 +64,7 @@ const ForgetPassword = () => {
             )}
           </div>
           {/* Old Password */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
               Old Password
             </label>
@@ -81,10 +81,10 @@ const ForgetPassword = () => {
                 {errors.oldPassword.message}
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* New Password */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
               New password
             </label>
@@ -111,7 +111,7 @@ const ForgetPassword = () => {
                 number)
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <div className="flex justify-between items-center">
@@ -124,7 +124,7 @@ const ForgetPassword = () => {
               }`}
               disabled={loading}
             >
-              {loading ? "Changing..." : "Change Password"}
+              {loading ? "Sending..." : "Send email"}
             </button>
           </div>
         </form>

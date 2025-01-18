@@ -162,7 +162,7 @@ const CreateSalesProductForm = () => {
             {/* Unit Price */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Unit Price <span className="text-[#FF0027]">*</span>
+                Unit Price (MRP) <span className="text-[#FF0027]">*</span>
               </label>
               <input
                 type="number"
